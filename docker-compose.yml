@@ -1,0 +1,61 @@
+services:
+  web:
+    build:
+      context: ./apps/web
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3001
+      NEXT_PUBLIC_DEMO_USER_ID: 1
+      NEXT_PUBLIC_ADMIN_TOKEN: dev-admin-token
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+  api:
+    build:
+      context: ./apps/api
+    environment:
+      HOST: 0.0.0.0
+      PORT: 3001
+      APP_URL: http://localhost:3000
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/recruitment
+      REDIS_URL: redis://redis:6379
+      ADMIN_TOKEN: dev-admin-token
+      DEMO_USER_ID: 1
+      DEMO_USER_EMAIL: demo@ukcloud.local
+      STRIPE_SECRET_KEY: ""
+      STRIPE_WEBHOOK_SECRET: ""
+      STRIPE_PRICE_GROWTH: ""
+      STRIPE_PRICE_SCALE: ""
+      PAYSTACK_SECRET_KEY: ""
+      PAYSTACK_PUBLIC_KEY: ""
+      PAYSTACK_PLAN_CODE_GROWTH: ""
+      PAYSTACK_PLAN_CODE_SCALE: ""
+    ports:
+      - "3001:3001"
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: recruitment
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./infra/postgres/init:/docker-entrypoint-initdb.d:ro
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
