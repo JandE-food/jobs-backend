@@ -1,10 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { buildApp } from "../src/app.ts";
+import { buildApp } from "../src/app.js";
 
 test("GET /health returns OK", async () => {
-  const app = buildApp();
+  const app = buildApp({ initializeDb: false });
 
   const response = await app.inject({
     method: "GET",

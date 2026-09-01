@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "BEJELI",
+    "slug": "bejeli-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#f5f7fb"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "plugins": [
+      "expo-video"
+    ]
+  }
+}

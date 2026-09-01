@@ -5,7 +5,7 @@ import { getUserIdFromRequest, requireAdmin } from "../lib/request-context.js";
 
 export async function registerPrivacyRoutes(app: FastifyInstance) {
   app.post("/privacy/request-deletion", async (request) => {
-    const userId = getUserIdFromRequest(request);
+    const userId = await getUserIdFromRequest(request);
     const deletionRequest = await requestDeletion(userId);
 
     return {
@@ -15,7 +15,7 @@ export async function registerPrivacyRoutes(app: FastifyInstance) {
   });
 
   app.get("/privacy/export", async (request) => {
-    const userId = getUserIdFromRequest(request);
+    const userId = await getUserIdFromRequest(request);
 
     return exportUserData(userId);
   });

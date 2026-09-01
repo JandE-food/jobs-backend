@@ -1,16 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const storageKey = "uk-cloud-cookie-consent";
 
-export function CookieBanner() {
-  const [visible, setVisible] = useState(false);
+function getInitialVisibility() {
+  if (typeof window === "undefined") {
+    return false;
+  }
 
-  useEffect(() => {
-    const consent = window.localStorage.getItem(storageKey);
-    setVisible(consent !== "accepted");
-  }, []);
+  return window.localStorage.getItem(storageKey) !== "accepted";
+}
+
+export function CookieBanner() {
+  const [visible, setVisible] = useState(getInitialVisibility);
 
   if (!visible) {
     return null;

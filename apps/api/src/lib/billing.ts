@@ -1,5 +1,5 @@
-export type BillingPlan = "free" | "growth" | "scale";
-export type BillingProvider = "stripe" | "paystack";
+export type BillingPlan = "free" | "growth" | "scale" | "enterprise";
+export type BillingProvider = "stripe" | "paystack" | "flutterwave";
 
 type PlanConfig = {
   id: BillingPlan;
@@ -32,6 +32,14 @@ const planConfigs: Record<BillingPlan, PlanConfig> = {
     name: "Scale",
     activeJobs: "Many jobs + featured",
     amountMinor: 14900,
+    intervalDays: 30,
+    featured: true,
+  },
+  enterprise: {
+    id: "enterprise",
+    name: "Enterprise",
+    activeJobs: "Unlimited jobs + escrow, analytics, and admin controls",
+    amountMinor: 39900,
     intervalDays: 30,
     featured: true,
   },
@@ -91,13 +99,31 @@ export function normalizeCountry(country: string) {
   return country.trim().toLowerCase();
 }
 
-export function getBillingProvider(country: string): BillingProvider {
+export function isBillingProvider(value: string): value is BillingProvider {
+  return (
+    value === "stripe" || value === "paystack" || value === "flutterwave"
+  );
+}
+
+export function getBillingProvider(
+  country: string,
+  preferredProvider?: BillingProvider,
+): BillingProvider {
+  if (preferredProvider) {
+    return preferredProvider;
+  }
+
   const normalized = normalizeCountry(country);
-  return africanCountries.has(normalized) ? "paystack" : "stripe";
+  return africanCountries.has(normalized) ? "flutterwave" : "stripe";
 }
 
 export function isBillingPlan(value: string): value is BillingPlan {
-  return value === "free" || value === "growth" || value === "scale";
+  return (
+    value === "free" ||
+    value === "growth" ||
+    value === "scale" ||
+    value === "enterprise"
+  );
 }
 
 export function getPlanConfig(plan: BillingPlan) {

@@ -1,20 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+
+import { CookieBanner } from "@/components/cookie-banner";
+import { KindredChrome } from "@/components/kindred/app/kindred-chrome";
+import { KindredProvider } from "@/components/kindred/app/kindred-provider";
+
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "Recruitment App - UK Cloud",
-  description: "Recruitment website base frontend",
+  title: "BEJELI",
+  description: "AI recruitment ecosystem for professionals, recruiters, and companies",
 };
 
 export default function RootLayout({
@@ -23,8 +17,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body>{children}</body>
+    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
+      <body>
+        <KindredProvider>
+          <KindredChrome>
+            {children}
+            <CookieBanner />
+          </KindredChrome>
+        </KindredProvider>
+      </body>
     </html>
   );
 }

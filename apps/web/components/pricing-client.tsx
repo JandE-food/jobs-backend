@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 
-import { apiUrl, demoUserId } from "./api";
+import { apiUrl, authedFetch, readJsonResponse } from "./api";
 
-type PlanId = "free" | "growth" | "scale";
+type PlanId = "free" | "growth" | "scale" | "enterprise";
 
 const plans = [
   {
@@ -28,6 +28,13 @@ const plans = [
     copy: "For higher-volume hiring with featured placement.",
     limit: "Many jobs + featured",
   },
+  {
+    id: "enterprise" as const,
+    name: "Enterprise",
+    price: "£399",
+    copy: "For escrow-backed hiring, compliance automation, and platform analytics.",
+    limit: "Unlimited jobs + operations controls",
+  },
 ];
 
 export function PricingClient() {
@@ -40,11 +47,10 @@ export function PricingClient() {
     setError("");
 
     try {
-      const response = await fetch(`${apiUrl}/billing/create-checkout`, {
+      const response = await authedFetch(`${apiUrl}/billing/create-checkout`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-user-id": demoUserId,
         },
         body: JSON.stringify({
           plan,
@@ -52,16 +58,16 @@ export function PricingClient() {
         }),
       });
 
-      const payload = (await response.json()) as {
+      const payload = await readJsonResponse<{
         checkoutUrl?: string;
         error?: string;
-      };
+      }>(response);
 
       if (!response.ok || !payload.checkoutUrl) {
         throw new Error(payload.error ?? "Unable to create checkout.");
       }
 
-      window.location.href = payload.checkoutUrl;
+      window.location.assign(payload.checkoutUrl);
     } catch (caughtError) {
       setError(
         caughtError instanceof Error
@@ -109,8 +115,10 @@ export function PricingClient() {
       {error ? <p className="error-copy">{error}</p> : null}
       <p className="muted-copy">
         UK and EU countries route to Stripe. African countries route to
-        Paystack. If payment keys are not configured yet, the API returns a mock
-        success redirect so you can test the flow locally.
+        Flutterwave by default, with Paystack still available as a backend
+        override for future regional flows. If payment keys are not configured
+        yet, the API returns a mock success redirect so you can test the flow
+        locally.
       </p>
     </div>
   );

@@ -4,7 +4,6 @@ services:
       context: ./apps/web
     environment:
       NEXT_PUBLIC_API_URL: http://localhost:3001
-      NEXT_PUBLIC_DEMO_USER_ID: 1
       NEXT_PUBLIC_ADMIN_TOKEN: dev-admin-token
     ports:
       - "3000:3000"
@@ -20,9 +19,12 @@ services:
       APP_URL: http://localhost:3000
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/recruitment
       REDIS_URL: redis://redis:6379
+      AUTH_TOKEN_SECRET: dev-auth-token-secret
+      AUTH_TOKEN_TTL_SECONDS: 604800
       ADMIN_TOKEN: dev-admin-token
       DEMO_USER_ID: 1
       DEMO_USER_EMAIL: demo@ukcloud.local
+      DEMO_USER_PASSWORD: Password123!
       STRIPE_SECRET_KEY: ""
       STRIPE_WEBHOOK_SECRET: ""
       STRIPE_PRICE_GROWTH: ""
@@ -31,6 +33,10 @@ services:
       PAYSTACK_PUBLIC_KEY: ""
       PAYSTACK_PLAN_CODE_GROWTH: ""
       PAYSTACK_PLAN_CODE_SCALE: ""
+      FLUTTERWAVE_PUBLIC_KEY: ""
+      FLUTTERWAVE_SECRET_KEY: ""
+      FLUTTERWAVE_ENCRYPTION_KEY: ""
+      FLUTTERWAVE_WEBHOOK_HASH: ""
     ports:
       - "3001:3001"
     depends_on:

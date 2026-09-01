@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 
-import { adminToken, apiUrl, demoUserId } from "./api";
+import { adminToken, apiUrl, authedFetch, readJsonResponse } from "./api";
+import { useKindredAuth } from "./kindred/app/kindred-provider";
 
 export function PrivacyActions() {
+  const { user } = useKindredAuth();
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [busyAction, setBusyAction] = useState<"request" | "download" | "delete" | null>(null);
@@ -15,14 +17,11 @@ export function PrivacyActions() {
     setError("");
 
     try {
-      const response = await fetch(`${apiUrl}/privacy/request-deletion`, {
+      const response = await authedFetch(`${apiUrl}/privacy/request-deletion`, {
         method: "POST",
-        headers: {
-          "x-user-id": demoUserId,
-        },
       });
 
-      const payload = (await response.json()) as { message?: string };
+      const payload = await readJsonResponse<{ message?: string }>(response);
 
       if (!response.ok) {
         throw new Error("Unable to request deletion.");
@@ -46,11 +45,7 @@ export function PrivacyActions() {
     setError("");
 
     try {
-      const response = await fetch(`${apiUrl}/privacy/export`, {
-        headers: {
-          "x-user-id": demoUserId,
-        },
-      });
+      const response = await authedFetch(`${apiUrl}/privacy/export`);
 
       if (!response.ok) {
         throw new Error("Unable to export data.");
@@ -81,8 +76,13 @@ export function PrivacyActions() {
     setMessage("");
     setError("");
 
+    if (!user?.id) {
+      setError("Sign in before running admin deletion.");
+      return;
+    }
+
     try {
-      const response = await fetch(`${apiUrl}/admin/privacy/delete/${demoUserId}`, {
+      const response = await fetch(`${apiUrl}/admin/privacy/delete/${user.id}`, {
         method: "POST",
         headers: {
           "x-admin-token": adminToken,
@@ -93,7 +93,7 @@ export function PrivacyActions() {
         throw new Error("Unable to run admin deletion.");
       }
 
-      setMessage("Admin deletion completed for the demo user.");
+      setMessage("Admin deletion completed for the signed-in user.");
     } catch (caughtError) {
       setError(
         caughtError instanceof Error
@@ -110,8 +110,8 @@ export function PrivacyActions() {
       <div className="content-card">
         <h2>GDPR controls</h2>
         <p className="muted-copy">
-          These controls use demo user `1` by default so you can exercise the
-          routes before full authentication is in place.
+          These controls use your signed-in session. The admin action still
+          requires the configured admin token.
         </p>
         <div className="button-row">
           <button

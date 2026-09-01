@@ -1,0 +1,30 @@
+module.exports = {
+  apps: [
+    {
+      name: "recruitment-api",
+      script: "dist/src/server.js",
+      cwd: "/srv/recruitment-api/apps/api",
+      env: {
+        NODE_ENV: "production",
+        HOST: "0.0.0.0",
+        PORT: "3001",
+        APP_URL: "https://your-web-domain.example",
+        DATABASE_URL: "postgres://recruitment_app:replace_me@127.0.0.1:5432/recruitment",
+        AUTH_TOKEN_SECRET: "replace-with-long-random-secret",
+        AUTH_TOKEN_TTL_SECONDS: "604800",
+        ADMIN_TOKEN: "replace-with-admin-token",
+        DEMO_USER_ID: "1",
+        DEMO_USER_EMAIL: "demo@ukcloud.local",
+        DEMO_USER_PASSWORD: "Password123!",
+        FLUTTERWAVE_PUBLIC_KEY: "FLWPUBK_TEST_REPLACE_ME",
+        FLUTTERWAVE_SECRET_KEY: "FLWSECK_TEST_REPLACE_ME",
+        FLUTTERWAVE_ENCRYPTION_KEY: "FLWSECK_TEST_REPLACE_ME",
+        FLUTTERWAVE_WEBHOOK_HASH: "replace-with-verif-hash",
+        STRIPE_SECRET_KEY: "",
+        STRIPE_WEBHOOK_SECRET: "",
+        PAYSTACK_SECRET_KEY: "",
+        PAYSTACK_PUBLIC_KEY: "",
+      },
+    },
+  ],
+};
