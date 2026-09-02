@@ -5,6 +5,10 @@
 {$APP_DOMAIN} {
   encode gzip zstd
 
+  handle /api {
+    reverse_proxy api:3001
+  }
+
   handle_path /api/* {
     reverse_proxy api:3001
   }

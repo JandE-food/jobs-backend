@@ -37,9 +37,10 @@ export async function registerBillingRoutes(app: FastifyInstance) {
       const plan = request.body?.plan;
       const country = request.body?.country?.trim() || "UK";
       const requestedProvider = request.body?.provider;
-      const providerOverride = isBillingProvider(requestedProvider ?? "")
-        ? requestedProvider
-        : undefined;
+      const providerOverride =
+        requestedProvider && isBillingProvider(requestedProvider)
+          ? requestedProvider
+          : undefined;
 
       if (!plan || !isBillingPlan(plan)) {
         reply.code(400).send({

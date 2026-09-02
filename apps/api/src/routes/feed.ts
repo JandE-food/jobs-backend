@@ -101,7 +101,7 @@ export async function registerFeedRoutes(app: FastifyInstance) {
     );
 
     reply.send({
-      posts: result.rows.map((row) => row.payload),
+      posts: result.rows.map((row: { payload: SharedFeedPost }) => row.payload),
     });
   });
 

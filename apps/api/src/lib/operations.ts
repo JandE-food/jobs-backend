@@ -19,7 +19,7 @@ export async function listAvailability(userId: number) {
     [userId],
   );
 
-  return result.rows.map((row) => ({
+  return result.rows.map((row: any) => ({
     dayOfWeek: Number(row.day_of_week),
     slot: row.slot as AvailabilitySlotInput["slot"],
     isAvailable: Boolean(row.is_available),
@@ -125,7 +125,7 @@ export async function listDiscoveryTalent(filters: DiscoveryFilters) {
   );
 
   return result.rows
-    .map((row) => {
+    .map((row: any) => {
       const rating =
         Math.round(
           Math.min(
@@ -154,7 +154,7 @@ export async function listDiscoveryTalent(filters: DiscoveryFilters) {
         rating,
       };
     })
-    .filter((item) =>
+    .filter((item: { rating: number }) =>
       typeof filters.minRating === "number" ? item.rating >= filters.minRating : true,
     );
 }
@@ -301,7 +301,7 @@ export async function listVerificationRecords() {
      ORDER BY c.updated_at DESC, c.created_at DESC`,
   );
 
-  return result.rows.map((row) => ({
+  return result.rows.map((row: any) => ({
     ...row,
     company_id: Number(row.company_id),
     directors: asArray(row.directors),
@@ -401,7 +401,7 @@ export async function listEscrowBookings(role: string, requesterUserId: number) 
     values,
   );
 
-  return result.rows.map((row) => ({
+  return result.rows.map((row: any) => ({
     ...row,
     id: Number(row.id),
     amount_minor: Number(row.amount_minor),
@@ -582,7 +582,7 @@ export async function getOperationsOverview() {
       pendingRedemptions: Number(requestStats.rows[0]?.pending_redemptions ?? 0),
       verificationReviews: Number(verificationStats.rows[0]?.reviews_needed ?? 0),
     },
-    subscriptionMix: subscriptionStats.rows.map((row) => ({
+    subscriptionMix: subscriptionStats.rows.map((row: any) => ({
       plan: row.plan,
       total: Number(row.total),
     })),

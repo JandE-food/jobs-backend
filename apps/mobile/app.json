@@ -14,6 +14,14 @@
     ],
     "plugins": [
       "expo-video"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "befa3129-ed00-42df-a267-cf75ac365e57"
+      }
+    },
+    "android": {
+      "package": "com.im6ft02.bejelimobile"
+    }
   }
 }

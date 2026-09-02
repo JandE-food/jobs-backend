@@ -51,6 +51,14 @@ export function buildApp(options?: { initializeDb?: boolean }) {
     reply.type("text/plain").send("OK");
   });
 
+  app.get("/", async (_request, reply) => {
+    reply.send({
+      ok: true,
+      service: "api",
+      health: "/health",
+    });
+  });
+
   void registerBillingRoutes(app);
   void registerAuthRoutes(app);
   void registerDirectoryRoutes(app);

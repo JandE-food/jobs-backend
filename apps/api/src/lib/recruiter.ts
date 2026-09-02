@@ -465,7 +465,7 @@ export async function deleteCompany(input: {
     [input.companyId, input.createdBy],
   );
 
-  return result.rowCount > 0;
+  return (result.rowCount ?? 0) > 0;
 }
 
 export async function listJobs(recruiterUserId?: number) {
@@ -550,7 +550,7 @@ export async function deleteJob(input: {
     [input.jobId, input.createdBy],
   );
 
-  return result.rowCount > 0;
+  return (result.rowCount ?? 0) > 0;
 }
 
 export async function createJob(input: {
