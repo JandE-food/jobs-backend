@@ -3,6 +3,7 @@ node_modules/
 .next/
 dist/
 *.apk
+*.tgz
 .DS_Store
 *.log
 .env
