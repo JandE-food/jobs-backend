@@ -160,8 +160,8 @@ export function KindredChrome({ children }: { children: ReactNode }) {
                 Do you want to log in?
               </h2>
               <p className="mt-3 text-sm leading-6 text-slate-600">
-                You can explore the feed first, then choose to log in for your personalized
-                workspace or stay signed out for now.
+                Start on the feed, then choose whether you want to log in or stay signed out
+                for now.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <Link
@@ -169,12 +169,6 @@ export function KindredChrome({ children }: { children: ReactNode }) {
                   className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-950 px-5 text-sm font-bold text-white"
                 >
                   Log in
-                </Link>
-                <Link
-                  href="/signup"
-                  className="inline-flex min-h-11 items-center justify-center rounded-full bg-indigo-50 px-5 text-sm font-bold text-indigo-800"
-                >
-                  Sign up
                 </Link>
                 <button
                   type="button"

@@ -1495,26 +1495,28 @@ export function FeedPage() {
                 onClick={(event) => event.stopPropagation()}
                 data-reel-interactive="true"
               >
-                <div className="flex items-center gap-3">
-                  <Avatar src={activeShort.authorAvatar} alt={activeShort.authorName} size={44} />
-                  <div className="min-w-0">
-                    <p className="truncate text-[1.1rem] font-bold text-white">
-                      {activeShort.authorName}
-                    </p>
-                    <p className="truncate text-sm text-white/75">
-                      {activeShort.authorMeta}
-                      {activeShort.locationLabel ? ` · ${activeShort.locationLabel}` : ""}
-                    </p>
+                <div className="max-w-[12.75rem] space-y-2.5">
+                  <div className="flex items-center gap-2.5">
+                    <Avatar src={activeShort.authorAvatar} alt={activeShort.authorName} size={36} />
+                    <div className="min-w-0">
+                      <p className="truncate text-[0.98rem] font-bold text-white">
+                        {activeShort.authorName}
+                      </p>
+                      <p className="truncate text-[0.78rem] text-white/72">
+                        {activeShort.authorMeta}
+                        {activeShort.locationLabel ? ` · ${activeShort.locationLabel}` : ""}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <p className="mt-3 max-w-[16rem] text-[0.98rem] font-semibold leading-7 text-white">
-                  {activeShort.caption}
-                </p>
-                {activeShort.recommendationNote ? (
-                  <p className="mt-2 text-sm font-semibold text-white/80">
-                    {activeShort.recommendationNote}
+                  <p className="text-[0.84rem] font-semibold leading-[1.45rem] text-white/96">
+                    {activeShort.caption}
                   </p>
-                ) : null}
+                  {activeShort.recommendationNote ? (
+                    <p className="text-[0.78rem] leading-5 text-white/78">
+                      {activeShort.recommendationNote}
+                    </p>
+                  ) : null}
+                </div>
               </div>
 
               {commentsOpen ? (
