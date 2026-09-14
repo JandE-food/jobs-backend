@@ -28,7 +28,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
           cache-dependency-path: apps/web-new/package-lock.json
 
@@ -42,4 +42,4 @@ jobs:
         run: npx vercel build --prod --token="$VERCEL_TOKEN"
 
       - name: Deploy to production
-        run: npx vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
+        run: npx vercel deploy --prebuilt --archive=tgz --prod --token="$VERCEL_TOKEN"

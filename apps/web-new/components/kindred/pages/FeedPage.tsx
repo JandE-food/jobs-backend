@@ -1515,7 +1515,7 @@ export function FeedPage() {
               >
                 <div className="max-w-[12.75rem] space-y-2.5">
                   <Link
-                    href={`/profile/${activeShort.authorId}`}
+                    href={`/profile?creator=${activeShort.authorId}`}
                     className="flex items-center gap-2.5 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
                     data-reel-interactive="true"
                   >
@@ -1807,7 +1807,7 @@ export function FeedPage() {
                       onClick={(event) => event.stopPropagation()}
                     >
                       <Link
-                        href={`/profile/${activeShort.authorId}`}
+                        href={`/profile?creator=${activeShort.authorId}`}
                         className="flex items-center gap-3 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
                         data-reel-interactive="true"
                       >
