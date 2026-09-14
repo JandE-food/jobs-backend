@@ -836,6 +836,7 @@ export function FeedPage() {
         return {
           id: item.id,
           title: item.author.name,
+          authorId: item.author.id,
           authorName: item.author.name,
           authorAvatar: item.author.avatar,
           authorMeta: item.author.title,
@@ -1511,10 +1512,13 @@ export function FeedPage() {
                 className="absolute inset-x-0 bottom-0 z-10 px-4 pt-8"
                 style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 5.5rem)" }}
                 onClick={(event) => event.stopPropagation()}
-                data-reel-interactive="true"
               >
                 <div className="max-w-[12.75rem] space-y-2.5">
-                  <div className="flex items-center gap-2.5">
+                  <Link
+                    href={`/profile/${activeShort.authorId}`}
+                    className="flex items-center gap-2.5 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+                    data-reel-interactive="true"
+                  >
                     <Avatar src={activeShort.authorAvatar} alt={activeShort.authorName} size={36} />
                     <div className="min-w-0">
                       <p className="truncate text-[0.98rem] font-bold text-white">
@@ -1525,7 +1529,7 @@ export function FeedPage() {
                         {activeShort.locationLabel ? ` · ${activeShort.locationLabel}` : ""}
                       </p>
                     </div>
-                  </div>
+                  </Link>
                   <p className="text-[0.84rem] font-semibold leading-[1.45rem] text-white/96">
                     {activeShort.caption}
                   </p>
@@ -1802,7 +1806,11 @@ export function FeedPage() {
                       className="absolute inset-x-0 bottom-0 z-10 p-5"
                       onClick={(event) => event.stopPropagation()}
                     >
-                      <div className="flex items-center gap-3">
+                      <Link
+                        href={`/profile/${activeShort.authorId}`}
+                        className="flex items-center gap-3 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+                        data-reel-interactive="true"
+                      >
                         <Avatar src={activeShort.authorAvatar} alt={activeShort.authorName} size={44} />
                         <div className="min-w-0">
                           <p className="truncate text-[1.15rem] font-bold text-white">
@@ -1813,7 +1821,7 @@ export function FeedPage() {
                             {activeShort.locationLabel ? ` · ${activeShort.locationLabel}` : ""}
                           </p>
                         </div>
-                      </div>
+                      </Link>
                       <p className="mt-4 max-w-[16rem] text-[0.95rem] font-semibold leading-7 text-white">
                         {activeShort.caption}
                       </p>

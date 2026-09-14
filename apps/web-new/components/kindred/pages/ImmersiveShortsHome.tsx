@@ -43,6 +43,7 @@ export type ImmersiveShortComment = {
 export type ImmersiveShortItem = {
   id: string;
   title: string;
+  authorId: string;
   authorName: string;
   authorAvatar: string;
   authorMeta: string;

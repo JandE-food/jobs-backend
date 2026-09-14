@@ -45,6 +45,7 @@ function isRecruiterRoute(pathname: string) {
 function isAppRoute(pathname: string) {
   return (
     APP_ROUTES.has(pathname) ||
+    pathname.startsWith("/profile/") ||
     pathname.startsWith("/companies/") ||
     pathname.startsWith("/recruiter/shortlists/") ||
     pathname.startsWith("/recruiter/candidates/")
@@ -52,7 +53,7 @@ function isAppRoute(pathname: string) {
 }
 
 function isGuestAllowedRoute(pathname: string) {
-  return GUEST_ALLOWED_ROUTES.has(pathname);
+  return GUEST_ALLOWED_ROUTES.has(pathname) || pathname.startsWith("/profile/");
 }
 
 export function KindredChrome({ children }: { children: ReactNode }) {
