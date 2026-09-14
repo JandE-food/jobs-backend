@@ -1186,7 +1186,7 @@ export function FeedPage() {
               {activeShort ? (
                 <article
                   key={`${activeShort.id}-${lastMoveDirection}`}
-                  className="-translate-y-[1cm] mx-auto w-full max-w-[calc(22rem+2cm)] rounded-[2rem] bg-slate-950 shadow-[0_32px_80px_rgba(15,23,42,0.22)]"
+                  className="mx-auto w-full max-w-[min(100%,calc(22rem+2cm))] rounded-[2rem] bg-slate-950 shadow-[0_32px_80px_rgba(15,23,42,0.22)] md:-translate-y-[1cm]"
                   style={
                     lastMoveDirection === 0
                       ? undefined
@@ -1215,13 +1215,13 @@ export function FeedPage() {
                         loop
                         playsInline
                         preload="metadata"
-                        className="h-[44rem] w-full cursor-pointer object-cover"
+                        className="h-[33rem] w-full cursor-pointer object-cover sm:h-[38rem] md:h-[44rem]"
                         aria-label={activeShort.media.alt}
                         onPlay={() => setIsPlaying(true)}
                         onPause={() => setIsPlaying(false)}
                       />
                     ) : activeShort.media ? (
-                      <div className="relative h-[44rem] w-full">
+                      <div className="relative h-[33rem] w-full sm:h-[38rem] md:h-[44rem]">
                         <Image
                           src={activeShort.media.src}
                           alt={activeShort.media.alt}
@@ -1231,7 +1231,7 @@ export function FeedPage() {
                         />
                       </div>
                     ) : (
-                      <div className="grid h-[44rem] w-full place-items-center bg-slate-900 text-white/70">
+                      <div className="grid h-[33rem] w-full place-items-center bg-slate-900 text-white/70 sm:h-[38rem] md:h-[44rem]">
                         <VideoIcon className="h-8 w-8" aria-hidden="true" />
                       </div>
                     )}
