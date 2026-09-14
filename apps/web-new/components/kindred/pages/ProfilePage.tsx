@@ -1098,7 +1098,7 @@ export function ProfilePage() {
               className="w-full"
               onClick={async () => {
                 await signOut();
-                router.replace("/login");
+                router.replace("/");
               }}
             >
               Sign out

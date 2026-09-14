@@ -28,6 +28,15 @@ const APP_ROUTES = new Set([
 ]);
 
 const AUTH_ROUTES = new Set(["/login", "/signup"]);
+const GUEST_ALLOWED_ROUTES = new Set([
+  "/",
+  "/jobs",
+  "/notifications",
+  "/network",
+  "/profile",
+  "/resume",
+  "/settings/privacy",
+]);
 
 function isRecruiterRoute(pathname: string) {
   return pathname.startsWith("/recruiter");
@@ -40,6 +49,10 @@ function isAppRoute(pathname: string) {
     pathname.startsWith("/recruiter/shortlists/") ||
     pathname.startsWith("/recruiter/candidates/")
   );
+}
+
+function isGuestAllowedRoute(pathname: string) {
+  return GUEST_ALLOWED_ROUTES.has(pathname);
 }
 
 export function KindredChrome({ children }: { children: ReactNode }) {
@@ -65,7 +78,7 @@ export function KindredChrome({ children }: { children: ReactNode }) {
     }
 
     if (!user && isAppRoute(pathname)) {
-      if (pathname !== "/") {
+      if (!isGuestAllowedRoute(pathname)) {
         router.replace("/");
       }
       return;
