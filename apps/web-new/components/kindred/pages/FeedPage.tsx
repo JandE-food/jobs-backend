@@ -882,16 +882,26 @@ export function FeedPage() {
       return;
     }
 
-    videos.forEach((video) => {
-      video.muted = isMuted;
+    const primaryVideo = getPrimaryVideoElement();
+    const secondaryVideos = videos.filter((video) => video !== primaryVideo);
 
-      if (isPlaying) {
-        void video.play().catch(() => undefined);
-        return;
-      }
-
+    secondaryVideos.forEach((video) => {
+      video.muted = true;
       video.pause();
     });
+
+    if (!primaryVideo) {
+      return;
+    }
+
+    primaryVideo.muted = isMuted;
+
+    if (isPlaying) {
+      void primaryVideo.play().catch(() => undefined);
+      return;
+    }
+
+    primaryVideo.pause();
   }, [activeShort?.id, activeShort?.media?.type, isMuted, isPlaying]);
 
   useEffect(() => {
@@ -1297,6 +1307,8 @@ export function FeedPage() {
     options?: {
       videoRef?: RefObject<HTMLVideoElement | null>;
       muted?: boolean;
+      autoPlay?: boolean;
+      preload?: "none" | "metadata" | "auto";
       onPlay?: () => void;
       onPause?: () => void;
       sizes?: string;
@@ -1308,11 +1320,11 @@ export function FeedPage() {
         <video
           ref={options?.videoRef}
           src={short.media.src}
-          autoPlay
+          autoPlay={options?.autoPlay ?? true}
           muted={options?.muted ?? isMuted}
           loop
           playsInline
-          preload="metadata"
+          preload={options?.preload ?? "metadata"}
           className={cn("h-full w-full object-cover", options?.className)}
           aria-label={short.media.alt}
           onPlay={options?.onPlay}
@@ -1393,7 +1405,11 @@ export function FeedPage() {
                 className="pointer-events-none absolute inset-0 will-change-transform"
                 style={mobilePreviewStyle}
               >
-                {renderImmersiveMedia(mobilePreviewShort, { muted: true })}
+                {renderImmersiveMedia(mobilePreviewShort, {
+                  muted: true,
+                  autoPlay: false,
+                  preload: "none",
+                })}
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/25 via-black/10 to-black/80" />
               </div>
             ) : null}
@@ -1421,6 +1437,8 @@ export function FeedPage() {
             >
               {renderImmersiveMedia(activeShort, {
                 videoRef: mobileVideoRef,
+                autoPlay: true,
+                preload: "metadata",
                 onPlay: () => setIsPlaying(true),
                 onPause: () => setIsPlaying(false),
                 className: "cursor-pointer",
@@ -1708,6 +1726,8 @@ export function FeedPage() {
                   >
                     {renderImmersiveMedia(activeShort, {
                       videoRef: desktopVideoRef,
+                      autoPlay: true,
+                      preload: "metadata",
                       sizes: "(max-width: 768px) 100vw, 31rem",
                       onPlay: () => setIsPlaying(true),
                       onPause: () => setIsPlaying(false),
