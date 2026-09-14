@@ -145,22 +145,22 @@ export function JobsPage() {
     <div className="ui-fade-up space-y-8 xl:space-y-10">
       <section
         aria-labelledby="matches-title"
-        className="rounded-[2rem] border border-slate-200 bg-white p-7 shadow-[0_18px_45px_rgba(15,23,42,0.05)] sm:p-9"
+        className="rounded-[2rem] border border-slate-200/90 bg-white/95 p-7 shadow-[0_18px_45px_rgba(15,23,42,0.05)] sm:p-9"
       >
         <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
           <div>
             <p className="flex items-center gap-1 text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
               <SparklesIcon className="h-4 w-4" aria-hidden="true" />
-              AI matches
+              Talent jobs
             </p>
             <h1
               id="matches-title"
               className="mt-1 font-display text-2xl font-bold tracking-tight text-slate-950"
             >
-              Roles that fit you
+              Jobs shaped around your current profile
             </h1>
             <p className="mt-1 text-sm text-slate-600">
-              Scored from your CV, skills and network.
+              Same BEJELI role data, rebuilt into the new reference-style workspace.
             </p>
           </div>
           <div className="grid gap-3 sm:grid-cols-3">
@@ -179,6 +179,17 @@ export function JobsPage() {
               </div>
             ))}
           </div>
+        </div>
+        <div className="mt-5 flex flex-wrap gap-2">
+          <span className="inline-flex min-h-11 items-center rounded-full bg-indigo-600 px-4 text-sm font-semibold text-white">
+            Best matches first
+          </span>
+          <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
+            Saved role tracking
+          </span>
+          <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
+            Employer directory links
+          </span>
         </div>
       </section>
 
@@ -200,7 +211,7 @@ export function JobsPage() {
                 aria-pressed={active === filter}
                 onClick={() => setActive(filter)}
                 className={cn(
-                  "min-h-11 rounded-xl border px-4 text-left text-sm font-bold focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600",
+                  "min-h-11 rounded-full border px-4 text-left text-sm font-bold focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600",
                   active === filter
                     ? "border-slate-900 bg-slate-900 text-white"
                     : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50",
@@ -343,7 +354,7 @@ export function JobsPage() {
                       </Button>
                       <Link
                         href="/companies"
-                        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-indigo-200 bg-white px-4 text-sm font-semibold text-indigo-800 hover:bg-indigo-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 lg:min-w-[240px]"
+                        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-indigo-200 bg-white px-4 text-sm font-semibold text-indigo-800 hover:bg-indigo-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 lg:min-w-[240px]"
                       >
                         Explore employer directory
                         <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />

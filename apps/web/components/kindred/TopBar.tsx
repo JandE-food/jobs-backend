@@ -11,16 +11,13 @@ import {
   BellIcon,
   BriefcaseBusinessIcon,
   ChevronDownIcon,
-  FileTextIcon,
-  HomeIcon,
   SearchIcon,
-  SparklesIcon,
-  UsersIcon,
+  ShieldCheckIcon,
 } from "./icons";
 import { cn, IconButton } from "./primitives";
 import { useKindredAuth } from "./app/kindred-provider";
 
-type OpenMenu = "search" | "platform" | "explore" | "recruiters" | "account" | null;
+type OpenMenu = "search" | "account" | null;
 
 type CompanySearchItem = {
   id: number;
@@ -88,11 +85,18 @@ export function TopBar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [companies, setCompanies] = useState<CompanySearchItem[]>([]);
   const [searchError, setSearchError] = useState("");
-  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [recentSearches, setRecentSearches] = useState<string[]>(() => {
+    if (typeof window === "undefined") {
+      return [];
+    }
 
-  useEffect(() => {
-    setOpenMenu(null);
-  }, [pathname]);
+    try {
+      const raw = window.localStorage.getItem(recentSearchesStorageKey);
+      return raw ? (JSON.parse(raw) as string[]) : [];
+    } catch {
+      return [];
+    }
+  });
 
   useEffect(() => {
     function handlePointerDown(event: MouseEvent) {
@@ -114,15 +118,6 @@ export function TopBar() {
       document.removeEventListener("mousedown", handlePointerDown);
       document.removeEventListener("keydown", handleEscape);
     };
-  }, []);
-
-  useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem(recentSearchesStorageKey);
-      setRecentSearches(raw ? (JSON.parse(raw) as string[]) : []);
-    } catch {
-      setRecentSearches([]);
-    }
   }, []);
 
   useEffect(() => {
@@ -287,6 +282,9 @@ export function TopBar() {
       .slice(0, 10);
   }, [companies, searchQuery]);
 
+  const companiesHref = canUseRecruiterShell ? "/recruiter/companies" : "/companies";
+  const postHref = canUseRecruiterShell ? "/recruiter#recruiter-posting-queue" : "/#feed-tools";
+
   return (
     <header ref={topbarRef} className="topbar-shell ui-fade-up">
       <div className="topbar-inner">
@@ -302,92 +300,8 @@ export function TopBar() {
             BEJELI
           </span>
         </Link>
-        <nav className="hidden items-center gap-1 lg:flex">
-          <Link href="/" className="nav-pill focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600">
-            <HomeIcon className="h-4 w-4" aria-hidden="true" />
-            Home
-          </Link>
-          <TopbarDropdown
-            label="Platform"
-            icon={<SparklesIcon className="h-4 w-4" aria-hidden="true" />}
-            open={openMenu === "platform"}
-            onToggle={() => toggleMenu("platform")}
-          >
-            <p className="nav-dropdown-label">Professional workflows</p>
-            <Link href="/jobs" className="nav-dropdown-link" onClick={() => setOpenMenu(null)}>
-              <strong>Job matching</strong>
-              <span>Review scored roles, save opportunities, and apply from one workspace.</span>
-            </Link>
-            <Link href="/network" className="nav-dropdown-link" onClick={() => setOpenMenu(null)}>
-              <strong>Network graph</strong>
-              <span>Find warm introductions, peers, and recruiter-side operators.</span>
-            </Link>
-            <Link href="/resume" className="nav-dropdown-link" onClick={() => setOpenMenu(null)}>
-              <strong>Resume Studio</strong>
-              <span>Upload your CV, review structured data, and refine your profile.</span>
-            </Link>
-          </TopbarDropdown>
-          <TopbarDropdown
-            label="Explore"
-            icon={<BriefcaseBusinessIcon className="h-4 w-4" aria-hidden="true" />}
-            open={openMenu === "explore"}
-            onToggle={() => toggleMenu("explore")}
-          >
-            <p className="nav-dropdown-label">Hiring ecosystem</p>
-            <Link href="/companies" className="nav-dropdown-link" onClick={() => setOpenMenu(null)}>
-              <strong>Company directory</strong>
-              <span>Browse verified employer pages, campaigns, and hiring queues.</span>
-            </Link>
-            <Link href="/pricing" className="nav-dropdown-link" onClick={() => setOpenMenu(null)}>
-              <strong>Plans and billing</strong>
-              <span>Review Free, Growth, and Scale pricing across regions.</span>
-            </Link>
-            <Link href="/settings/privacy" className="nav-dropdown-link" onClick={() => setOpenMenu(null)}>
-              <strong>Privacy controls</strong>
-              <span>Export data, manage deletion requests, and review consent tooling.</span>
-            </Link>
-          </TopbarDropdown>
-          {canUseRecruiterShell ? (
-            <TopbarDropdown
-              label="Recruiters"
-              icon={<UsersIcon className="h-4 w-4" aria-hidden="true" />}
-              open={openMenu === "recruiters"}
-              onToggle={() => toggleMenu("recruiters")}
-            >
-              <p className="nav-dropdown-label">Enterprise tools</p>
-              <Link href="/recruiter" className="nav-dropdown-link" onClick={() => setOpenMenu(null)}>
-                <strong>Dashboard</strong>
-                <span>Review company momentum, shortlists, and posting queues.</span>
-              </Link>
-              <Link
-                href="/recruiter/candidates"
-                className="nav-dropdown-link"
-                onClick={() => setOpenMenu(null)}
-              >
-                <strong>Candidate search</strong>
-                <span>Filter talent and add profiles directly into shortlist pipelines.</span>
-              </Link>
-              <Link
-                href="/recruiter/companies"
-                className="nav-dropdown-link"
-                onClick={() => setOpenMenu(null)}
-              >
-                <strong>Company operations</strong>
-                <span>Create company pages, job queues, and ad inventory placements.</span>
-              </Link>
-              <Link
-                href="/recruiter/operations"
-                className="nav-dropdown-link"
-                onClick={() => setOpenMenu(null)}
-              >
-                <strong>Platform operations</strong>
-                <span>Review escrow holds, compliance checks, rewards, and dispute cases.</span>
-              </Link>
-            </TopbarDropdown>
-          ) : null}
-        </nav>
-        <div className="relative hidden min-w-0 flex-1 xl:block">
-          <div className="flex h-12 w-full max-w-lg items-center gap-3 rounded-full border border-slate-200 bg-slate-50 px-4 text-left text-sm text-slate-500 transition-[background-color,border-color,box-shadow] duration-200 hover:border-slate-300 hover:bg-white focus-within:border-slate-300 focus-within:bg-white">
+        <div className="relative hidden min-w-0 flex-1 justify-center md:flex">
+          <div className="flex h-12 w-full max-w-2xl items-center gap-3 rounded-full border border-slate-200 bg-slate-50 px-4 text-left text-sm text-slate-500 transition-[background-color,border-color,box-shadow] duration-200 hover:border-slate-300 hover:bg-white focus-within:border-slate-300 focus-within:bg-white">
             <SearchIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
             <input
               value={searchQuery}
@@ -455,18 +369,27 @@ export function TopBar() {
             </div>
           ) : null}
         </div>
-        <div className="ml-auto flex items-center gap-1">
+        <div className="ml-auto flex items-center gap-2">
           <Link
-            href="/resume"
-            className="inline-flex min-h-11 items-center gap-1.5 rounded-xl px-3 text-sm font-semibold text-indigo-800 hover:bg-indigo-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
-            aria-label="Open Resume Studio"
+            href={companiesHref}
+            className="hidden min-h-11 items-center gap-2 rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-800 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 lg:inline-flex"
           >
-            <FileTextIcon className="h-4 w-4" aria-hidden="true" />
-            <span className="hidden min-[380px]:inline">Resume Studio</span>
+            <BriefcaseBusinessIcon className="h-4 w-4" aria-hidden="true" />
+            Companies
+          </Link>
+          <span className="hidden min-h-11 items-center gap-2 rounded-full bg-emerald-50 px-4 text-sm font-semibold text-emerald-700 xl:inline-flex">
+            <ShieldCheckIcon className="h-4 w-4" aria-hidden="true" />
+            UK data protected
+          </span>
+          <Link
+            href={postHref}
+            className="hidden min-h-11 items-center rounded-full bg-indigo-700 px-4 text-sm font-semibold text-white hover:bg-indigo-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 md:inline-flex"
+          >
+            + Post
           </Link>
           <IconButton
             label="Search people, roles and companies"
-            className="xl:hidden"
+            className="md:hidden"
             onClick={() => toggleMenu("search")}
           >
             <SearchIcon className="h-5 w-5" aria-hidden="true" />
@@ -475,7 +398,7 @@ export function TopBar() {
             href="/notifications"
             aria-label={`Notifications, ${unreadNotifications} unread`}
             className={cn(
-              "relative grid h-11 w-11 place-items-center rounded-xl text-slate-600 transition-colors hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2",
+              "relative grid h-11 w-11 place-items-center rounded-full text-slate-600 transition-colors hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2",
               pathname === "/notifications" && "bg-slate-100 text-slate-900",
             )}
           >
@@ -507,6 +430,12 @@ export function TopBar() {
               <strong>Resume Studio</strong>
               <span>Refresh skills, experience, and structured CV metadata.</span>
             </Link>
+            {canUseRecruiterShell ? (
+              <Link href="/recruiter" className="nav-dropdown-link" onClick={() => setOpenMenu(null)}>
+                <strong>Recruiter workspace</strong>
+                <span>Open TalentShorts, shortlists, companies, and hiring workflows.</span>
+              </Link>
+            ) : null}
             <Link href="/settings/privacy" className="nav-dropdown-link" onClick={() => setOpenMenu(null)}>
               <strong>Privacy settings</strong>
               <span>Manage GDPR export, deletion, and session-linked data controls.</span>

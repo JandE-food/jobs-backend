@@ -313,33 +313,18 @@ const envApiUrl = (
     };
   }
 ).process?.env?.EXPO_PUBLIC_API_URL;
+const defaultApiUrl = "https://135.125.184.123.sslip.io/api";
+
+function normalizeApiUrl(url: string) {
+  return url.trim().replace(/\/+$/, "");
+}
 
 function resolveMobileApiUrl() {
-  if (envApiUrl) {
-    return envApiUrl;
+  if (envApiUrl?.trim()) {
+    return normalizeApiUrl(envApiUrl);
   }
 
-  const scriptUrl = (
-    NativeModules as {
-      SourceCode?: {
-        scriptURL?: string;
-      };
-    }
-  ).SourceCode?.scriptURL;
-
-  const hostMatch = scriptUrl?.match(/^https?:\/\/([^/:]+)(?::\d+)?\//);
-  const derivedHost = hostMatch?.[1];
-
-  if (derivedHost) {
-    const resolvedHost =
-      Platform.OS === "android" && (derivedHost === "localhost" || derivedHost === "127.0.0.1")
-        ? "10.0.2.2"
-        : derivedHost;
-
-    return `http://${resolvedHost}:3001`;
-  }
-
-  return Platform.OS === "android" ? "http://10.0.2.2:3001" : "http://localhost:3001";
+  return defaultApiUrl;
 }
 
 const apiUrl = resolveMobileApiUrl();

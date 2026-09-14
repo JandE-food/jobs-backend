@@ -607,11 +607,38 @@ export function ProfilePage() {
                 </Button>
                 <Link
                   href="/resume"
-                  className="inline-flex min-h-11 items-center rounded-xl bg-indigo-700 px-4 text-sm font-semibold text-white hover:bg-indigo-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
+                  className="inline-flex min-h-11 items-center rounded-full bg-indigo-700 px-4 text-sm font-semibold text-white hover:bg-indigo-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
                 >
                   Refresh from CV
                 </Link>
               </div>
+            </div>
+            <div className="mt-5 grid gap-3 sm:grid-cols-3">
+              {[
+                { label: "Profile health", value: `${profileHealthScore}%` },
+                { label: "Skills", value: `${skills.length}` },
+                { label: "Portfolio", value: `${portfolio.length}` },
+              ].map((stat) => (
+                <div key={stat.label} className="rounded-[1.35rem] bg-slate-50 px-4 py-3">
+                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">
+                    {stat.label}
+                  </p>
+                  <p className="mt-1 font-display text-2xl font-bold text-slate-950">
+                    {stat.value}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-5 flex flex-wrap gap-2">
+              <span className="inline-flex min-h-11 items-center rounded-full bg-indigo-600 px-4 text-sm font-semibold text-white">
+                Talent identity
+              </span>
+              <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
+                Resume-connected
+              </span>
+              <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
+                Recruiter-visible
+              </span>
             </div>
           </div>
         </Card>
@@ -644,7 +671,7 @@ export function ProfilePage() {
               <input
                 value={profileDraft.fullName}
                 onChange={(event) => handleDraftChange("fullName", event.target.value)}
-                className="rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition-colors focus:border-indigo-500"
+                className="rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition-colors focus:border-indigo-500 focus:bg-white"
               />
             </label>
             <label className="grid gap-2 text-sm font-semibold text-slate-700">
@@ -652,7 +679,7 @@ export function ProfilePage() {
               <input
                 value={profileDraft.location}
                 onChange={(event) => handleDraftChange("location", event.target.value)}
-                className="rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition-colors focus:border-indigo-500"
+                className="rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition-colors focus:border-indigo-500 focus:bg-white"
               />
             </label>
             <label className="grid gap-2 text-sm font-semibold text-slate-700 md:col-span-2">
@@ -661,7 +688,7 @@ export function ProfilePage() {
                 value={profileDraft.headline}
                 onChange={(event) => handleDraftChange("headline", event.target.value)}
                 rows={3}
-                className="rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition-colors focus:border-indigo-500"
+                className="rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition-colors focus:border-indigo-500 focus:bg-white"
               />
             </label>
           </div>
@@ -681,7 +708,7 @@ export function ProfilePage() {
             </div>
             <Link
               href="/resume"
-              className="mt-3 inline-flex min-h-11 items-center rounded-xl bg-white px-4 text-sm font-bold text-indigo-800 ring-1 ring-indigo-200 hover:bg-indigo-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
+              className="mt-3 inline-flex min-h-11 items-center rounded-full bg-white px-4 text-sm font-bold text-indigo-800 ring-1 ring-indigo-200 hover:bg-indigo-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
             >
               Update from CV
             </Link>

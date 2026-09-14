@@ -96,8 +96,62 @@ export function RecruiterCandidatesPage() {
   }
 
   useEffect(() => {
-    void loadCandidates();
-    void loadShortlists();
+    let active = true;
+
+    const timer = window.setTimeout(() => {
+      authedFetch(`${apiUrl}/recruiter/candidates`)
+        .then(async (response) => {
+          const payload = await readJsonResponse<{ candidates?: Candidate[] }>(response);
+
+          if (!response.ok) {
+            throw new Error("Unable to load candidates.");
+          }
+
+          if (active) {
+            setCandidates(payload.candidates ?? []);
+          }
+        })
+        .catch((caughtError) => {
+          if (!active) {
+            return;
+          }
+
+          setError(
+            caughtError instanceof Error
+              ? caughtError.message
+              : "Unable to load candidates.",
+          );
+        });
+
+      authedFetch(`${apiUrl}/recruiter/shortlists`)
+        .then(async (response) => {
+          const payload = await readJsonResponse<{ shortlists?: Shortlist[] }>(response);
+
+          if (!response.ok) {
+            throw new Error("Unable to load shortlists.");
+          }
+
+          if (active) {
+            setShortlists(payload.shortlists ?? []);
+          }
+        })
+        .catch((caughtError) => {
+          if (!active) {
+            return;
+          }
+
+          setError(
+            caughtError instanceof Error
+              ? caughtError.message
+              : "Unable to load shortlists.",
+          );
+        });
+    }, 0);
+
+    return () => {
+      active = false;
+      window.clearTimeout(timer);
+    };
   }, []);
 
   async function createShortlist() {
@@ -186,8 +240,8 @@ export function RecruiterCandidatesPage() {
   }
 
   return (
-    <div className="space-y-6 py-5">
-      <section className="rounded-[28px] border border-slate-200 bg-white p-6">
+    <div className="mx-auto max-w-5xl space-y-6 py-5">
+      <section className="rounded-[2rem] border border-slate-200/90 bg-white/95 p-6 shadow-[0_18px_45px_rgba(15,23,42,0.05)]">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
             <span className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-700">
@@ -203,6 +257,18 @@ export function RecruiterCandidatesPage() {
           <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-900">
             {shortlists.length} active shortlists
           </div>
+        </div>
+
+        <div className="mt-5 flex flex-wrap gap-2">
+          <span className="inline-flex min-h-11 items-center rounded-full bg-indigo-600 px-4 text-sm font-semibold text-white">
+            Candidate search
+          </span>
+          <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
+            Shortlist actions
+          </span>
+          <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
+            Shared recruiter data
+          </span>
         </div>
 
         <form
@@ -330,7 +396,7 @@ export function RecruiterCandidatesPage() {
                     {shortlists.length ? (
                       <Link
                         href="/recruiter/shortlists"
-                        className="inline-flex min-h-11 items-center justify-center rounded-xl px-4 text-sm font-semibold text-indigo-800 transition-colors hover:bg-indigo-50"
+                        className="inline-flex min-h-11 items-center justify-center rounded-full px-4 text-sm font-semibold text-indigo-800 transition-colors hover:bg-indigo-50"
                       >
                         View all shortlists
                       </Link>
@@ -351,7 +417,7 @@ export function RecruiterCandidatesPage() {
           )}
         </div>
 
-        <Card className="h-fit p-5">
+        <Card className="h-fit border-slate-200/90 bg-white/95 p-5 shadow-[0_18px_45px_rgba(15,23,42,0.05)]">
           <h2 className="font-display text-xl font-bold text-slate-950">
             Shortlist workflow
           </h2>
@@ -395,7 +461,7 @@ export function RecruiterCandidatesPage() {
               {recentShortlist ? (
                 <Link
                   href={`/recruiter/shortlists/${recentShortlist.id}`}
-                  className="inline-flex min-h-11 items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 px-4 text-sm font-semibold text-emerald-900 transition-colors hover:bg-emerald-100"
+                  className="inline-flex min-h-11 items-center justify-center rounded-full border border-emerald-200 bg-emerald-50 px-4 text-sm font-semibold text-emerald-900 transition-colors hover:bg-emerald-100"
                 >
                   View {recentShortlist.name}
                 </Link>

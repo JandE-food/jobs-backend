@@ -181,7 +181,7 @@ export function NetworkPage() {
     <div className="ui-fade-up space-y-8 xl:space-y-10">
       <section
         aria-labelledby="network-title"
-        className="rounded-[2rem] border border-slate-200 bg-white p-7 shadow-[0_18px_45px_rgba(15,23,42,0.05)] sm:p-9"
+        className="rounded-[2rem] border border-slate-200/90 bg-white/95 p-7 shadow-[0_18px_45px_rgba(15,23,42,0.05)] sm:p-9"
       >
         <p className="flex items-center gap-1 text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
           <SparklesIcon className="h-4 w-4" aria-hidden="true" />
@@ -197,6 +197,17 @@ export function NetworkPage() {
           Filter by location, sector, and rating, then endorse strong profiles or dispatch
           instant-book shifts from the same discovery flow.
         </p>
+        <div className="mt-5 flex flex-wrap gap-2">
+          <span className="inline-flex min-h-11 items-center rounded-full bg-indigo-600 px-4 text-sm font-semibold text-white">
+            Talent discovery
+          </span>
+          <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
+            Recruiter actions
+          </span>
+          <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
+            Instant booking
+          </span>
+        </div>
       </section>
 
       <dl className="grid gap-4 md:grid-cols-3" aria-label="Network summary">
@@ -242,18 +253,18 @@ export function NetworkPage() {
                 value={location}
                 onChange={(event) => setLocation(event.target.value)}
                 placeholder="Filter by location"
-                className="min-h-11 rounded-xl border border-slate-300 px-4 text-sm outline-none"
+                className="min-h-11 rounded-2xl border border-slate-300 bg-slate-50 px-4 text-sm outline-none"
               />
               <input
                 value={sector}
                 onChange={(event) => setSector(event.target.value)}
                 placeholder="Filter by sector"
-                className="min-h-11 rounded-xl border border-slate-300 px-4 text-sm outline-none"
+                className="min-h-11 rounded-2xl border border-slate-300 bg-slate-50 px-4 text-sm outline-none"
               />
               <select
                 value={minRating}
                 onChange={(event) => setMinRating(event.target.value)}
-                className="min-h-11 rounded-xl border border-slate-300 px-4 text-sm outline-none"
+                className="min-h-11 rounded-2xl border border-slate-300 bg-slate-50 px-4 text-sm outline-none"
               >
                 <option value="0">All ratings</option>
                 <option value="3.5">3.5+</option>
@@ -384,13 +395,13 @@ export function NetworkPage() {
             <div className="mt-4 flex flex-wrap gap-3">
               <Link
                 href="/companies"
-                className="inline-flex min-h-11 items-center gap-2 rounded-xl text-sm font-semibold text-indigo-800 hover:bg-indigo-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
+                className="inline-flex min-h-11 items-center gap-2 rounded-full text-sm font-semibold text-indigo-800 hover:bg-indigo-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
               >
                 Open company directory <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
               </Link>
               <Link
                 href="/recruiter/operations"
-                className="inline-flex min-h-11 items-center gap-2 rounded-xl text-sm font-semibold text-indigo-800 hover:bg-indigo-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
+                className="inline-flex min-h-11 items-center gap-2 rounded-full text-sm font-semibold text-indigo-800 hover:bg-indigo-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
               >
                 Open operations dashboard <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
               </Link>

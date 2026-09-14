@@ -93,7 +93,7 @@ export function SignupPage() {
 
   return (
     <AuthLayout>
-      <Card className="w-full p-5 shadow-[0_12px_32px_rgba(15,23,42,0.06)] sm:p-7">
+      <Card className="w-full max-w-xl p-5 shadow-[0_18px_45px_rgba(15,23,42,0.06)] sm:p-7">
         <p className="text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
           Build your professional signal
         </p>
@@ -101,7 +101,7 @@ export function SignupPage() {
           Create your account
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-slate-600">
-          Join a network built for meaningful connections and credible opportunities.
+          Join the same connected ecosystem used by the mobile app, with separate flows for talent and recruiters.
         </p>
 
         <ul className="mt-5 space-y-2 rounded-xl bg-slate-50 p-3 text-sm text-slate-700">

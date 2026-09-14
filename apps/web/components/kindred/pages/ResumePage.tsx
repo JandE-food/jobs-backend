@@ -357,7 +357,7 @@ export function ResumePage() {
     <div className="ui-fade-up space-y-6 lg:space-y-8">
       <section
         aria-labelledby="resume-title"
-        className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_18px_45px_rgba(15,23,42,0.05)] sm:p-8"
+        className="rounded-[2rem] border border-slate-200/90 bg-white/95 p-6 shadow-[0_18px_45px_rgba(15,23,42,0.05)] sm:p-8"
       >
         <p className="flex items-center gap-1 text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
           <WandSparklesIcon className="h-4 w-4" aria-hidden="true" />
@@ -373,6 +373,17 @@ export function ResumePage() {
           Upload once, review the structured output, and move straight into job
           matching, recruiter visibility, and profile updates from a desktop workspace.
         </p>
+        <div className="mt-5 flex flex-wrap gap-2">
+          <span className="inline-flex min-h-11 items-center rounded-full bg-indigo-600 px-4 text-sm font-semibold text-white">
+            CV parsing
+          </span>
+          <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
+            Profile sync
+          </span>
+          <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
+            Same BEJELI server
+          </span>
+        </div>
       </section>
 
       <p className="sr-only" role="status" aria-live="polite">

@@ -1,0 +1,45 @@
+name: Deploy Web New To Vercel
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - "apps/web-new/**"
+      - ".github/workflows/deploy-web-new-vercel.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: team_8SQbYkIf4GJ0IQT51bIYx8FM
+      VERCEL_PROJECT_ID: prj_fA6UAZPdGME8lTnxlq6BUWyUHA6F
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+    defaults:
+      run:
+        working-directory: apps/web-new
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: apps/web-new/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Pull Vercel environment
+        run: npx vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+
+      - name: Build Vercel artifact
+        run: npx vercel build --prod --token="$VERCEL_TOKEN"
+
+      - name: Deploy to production
+        run: npx vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"

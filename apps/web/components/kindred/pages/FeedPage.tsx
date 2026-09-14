@@ -5,9 +5,11 @@ import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
 import Link from "next/link";
 import {
   ArrowRightIcon,
+  BellIcon,
   BanknoteIcon,
   CheckCircle2Icon,
   HeartIcon,
+  HomeIcon,
   ImageIcon,
   MapPinIcon,
   MessageCircleIcon,
@@ -15,13 +17,16 @@ import {
   SparklesIcon,
   FileTextIcon,
   UploadCloudIcon,
+  UserIcon,
   VideoIcon,
+  UsersIcon,
 } from "../icons";
 
 import { motion, useReducedMotion } from "../motion";
 import { feed, me, type FeedItem } from "../mock";
 import { useKindredAuth } from "../app/kindred-provider";
 import { Avatar, Badge, Button, Card, MatchRing, cn } from "../primitives";
+import { ImmersiveShortsHome, type ImmersiveShortItem } from "./ImmersiveShortsHome";
 import { apiUrl } from "../../api";
 import {
   feedStorageKey,
@@ -98,28 +103,42 @@ function ComposeCard({
   const captureVideoInputRef = useRef<HTMLInputElement | null>(null);
 
   return (
-    <Card className="p-5 sm:p-6">
+    <Card className="overflow-hidden border-slate-200/90 bg-white/95 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.06)] sm:p-6">
       <div className="flex items-start gap-3">
         <Avatar src={authorAvatar} alt={authorName} size={46} />
         <div className="min-w-0 flex-1">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="text-sm font-semibold text-slate-900">{authorName}</p>
+              <p className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">
+                Post to your feed
+              </p>
+            </div>
+            <Badge tone="indigo">Creator mode</Badge>
+          </div>
           <textarea
             value={body}
             onChange={(event) => onBodyChange(event.target.value)}
             rows={4}
             placeholder="Share an update, a role, or a win..."
-            className="min-h-28 w-full resize-none rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-7 text-slate-700 outline-none transition-colors placeholder:text-slate-500 focus:border-slate-300 focus:bg-white focus-visible:outline-none"
+            className="mt-3 min-h-28 w-full resize-none rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-7 text-slate-700 outline-none transition-colors placeholder:text-slate-500 focus:border-slate-300 focus:bg-white focus-visible:outline-none"
           />
           {media.length ? (
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               {media.map((item) => (
-                <div key={item.id} className="overflow-hidden rounded-[1.25rem] border border-slate-200 bg-slate-50">
+                <div
+                  key={item.id}
+                  className="overflow-hidden rounded-[1.4rem] border border-slate-200 bg-slate-50"
+                >
                   {item.type === "image" ? (
                     <img src={item.src} alt={item.alt} className="h-48 w-full object-cover" />
                   ) : (
                     <video src={item.src} controls className="h-48 w-full object-cover" />
                   )}
                   <div className="flex items-center justify-between gap-3 px-4 py-3">
-                    <p className="min-w-0 truncate text-xs font-semibold text-slate-600">{item.name}</p>
+                    <p className="min-w-0 truncate text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
+                      {item.type === "image" ? "Photo ready" : "Video ready"}
+                    </p>
                     <button
                       type="button"
                       onClick={() => onRemoveMedia(item.id)}
@@ -363,7 +382,7 @@ function ProfileNudge({
   profileReadiness: number;
 }) {
   return (
-    <Card className="border-indigo-200 bg-indigo-50/70 p-5">
+    <Card className="border-indigo-200 bg-gradient-to-r from-indigo-50 via-white to-emerald-50 p-5">
       <div className="flex items-center gap-3">
         <Avatar src={avatarSrc} alt="" size={42} />
         <div className="min-w-0 flex-1">
@@ -383,42 +402,6 @@ function ProfileNudge({
         </Link>
       </div>
     </Card>
-  );
-}
-
-function FeedHighlights({
-  profileReadiness,
-  skillsCount,
-  portfolioCount,
-}: {
-  profileReadiness: number;
-  skillsCount: number;
-  portfolioCount: number;
-}) {
-  const stats = [
-    {
-      label: "Profile score",
-      value: `${profileReadiness}%`,
-      detail: "Ranked for recruiter trust",
-    },
-    { label: "Connections", value: `${me.connections}`, detail: "Warm network signal" },
-    {
-      label: "Visible proof",
-      value: `${portfolioCount + skillsCount}`,
-      detail: `${portfolioCount} clips and ${skillsCount} structured skills`,
-    },
-  ];
-
-  return (
-    <section className="grid gap-3 md:grid-cols-3">
-      {stats.map((stat) => (
-        <Card key={stat.label} className="p-4">
-          <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">{stat.label}</p>
-          <p className="mt-2 font-display text-3xl font-bold text-slate-950">{stat.value}</p>
-          <p className="mt-1 text-sm text-slate-600">{stat.detail}</p>
-        </Card>
-      ))}
-    </section>
   );
 }
 
@@ -465,51 +448,58 @@ function PostCard({
 
   return (
     <article>
-      <Card className="p-4 sm:p-5">
-        <div className="flex items-start gap-3">
-          <Avatar src={item.author.avatar} alt={item.author.name} size={44} />
-          <div className="min-w-0 flex-1">
-            <div className="flex items-baseline gap-2">
-              <p className="truncate font-semibold text-slate-900">
-                {item.author.name}
+      <Card className="overflow-hidden border-slate-200/90 bg-white/95 p-0 shadow-[0_22px_55px_rgba(15,23,42,0.06)]">
+        <div className="p-5 sm:p-6">
+          <div className="flex items-start gap-3">
+            <Avatar src={item.author.avatar} alt={item.author.name} size={44} />
+            <div className="min-w-0 flex-1">
+              <div className="flex items-baseline gap-2">
+                <p className="truncate font-semibold text-slate-900">
+                  {item.author.name}
+                </p>
+                <span className="text-xs text-slate-500">· {item.time}</span>
+              </div>
+              <p className="truncate text-sm text-slate-600">
+                {item.author.title} at {item.author.company}
               </p>
-              <span className="text-xs text-slate-500">· {item.time}</span>
             </div>
-            <p className="truncate text-sm text-slate-600">
-              {item.author.title} at {item.author.company}
-            </p>
+          </div>
+          <p className="mt-4 text-[15px] leading-relaxed text-slate-700">{item.body}</p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {item.tags.map((tag) => (
+              <Badge key={tag} tone="indigo">
+                {tag}
+              </Badge>
+            ))}
           </div>
         </div>
-        <p className="mt-3 text-[15px] leading-relaxed text-slate-700">{item.body}</p>
         {item.media?.length ? (
-          <div className={cn("mt-4 grid gap-3", item.media.length > 1 && "sm:grid-cols-2")}>
+          <div
+            className={cn(
+              "grid gap-1.5 border-y border-slate-100 bg-slate-100/70 p-1.5",
+              item.media.length > 1 && "sm:grid-cols-2",
+            )}
+          >
             {item.media.map((media) =>
               media.type === "image" ? (
                 <img
                   key={media.src}
                   src={media.src}
                   alt={media.alt}
-                  className="max-h-[26rem] w-full rounded-[1.25rem] object-cover"
+                  className="max-h-[32rem] w-full rounded-[1.5rem] bg-slate-200 object-cover"
                 />
               ) : (
                 <video
                   key={media.src}
                   src={media.src}
                   controls
-                  className="max-h-[26rem] w-full rounded-[1.25rem] bg-slate-950 object-cover"
+                  className="max-h-[32rem] w-full rounded-[1.5rem] bg-slate-950 object-cover"
                 />
               ),
             )}
           </div>
         ) : null}
-        <div className="mt-3 flex flex-wrap gap-2">
-          {item.tags.map((tag) => (
-            <Badge key={tag} tone="indigo">
-              {tag}
-            </Badge>
-          ))}
-        </div>
-        <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-2">
+        <div className="flex items-center justify-between gap-2 px-4 py-3 sm:px-6">
           <button
             type="button"
             onClick={() => {
@@ -518,7 +508,7 @@ function PostCard({
             aria-pressed={Boolean(item.liked)}
             aria-label={`${item.liked ? "Unlike" : "Like"} post, ${item.likes} likes`}
             className={cn(
-              "inline-flex min-h-11 items-center gap-2 rounded-xl px-3 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600",
+              "inline-flex min-h-11 items-center gap-2 rounded-2xl px-3.5 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600",
               item.liked && "text-rose-700",
             )}
           >
@@ -532,7 +522,7 @@ function PostCard({
             type="button"
             onClick={() => setCommentsOpen((current) => !current)}
             aria-label={`Open ${comments.length} comments`}
-            className="inline-flex min-h-11 items-center gap-2 rounded-xl px-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
+            className="inline-flex min-h-11 items-center gap-2 rounded-2xl px-3.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
           >
             <MessageCircleIcon className="h-4 w-4" aria-hidden="true" />
             {comments.length}
@@ -541,13 +531,13 @@ function PostCard({
             type="button"
             aria-label="Share post"
             onClick={() => void handleShare()}
-            className="grid h-11 w-11 place-items-center rounded-xl text-slate-700 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
+            className="grid h-11 w-11 place-items-center rounded-2xl text-slate-700 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
           >
             <Share2Icon className="h-4 w-4" aria-hidden="true" />
           </button>
         </div>
         {commentsOpen ? (
-          <div className="mt-4 space-y-3 border-t border-slate-100 pt-4">
+          <div className="space-y-3 border-t border-slate-100 px-4 py-4 sm:px-6">
             <div className="flex gap-3">
               <Avatar src={viewerAvatar} alt={viewerName} size={40} />
               <div className="flex-1">
@@ -726,15 +716,30 @@ function FeedItemView({
 
 export function FeedPage() {
   const { token } = useKindredAuth();
-  const [feedItems, setFeedItems] = useState<FeedItem[]>(feed);
+  const [feedItems, setFeedItems] = useState<FeedItem[]>(() => {
+    if (typeof window === "undefined") {
+      return feed;
+    }
+
+    try {
+      const raw = window.localStorage.getItem(feedStorageKey);
+      return raw ? (JSON.parse(raw) as FeedItem[]) : feed;
+    } catch {
+      return feed;
+    }
+  });
   const [composerText, setComposerText] = useState("");
   const [composerMedia, setComposerMedia] = useState<ComposerMedia[]>([]);
   const [composerStatus, setComposerStatus] = useState("");
-  const [feedMode, setFeedMode] = useState<FeedMode>("All");
+  const [composerChannel, setComposerChannel] = useState<Exclude<FeedMode, "All">>("Work");
+  const [shortsMode, setShortsMode] = useState<"curated" | "latest">("curated");
+  const [discoveryLocation, setDiscoveryLocation] = useState("All locations");
+  const [discoverySector, setDiscoverySector] = useState("All sectors");
+  const [discoveryRating, setDiscoveryRating] = useState("All ratings");
+  const [sharedShortIds, setSharedShortIds] = useState<Record<string, boolean>>({});
   const [profile] = useState(() => getStoredProfileWorkspace());
   const [resume] = useState(() => getStoredResumeWorkspace());
   const author = useMemo(() => buildCurrentAuthor(profile), [profile]);
-  const selectedChannel = feedMode === "All" ? "Work" : feedMode;
   const profileReadiness = useMemo(
     () =>
       Math.min(
@@ -743,25 +748,96 @@ export function FeedPage() {
       ),
     [profile.portfolio.length, resume.skills.length],
   );
-  const filteredFeed = useMemo(() => {
-    if (feedMode === "All") {
-      return feedItems;
+  const mediaPosts = useMemo(
+    () =>
+      feedItems.filter(
+        (item): item is Extract<FeedItem, { kind: "post" }> =>
+          item.kind === "post" && Boolean(item.media?.length),
+      ),
+    [feedItems],
+  );
+  const streamItems = useMemo(
+    () => feedItems.filter((item) => item.kind !== "post" || !item.media?.length),
+    [feedItems],
+  );
+  const discoveryLocationOptions = useMemo(() => {
+    const uniqueLocations = Array.from(
+      new Set(mediaPosts.map((item) => item.author.location).filter(Boolean)),
+    ).slice(0, 4);
+
+    return ["All locations", ...uniqueLocations];
+  }, [mediaPosts]);
+  const discoverySectorOptions = useMemo(() => {
+    const uniqueSectors = Array.from(
+      new Set(
+        mediaPosts
+          .map((item) => item.tags[0])
+          .filter((tag): tag is string => Boolean(tag)),
+      ),
+    ).slice(0, 4);
+
+    return ["All sectors", ...uniqueSectors];
+  }, [mediaPosts]);
+  const discoveryRatingOptions = ["All ratings", "4.0★+", "4.5★+"];
+
+  const shortsItems = useMemo(() => {
+    const base = mediaPosts.filter((item) => {
+      const rating = 4 + Math.min(0.9, item.likes / 300 + item.comments / 500);
+      const passesLocation =
+        discoveryLocation === "All locations" || item.author.location === discoveryLocation;
+      const passesSector =
+        discoverySector === "All sectors" || item.tags.includes(discoverySector);
+      const passesRating =
+        discoveryRating === "All ratings" ||
+        rating >= Number.parseFloat(discoveryRating.replace("★+", ""));
+
+      return passesLocation && passesSector && passesRating;
+    });
+
+    if (shortsMode === "latest") {
+      return base;
     }
 
-    return feedItems.filter((item) => item.channel === feedMode);
-  }, [feedItems, feedMode]);
+    return [...base].sort((left, right) => {
+      const leftScore = left.likes * 2 + left.comments * 3;
+      const rightScore = right.likes * 2 + right.comments * 3;
+      return rightScore - leftScore;
+    });
+  }, [discoveryLocation, discoveryRating, discoverySector, mediaPosts, shortsMode]);
 
-  useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem(feedStorageKey);
+  const immersiveShorts = useMemo<ImmersiveShortItem[]>(
+    () =>
+      shortsItems.map((item) => {
+        const rating = 4 + Math.min(0.9, item.likes / 300 + item.comments / 500);
+        const estimatedShares = Math.max(1, Math.round(item.likes / 6));
 
-      if (raw) {
-        setFeedItems(JSON.parse(raw) as FeedItem[]);
-      }
-    } catch {
-      // Ignore malformed local state and fall back to seeded feed.
-    }
-  }, []);
+        return {
+          id: item.id,
+          title: item.author.name,
+          authorName: item.author.name,
+          authorAvatar: item.author.avatar,
+          authorMeta: item.author.title,
+          caption: item.body,
+          tags: item.tags,
+          media: item.media?.[0],
+          locationLabel: item.author.location,
+          recommendationLabel: `${rating.toFixed(1)}★ creator signal`,
+          recommendationNote:
+            shortsMode === "curated"
+              ? "Curated to surface strong proof-of-work and standout momentum."
+              : "Latest short from your professional graph.",
+          ctaLabel: item.tags[0] ?? "Open profile",
+          likes: item.likes,
+          comments: item.comments,
+          shares: estimatedShares + (sharedShortIds[item.id] ? 1 : 0),
+          shared: Boolean(sharedShortIds[item.id]),
+          liked: item.liked,
+          commentItems: item.commentItems ?? [],
+          searchText: `${item.author.location} ${item.tags.join(" ")}`,
+        };
+      }),
+    [sharedShortIds, shortsItems, shortsMode],
+  );
 
   useEffect(() => {
     try {
@@ -844,8 +920,8 @@ export function FeedPage() {
   }
 
   function handleCreateDraft() {
-    setComposerText(buildAiDraft(selectedChannel, profile, resume));
-    setComposerStatus(`AI draft prepared for the ${selectedChannel.toLowerCase()} channel.`);
+    setComposerText(buildAiDraft(composerChannel, profile, resume));
+    setComposerStatus(`AI draft prepared for the ${composerChannel.toLowerCase()} channel.`);
   }
 
   function updatePostItem(
@@ -898,14 +974,14 @@ export function FeedPage() {
     const nextPost: Extract<FeedItem, { kind: "post" }> = {
       kind: "post",
       id: `post-${Date.now()}`,
-      channel: selectedChannel,
+      channel: composerChannel,
       author,
       time: "Just now",
       body: normalized || "Shared a media update.",
       tags:
-        selectedChannel === "Showcase"
+        composerChannel === "Showcase"
           ? ["Portfolio", composerMedia.length ? "Media update" : "Creator post"]
-          : selectedChannel === "Local"
+          : composerChannel === "Local"
             ? ["Local talent", "Availability"]
             : composerMedia.length
               ? ["Media update", "Work graph"]
@@ -923,130 +999,197 @@ export function FeedPage() {
     }
     setComposerText("");
     setComposerMedia([]);
-    setFeedMode("All");
+    setComposerChannel("Work");
     setComposerStatus("Post published to your feed.");
   }
 
+  async function handleShareShort(shortId: string) {
+    const targetItem = feedItems.find(
+      (item): item is Extract<FeedItem, { kind: "post" }> =>
+        item.kind === "post" && item.id === shortId,
+    );
+
+    if (!targetItem) {
+      return;
+    }
+
+    const shareText = `${targetItem.author.name}: ${targetItem.body}`;
+
+    if (navigator.share) {
+      await navigator
+        .share({ title: "CareerShorts", text: shareText })
+        .catch(() => undefined);
+    } else {
+      await navigator.clipboard?.writeText(shareText).catch(() => undefined);
+    }
+
+    setSharedShortIds((current) => ({ ...current, [shortId]: true }));
+  }
+
   return (
-    <div className="ui-fade-up space-y-8 xl:space-y-10">
-      <section aria-labelledby="feed-title" className="rounded-[2rem] border border-slate-200 bg-white p-7 shadow-[0_18px_45px_rgba(15,23,42,0.05)] sm:p-9">
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
-              Curated for you
+    <ImmersiveShortsHome
+      brandLabel="Talent side"
+      navLabel="Talent navigation"
+      navItems={[
+        { href: "/", label: "Shorts", icon: <HomeIcon className="h-5 w-5" />, active: true },
+        { href: "/jobs", label: "Matches", icon: <SparklesIcon className="h-5 w-5" /> },
+        { href: "/network", label: "Network", icon: <UsersIcon className="h-5 w-5" /> },
+        { href: "/notifications", label: "Alerts", icon: <BellIcon className="h-5 w-5" /> },
+        { href: "/profile", label: "You", icon: <UserIcon className="h-5 w-5" /> },
+      ]}
+      searchPlaceholder="Search the home feed"
+      eyebrow="FOR YOUR NEXT MOVE"
+      title="CareerShorts"
+      modeLabel={shortsMode === "curated" ? "Curated" : "Latest"}
+      onToggleMode={() =>
+        setShortsMode((current) => (current === "curated" ? "latest" : "curated"))
+      }
+      dockItems={[
+        ...discoveryLocationOptions.map((option) => ({
+          key: `location-${option}`,
+          label: option,
+          active: discoveryLocation === option,
+          onClick: () => setDiscoveryLocation(option),
+        })),
+        ...discoverySectorOptions.map((option) => ({
+          key: `sector-${option}`,
+          label: option,
+          active: discoverySector === option,
+          onClick: () => setDiscoverySector(option),
+        })),
+        ...discoveryRatingOptions.map((option) => ({
+          key: `rating-${option}`,
+          label: option,
+          active: discoveryRating === option,
+          onClick: () => setDiscoveryRating(option),
+        })),
+        {
+          key: "resume",
+          label: "Resume",
+          icon: <FileTextIcon className="h-4 w-4" />,
+          href: "/resume",
+          tone: "accent",
+        },
+      ]}
+      shorts={immersiveShorts}
+      viewerName={author.name}
+      viewerAvatar={author.avatar}
+      emptyTitle="No shorts yet"
+      emptyBody="Create the first short or switch back once your synced feed loads."
+      commentPlaceholder="Add a thoughtful reply..."
+      onToggleLike={handleToggleLike}
+      onAddComment={handleAddComment}
+      onShare={(shortId) => void handleShareShort(shortId)}
+      topBarActions={
+        <>
+          <Link href="/jobs" className="immersive-dock-chip is-active">
+            <SparklesIcon className="h-4 w-4" aria-hidden="true" />
+            <span>Matches</span>
+          </Link>
+          <a
+            href="#feed-tools"
+            className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-950 px-4 text-sm font-bold text-white"
+          >
+            + Post
+          </a>
+          <Link
+            href="/notifications"
+            className="grid h-11 w-11 place-items-center rounded-full border border-slate-200 bg-white text-slate-700"
+            aria-label="Open notifications"
+          >
+            <BellIcon className="h-4 w-4" aria-hidden="true" />
+          </Link>
+          <Link href="/profile" className="rounded-full" aria-label="Open your profile">
+            <Avatar src={author.avatar} alt={author.name} size={44} />
+          </Link>
+        </>
+      }
+      sidePanel={
+        <div className="space-y-4">
+          <Card className="border-slate-200/90 bg-white/95 p-4 shadow-[0_18px_40px_rgba(15,23,42,0.06)]">
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-indigo-700">
+              Feed visibility
             </p>
-            <h1
-              id="feed-title"
-              className="mt-2 font-display text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl"
-            >
-              Professional signal, now in a real web workspace
-            </h1>
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">
-              Track role matches, people activity, and recruiter intent in a desktop
-              feed built for deeper browsing instead of phone-width scrolling.
+            <p className="mt-2 font-display text-3xl font-bold text-slate-950">
+              {profileReadiness}%
             </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge tone="emerald" className="shrink-0">
-              <SparklesIcon className="h-3.5 w-3.5" aria-hidden="true" />
-              Ranked and filtered
-            </Badge>
-            <Badge tone="indigo">Video-first discovery</Badge>
-            <Badge tone="amber">Work + creator graph</Badge>
-          </div>
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              Keep your profile fresh so your clips, portfolio, and availability stand out.
+            </p>
+          </Card>
+          <Card className="border-slate-200/90 bg-white/95 p-4 shadow-[0_18px_40px_rgba(15,23,42,0.06)]">
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-indigo-700">
+              Quick access
+            </p>
+            <div className="mt-4 grid gap-2">
+              <Link href="/resume" className="immersive-rail-link">
+                Resume
+              </Link>
+              <Link href="/notifications" className="immersive-rail-link">
+                Notifications
+              </Link>
+              <Link href="/jobs" className="immersive-rail-link">
+                Matches
+              </Link>
+            </div>
+          </Card>
+          <Card className="border-slate-200/90 bg-white/95 p-4 shadow-[0_18px_40px_rgba(15,23,42,0.06)]">
+            <div className="flex items-center gap-2">
+              <BellIcon className="h-4 w-4 text-emerald-600" />
+              <p className="text-sm font-bold text-slate-950">Mobile-aligned labels</p>
+            </div>
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              `CareerShorts`, `Curated`, `Latest`, and `Resume` now mirror the mobile
+              feed language on web.
+            </p>
+          </Card>
         </div>
-      </section>
-      <FeedHighlights
-        profileReadiness={profileReadiness}
-        skillsCount={resume.skills.length}
-        portfolioCount={profile.portfolio.length}
-      />
-      <section aria-label="Feed modes">
-        <div className="flex flex-wrap gap-2">
-          {(["All", "Work", "Showcase", "Local"] as FeedMode[]).map((mode) => (
-            <button
-              key={mode}
-              type="button"
-              onClick={() => setFeedMode(mode)}
-              className={cn(
-                "inline-flex min-h-11 items-center rounded-full px-4 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600",
-                feedMode === mode
-                  ? "bg-slate-950 text-white"
-                  : "bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50",
-              )}
-            >
-              {mode === "All" ? "For you" : mode}
-            </button>
-          ))}
-        </div>
-        <div className="mt-4 grid gap-3 md:grid-cols-3">
-          <Card className="p-4">
-            <p className="text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
-              Video portfolio
-            </p>
-            <p className="mt-2 text-sm leading-7 text-slate-700">
-              Showcase short-form clips, process videos, and work snapshots without losing professional context.
-            </p>
-          </Card>
-          <Card className="p-4">
-            <p className="text-xs font-bold uppercase tracking-[0.12em] text-emerald-700">
-              Work graph
-            </p>
-            <p className="mt-2 text-sm leading-7 text-slate-700">
-              Keep job matches, hiring posts, and recruiter trust signals in the same scrolling workspace.
-            </p>
-          </Card>
-          <Card className="p-4">
-            <p className="text-xs font-bold uppercase tracking-[0.12em] text-amber-700">
-              Local visibility
-            </p>
-            <p className="mt-2 text-sm leading-7 text-slate-700">
-              Surface availability and local-ready talent posts for faster blue-collar and shift discovery patterns.
-            </p>
-          </Card>
-        </div>
-      </section>
-      <section aria-label="Feed updates" className="space-y-5">
-        <ProfileNudge avatarSrc={author.avatar} profileReadiness={profileReadiness} />
-        <ComposeCard
-          authorAvatar={author.avatar}
-          authorName={author.name}
-          body={composerText}
-          onBodyChange={setComposerText}
-          media={composerMedia}
-          selectedChannel={selectedChannel}
-          onSelectChannel={setFeedMode}
-          onCreateDraft={handleCreateDraft}
-          onPickImages={(event) => handleMediaUpload(event, "image")}
-          onPickVideos={(event) => handleMediaUpload(event, "video")}
-          onRemoveMedia={(mediaId) =>
-            setComposerMedia((current) => current.filter((item) => item.id !== mediaId))
-          }
-          onPublish={handlePublishPost}
-          statusMessage={composerStatus}
-        />
-        {filteredFeed.length ? (
-          filteredFeed.map((item) => (
-            <FeedItemView
-              key={item.id}
-              item={item}
-              viewerAvatar={author.avatar}
-              viewerName={author.name}
-              onToggleLike={handleToggleLike}
-              onAddComment={handleAddComment}
-            />
-          ))
-        ) : (
-          <Card className="p-5">
-            <p className="text-sm font-semibold text-slate-900">
-              No posts yet in {feedMode === "All" ? "your filtered feed" : `${feedMode.toLowerCase()} mode`}.
-            </p>
-            <p className="mt-2 text-sm leading-7 text-slate-600">
-              Switch channels or publish the first update to activate this stream.
-            </p>
-          </Card>
-        )}
-      </section>
-    </div>
+      }
+      belowFeed={
+        <section id="feed-tools" aria-label="Feed tools" className="space-y-5">
+          <ProfileNudge avatarSrc={author.avatar} profileReadiness={profileReadiness} />
+          <ComposeCard
+            authorAvatar={author.avatar}
+            authorName={author.name}
+            body={composerText}
+            onBodyChange={setComposerText}
+            media={composerMedia}
+            selectedChannel={composerChannel}
+            onSelectChannel={(value) => {
+              if (value !== "All") {
+                setComposerChannel(value);
+              }
+            }}
+            onCreateDraft={handleCreateDraft}
+            onPickImages={(event) => handleMediaUpload(event, "image")}
+            onPickVideos={(event) => handleMediaUpload(event, "video")}
+            onRemoveMedia={(mediaId) =>
+              setComposerMedia((current) => current.filter((item) => item.id !== mediaId))
+            }
+            onPublish={handlePublishPost}
+            statusMessage={composerStatus}
+          />
+          {streamItems.length ? (
+            streamItems.map((item) => (
+              <FeedItemView
+                key={item.id}
+                item={item}
+                viewerAvatar={author.avatar}
+                viewerName={author.name}
+                onToggleLike={handleToggleLike}
+                onAddComment={handleAddComment}
+              />
+            ))
+          ) : (
+            <Card className="border-slate-200/90 bg-white/95 p-5">
+              <p className="text-sm font-semibold text-slate-900">No feed updates yet.</p>
+              <p className="mt-2 text-sm leading-7 text-slate-600">
+                Publish the first update to activate the rest of your home stream.
+              </p>
+            </Card>
+          )}
+        </section>
+      }
+    />
   );
 }

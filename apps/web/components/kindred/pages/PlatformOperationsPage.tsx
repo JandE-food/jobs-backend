@@ -69,13 +69,19 @@ export function PlatformOperationsPage() {
   }
 
   useEffect(() => {
-    loadOverview().catch((caughtError) => {
-      setError(
-        caughtError instanceof Error
-          ? caughtError.message
-          : "Unable to load platform operations.",
-      );
-    });
+    const timer = window.setTimeout(() => {
+      loadOverview().catch((caughtError) => {
+        setError(
+          caughtError instanceof Error
+            ? caughtError.message
+            : "Unable to load platform operations.",
+        );
+      });
+    }, 0);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
   }, []);
 
   async function updateBookingStatus(
@@ -211,6 +217,17 @@ export function PlatformOperationsPage() {
             Review dispute holds, companies-house style verification state, subscription mix,
             token velocity, and payout readiness from a single recruiter/admin workspace.
           </p>
+          <div className="mt-5 flex flex-wrap gap-2">
+            <span className="inline-flex min-h-11 items-center rounded-full bg-indigo-600 px-4 text-sm font-semibold text-white">
+              Escrow control
+            </span>
+            <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
+              Verification review
+            </span>
+            <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
+              Revenue visibility
+            </span>
+          </div>
         </Card>
       </section>
 
