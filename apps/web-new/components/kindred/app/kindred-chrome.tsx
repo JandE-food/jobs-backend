@@ -114,9 +114,7 @@ export function KindredChrome({ children }: { children: ReactNode }) {
             {children}
           </main>
         </div>
-        <div className={immersiveFeedRoute ? "hidden sm:block" : ""}>
-          <BottomNav />
-        </div>
+        <BottomNav />
       </div>
     );
   }

@@ -1186,10 +1186,21 @@ export function FeedPage() {
     }
 
     const totalOffset = dragDistanceYRef.current;
+    const isTap =
+      Math.abs(totalOffset) <= 6 &&
+      activeShort?.media?.type === "video" &&
+      !isInteractiveReelTarget(event.target);
     const shouldMove = Math.abs(totalOffset) >= DRAG_TRIGGER_PX;
 
     if (!shouldMove) {
       resetDragState();
+
+      if (isTap) {
+        suppressSurfaceClickRef.current = true;
+        togglePlayback();
+        return;
+      }
+
       setIsReleaseAnimating(true);
       releaseTimerRef.current = window.setTimeout(() => {
         setIsReleaseAnimating(false);
@@ -1388,7 +1399,7 @@ export function FeedPage() {
 
               <div
                 className="absolute inset-x-0 bottom-0 z-10 px-4 pt-8"
-                style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 1.25rem)" }}
+                style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 5.5rem)" }}
                 onClick={(event) => event.stopPropagation()}
                 data-reel-interactive="true"
               >
@@ -1417,7 +1428,7 @@ export function FeedPage() {
               {commentsOpen ? (
                 <div
                   className="ui-fade-up absolute inset-x-4 bottom-4 z-40 rounded-[1.5rem] bg-white p-4 shadow-[0_22px_55px_rgba(15,23,42,0.2)]"
-                  style={{ bottom: "calc(env(safe-area-inset-bottom) + 1rem)" }}
+                  style={{ bottom: "calc(env(safe-area-inset-bottom) + 5rem)" }}
                   onClick={(event) => event.stopPropagation()}
                   data-reel-interactive="true"
                 >
