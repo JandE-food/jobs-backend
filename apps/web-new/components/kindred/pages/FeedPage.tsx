@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type ChangeEvent, type RefObject } from "react";
 
 import Link from "next/link";
 import {
@@ -771,7 +771,8 @@ export function FeedPage() {
   const [recruiterPromptOpen, setRecruiterPromptOpen] = useState(false);
   const [dragOffsetY, setDragOffsetY] = useState(0);
   const [isReleaseAnimating, setIsReleaseAnimating] = useState(false);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const mobileVideoRef = useRef<HTMLVideoElement | null>(null);
+  const desktopVideoRef = useRef<HTMLVideoElement | null>(null);
   const actionAnimationTimerRef = useRef<number | null>(null);
   const releaseTimerRef = useRef<number | null>(null);
   const activePointerIdRef = useRef<number | null>(null);
@@ -866,20 +867,31 @@ export function FeedPage() {
   const activeShort = immersiveShorts[safeActiveIndex] ?? null;
 
   useEffect(() => {
-    const video = videoRef.current;
+    const videos = [mobileVideoRef.current, desktopVideoRef.current].filter(
+      (video): video is HTMLVideoElement => Boolean(video),
+    );
 
-    if (!video || activeShort?.media?.type !== "video") {
+    if (!videos.length) {
       return;
     }
 
-    video.muted = isMuted;
-
-    if (isPlaying) {
-      void video.play().catch(() => undefined);
+    if (activeShort?.media?.type !== "video") {
+      videos.forEach((video) => {
+        video.pause();
+      });
       return;
     }
 
-    video.pause();
+    videos.forEach((video) => {
+      video.muted = isMuted;
+
+      if (isPlaying) {
+        void video.play().catch(() => undefined);
+        return;
+      }
+
+      video.pause();
+    });
   }, [activeShort?.id, activeShort?.media?.type, isMuted, isPlaying]);
 
   useEffect(() => {
@@ -1210,8 +1222,9 @@ export function FeedPage() {
     }
 
     const direction = totalOffset < 0 ? 1 : -1;
+    const releaseTravelPx = getReleaseTravelPx();
     setIsReleaseAnimating(true);
-    setDragOffsetY(direction === 1 ? -DRAG_LIMIT_PX : DRAG_LIMIT_PX);
+    setDragOffsetY(direction === 1 ? -releaseTravelPx : releaseTravelPx);
     activePointerIdRef.current = null;
     dragStartYRef.current = null;
     dragDistanceYRef.current = 0;
@@ -1224,23 +1237,31 @@ export function FeedPage() {
     }, 160);
   }
 
+  function getPrimaryVideoElement() {
+    if (typeof window !== "undefined" && window.matchMedia("(max-width: 639px)").matches) {
+      return mobileVideoRef.current ?? desktopVideoRef.current;
+    }
+
+    return desktopVideoRef.current ?? mobileVideoRef.current;
+  }
+
+  function getReleaseTravelPx() {
+    if (typeof window !== "undefined" && window.matchMedia("(max-width: 639px)").matches) {
+      return Math.max(DRAG_LIMIT_PX, Math.round(window.innerHeight * 0.88));
+    }
+
+    return DRAG_LIMIT_PX;
+  }
+
   function togglePlayback() {
-    const video = videoRef.current;
+    const video = getPrimaryVideoElement();
 
     if (!video || activeShort?.media?.type !== "video") {
       return;
     }
 
-    if (video.paused) {
-      setPlaybackIndicator("play");
-      setIsPlaying(true);
-      void video.play().catch(() => undefined);
-      return;
-    }
-
-    setPlaybackIndicator("pause");
-    video.pause();
-    setIsPlaying(false);
+    setPlaybackIndicator(isPlaying ? "pause" : "play");
+    setIsPlaying((current) => !current);
   }
 
   function triggerActionAnimation() {
@@ -1271,8 +1292,92 @@ export function FeedPage() {
     setCommentDraft("");
   }
 
-  const mobileReelStyle = dragOffsetY
-    ? { transform: `translateY(${dragOffsetY}px)` }
+  function renderImmersiveMedia(
+    short: ImmersiveShortItem,
+    options?: {
+      videoRef?: RefObject<HTMLVideoElement | null>;
+      muted?: boolean;
+      onPlay?: () => void;
+      onPause?: () => void;
+      sizes?: string;
+      className?: string;
+    },
+  ) {
+    if (short.media?.type === "video") {
+      return (
+        <video
+          ref={options?.videoRef}
+          src={short.media.src}
+          autoPlay
+          muted={options?.muted ?? isMuted}
+          loop
+          playsInline
+          preload="metadata"
+          className={cn("h-full w-full object-cover", options?.className)}
+          aria-label={short.media.alt}
+          onPlay={options?.onPlay}
+          onPause={options?.onPause}
+        />
+      );
+    }
+
+    if (short.media) {
+      return (
+        <div className={cn("relative h-full w-full", options?.className)}>
+          <Image
+            src={short.media.src}
+            alt={short.media.alt}
+            fill
+            sizes={options?.sizes ?? "100vw"}
+            className="object-cover"
+          />
+        </div>
+      );
+    }
+
+    return (
+      <div
+        className={cn(
+          "grid h-full w-full place-items-center bg-slate-900 text-white/70",
+          options?.className,
+        )}
+      >
+        <VideoIcon className="h-8 w-8" aria-hidden="true" />
+      </div>
+    );
+  }
+
+  const mobileSwipeDirection = dragOffsetY === 0 ? 0 : dragOffsetY < 0 ? 1 : -1;
+  const mobilePreviewShort =
+    mobileSwipeDirection !== 0 && immersiveShorts.length > 1
+      ? immersiveShorts[
+          (safeActiveIndex + mobileSwipeDirection + immersiveShorts.length) % immersiveShorts.length
+        ]
+      : null;
+  const mobileSwipeProgress = Math.min(
+    1,
+    Math.abs(dragOffsetY) /
+      Math.max(
+        DRAG_LIMIT_PX,
+        typeof window !== "undefined" ? Math.round(window.innerHeight * 0.72) : DRAG_LIMIT_PX,
+      ),
+  );
+  const mobilePreviewStyle =
+    mobilePreviewShort && mobileSwipeDirection !== 0
+      ? {
+          transform: `translate3d(0, ${
+            mobileSwipeDirection === 1
+              ? `${100 - mobileSwipeProgress * 100}%`
+              : `${-100 + mobileSwipeProgress * 100}%`
+          }, 0) scale(${0.965 + mobileSwipeProgress * 0.035})`,
+          opacity: 0.68 + mobileSwipeProgress * 0.32,
+        }
+      : undefined;
+  const mobileActiveLayerStyle = dragOffsetY
+    ? {
+        transform: `translate3d(0, ${dragOffsetY}px, 0) scale(${1 - mobileSwipeProgress * 0.018})`,
+        opacity: 1 - mobileSwipeProgress * 0.08,
+      }
     : undefined;
 
   return (
@@ -1281,14 +1386,24 @@ export function FeedPage() {
         {activeShort ? (
           <article
             key={`${activeShort.id}-${lastMoveDirection}-mobile`}
-            className={cn(
-              "relative h-[100svh] overflow-hidden bg-slate-950 text-white",
-              isReleaseAnimating && "transition-transform duration-200 ease-out",
-            )}
-            style={mobileReelStyle}
+            className="relative h-[100svh] overflow-hidden bg-slate-950 text-white"
           >
+            {mobilePreviewShort ? (
+              <div
+                className="pointer-events-none absolute inset-0 will-change-transform"
+                style={mobilePreviewStyle}
+              >
+                {renderImmersiveMedia(mobilePreviewShort, { muted: true })}
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/25 via-black/10 to-black/80" />
+              </div>
+            ) : null}
             <div
-              className="relative h-full touch-none overflow-hidden"
+              className={cn(
+                "relative h-full touch-none overflow-hidden will-change-transform",
+                isReleaseAnimating &&
+                  "transition-[transform,opacity] duration-[180ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+              )}
+              style={mobileActiveLayerStyle}
               onPointerDown={handleSurfacePointerDown}
               onPointerMove={handleSurfacePointerMove}
               onPointerUp={finishSurfaceDrag}
@@ -1304,35 +1419,12 @@ export function FeedPage() {
                 }
               }}
             >
-              {activeShort.media?.type === "video" ? (
-                <video
-                  ref={videoRef}
-                  src={activeShort.media.src}
-                  autoPlay
-                  muted={isMuted}
-                  loop
-                  playsInline
-                  preload="metadata"
-                  className="h-full w-full cursor-pointer object-cover"
-                  aria-label={activeShort.media.alt}
-                  onPlay={() => setIsPlaying(true)}
-                  onPause={() => setIsPlaying(false)}
-                />
-              ) : activeShort.media ? (
-                <div className="relative h-full w-full">
-                  <Image
-                    src={activeShort.media.src}
-                    alt={activeShort.media.alt}
-                    fill
-                    sizes="100vw"
-                    className="object-cover"
-                  />
-                </div>
-              ) : (
-                <div className="grid h-full w-full place-items-center bg-slate-900 text-white/70">
-                  <VideoIcon className="h-8 w-8" aria-hidden="true" />
-                </div>
-              )}
+              {renderImmersiveMedia(activeShort, {
+                videoRef: mobileVideoRef,
+                onPlay: () => setIsPlaying(true),
+                onPause: () => setIsPlaying(false),
+                className: "cursor-pointer",
+              })}
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/80" />
               {activeShort.media?.type === "video" && playbackIndicator ? (
                 <div className="pointer-events-none absolute inset-0 z-20 grid place-items-center">
@@ -1612,35 +1704,13 @@ export function FeedPage() {
                       }
                     }}
                   >
-                    {activeShort.media?.type === "video" ? (
-                      <video
-                        ref={videoRef}
-                        src={activeShort.media.src}
-                        autoPlay
-                        muted={isMuted}
-                        loop
-                        playsInline
-                        preload="metadata"
-                        className="h-[33rem] w-full cursor-pointer object-cover sm:h-[38rem] md:h-[44rem]"
-                        aria-label={activeShort.media.alt}
-                        onPlay={() => setIsPlaying(true)}
-                        onPause={() => setIsPlaying(false)}
-                      />
-                    ) : activeShort.media ? (
-                      <div className="relative h-[33rem] w-full sm:h-[38rem] md:h-[44rem]">
-                        <Image
-                          src={activeShort.media.src}
-                          alt={activeShort.media.alt}
-                          fill
-                          sizes="(max-width: 768px) 100vw, 31rem"
-                          className="object-cover"
-                        />
-                      </div>
-                    ) : (
-                      <div className="grid h-[33rem] w-full place-items-center bg-slate-900 text-white/70 sm:h-[38rem] md:h-[44rem]">
-                        <VideoIcon className="h-8 w-8" aria-hidden="true" />
-                      </div>
-                    )}
+                    {renderImmersiveMedia(activeShort, {
+                      videoRef: desktopVideoRef,
+                      sizes: "(max-width: 768px) 100vw, 31rem",
+                      onPlay: () => setIsPlaying(true),
+                      onPause: () => setIsPlaying(false),
+                      className: "h-[33rem] sm:h-[38rem] md:h-[44rem] cursor-pointer",
+                    })}
                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/15 via-black/10 to-black/75" />
                     {activeShort.media?.type === "video" && playbackIndicator ? (
                       <div className="pointer-events-none absolute inset-0 z-20 grid place-items-center">
