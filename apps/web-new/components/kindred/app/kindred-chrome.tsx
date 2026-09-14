@@ -45,6 +45,7 @@ export function KindredChrome({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const { hydrated, user } = useKindredAuth();
+  const immersiveFeedRoute = pathname === "/";
 
   useEffect(() => {
     if (!hydrated) {
@@ -88,8 +89,14 @@ export function KindredChrome({ children }: { children: ReactNode }) {
         >
           Skip to main content
         </a>
-        <TopBar />
-        <div className="mx-auto flex w-full max-w-[1440px] gap-8 px-4">
+        <div className={immersiveFeedRoute ? "hidden sm:block" : ""}>
+          <TopBar />
+        </div>
+        <div
+          className={`mx-auto flex w-full max-w-[1440px] gap-8 ${
+            immersiveFeedRoute ? "px-0 sm:px-4" : "px-4"
+          }`}
+        >
           <aside className="hidden w-[260px] shrink-0 lg:block">
             <div className="sticky top-14 max-h-[calc(100vh-3.5rem)] overflow-y-auto py-5 no-scrollbar">
               <SideNav />
@@ -98,12 +105,18 @@ export function KindredChrome({ children }: { children: ReactNode }) {
           <main
             id="main-content"
             aria-label={isRecruiterRoute(pathname) ? "BEJELI recruiter workspace" : "BEJELI talent workspace"}
-            className={pathname === "/" || pathname === "/recruiter" ? "min-w-0 flex-1 pt-3" : "min-w-0 flex-1 pb-24 pt-5 lg:pb-12"}
+            className={
+              pathname === "/" || pathname === "/recruiter"
+                ? "min-w-0 flex-1 pt-0 sm:pt-3"
+                : "min-w-0 flex-1 pb-24 pt-5 lg:pb-12"
+            }
           >
             {children}
           </main>
         </div>
-        <BottomNav />
+        <div className={immersiveFeedRoute ? "hidden sm:block" : ""}>
+          <BottomNav />
+        </div>
       </div>
     );
   }

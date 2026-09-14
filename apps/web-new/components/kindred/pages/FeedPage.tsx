@@ -68,6 +68,9 @@ type SyncedFeedPost = {
   media: SyncedFeedMedia[];
 };
 
+const DRAG_TRIGGER_PX = 90;
+const DRAG_LIMIT_PX = 178;
+
 function ComposeCard({
   authorAvatar,
   authorName,
@@ -766,8 +769,15 @@ export function FeedPage() {
   const [lastMoveDirection, setLastMoveDirection] = useState<-1 | 0 | 1>(0);
   const [animatedAction, setAnimatedAction] = useState<"endorse" | null>(null);
   const [recruiterPromptOpen, setRecruiterPromptOpen] = useState(false);
+  const [dragOffsetY, setDragOffsetY] = useState(0);
+  const [isReleaseAnimating, setIsReleaseAnimating] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const actionAnimationTimerRef = useRef<number | null>(null);
+  const releaseTimerRef = useRef<number | null>(null);
+  const activePointerIdRef = useRef<number | null>(null);
+  const dragStartYRef = useRef<number | null>(null);
+  const dragDistanceYRef = useRef(0);
+  const suppressSurfaceClickRef = useRef(false);
   const [profile] = useState(() => getStoredProfileWorkspace(workspaceIdentity));
   const [resume] = useState(() => getStoredResumeWorkspace(workspaceIdentity));
   const author = useMemo(() => buildCurrentAuthor(profile), [profile]);
@@ -889,6 +899,9 @@ export function FeedPage() {
   useEffect(() => () => {
     if (actionAnimationTimerRef.current) {
       window.clearTimeout(actionAnimationTimerRef.current);
+    }
+    if (releaseTimerRef.current) {
+      window.clearTimeout(releaseTimerRef.current);
     }
   }, []);
 
@@ -1096,6 +1109,110 @@ export function FeedPage() {
     setActiveIndex((current) => (current + direction + immersiveShorts.length) % immersiveShorts.length);
   }
 
+  function clearReleaseTimer() {
+    if (releaseTimerRef.current !== null) {
+      window.clearTimeout(releaseTimerRef.current);
+      releaseTimerRef.current = null;
+    }
+  }
+
+  function isInteractiveReelTarget(target: EventTarget | null) {
+    return target instanceof HTMLElement && Boolean(
+      target.closest(
+        "button, a, input, textarea, select, [data-reel-interactive='true']",
+      ),
+    );
+  }
+
+  function applyDragResistance(offset: number) {
+    const direction = Math.sign(offset) || 1;
+    const distance = Math.abs(offset);
+
+    if (distance <= 32) {
+      return offset;
+    }
+
+    const easedDistance = 32 + Math.pow(distance - 32, 0.82) * 0.88;
+    return direction * Math.min(DRAG_LIMIT_PX, easedDistance);
+  }
+
+  function resetDragState() {
+    activePointerIdRef.current = null;
+    dragStartYRef.current = null;
+    dragDistanceYRef.current = 0;
+    setDragOffsetY(0);
+  }
+
+  function handleSurfacePointerDown(event: React.PointerEvent<HTMLDivElement>) {
+    if (
+      !immersiveShorts.length ||
+      (event.pointerType === "mouse" && event.button !== 0) ||
+      isInteractiveReelTarget(event.target)
+    ) {
+      return;
+    }
+
+    clearReleaseTimer();
+    activePointerIdRef.current = event.pointerId;
+    dragStartYRef.current = event.clientY;
+    dragDistanceYRef.current = 0;
+    setDragOffsetY(0);
+    setIsReleaseAnimating(false);
+    event.currentTarget.setPointerCapture(event.pointerId);
+  }
+
+  function handleSurfacePointerMove(event: React.PointerEvent<HTMLDivElement>) {
+    if (activePointerIdRef.current !== event.pointerId || dragStartYRef.current === null) {
+      return;
+    }
+
+    const nextOffset = event.clientY - dragStartYRef.current;
+    dragDistanceYRef.current = nextOffset;
+
+    if (Math.abs(nextOffset) > 6) {
+      suppressSurfaceClickRef.current = true;
+    }
+
+    setDragOffsetY(applyDragResistance(nextOffset));
+  }
+
+  function finishSurfaceDrag(event: React.PointerEvent<HTMLDivElement>) {
+    if (activePointerIdRef.current !== event.pointerId) {
+      return;
+    }
+
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+
+    const totalOffset = dragDistanceYRef.current;
+    const shouldMove = Math.abs(totalOffset) >= DRAG_TRIGGER_PX;
+
+    if (!shouldMove) {
+      resetDragState();
+      setIsReleaseAnimating(true);
+      releaseTimerRef.current = window.setTimeout(() => {
+        setIsReleaseAnimating(false);
+        releaseTimerRef.current = null;
+      }, 240);
+      return;
+    }
+
+    const direction = totalOffset < 0 ? 1 : -1;
+    setIsReleaseAnimating(true);
+    setDragOffsetY(direction === 1 ? -DRAG_LIMIT_PX : DRAG_LIMIT_PX);
+    activePointerIdRef.current = null;
+    dragStartYRef.current = null;
+    dragDistanceYRef.current = 0;
+
+    releaseTimerRef.current = window.setTimeout(() => {
+      setIsReleaseAnimating(false);
+      setDragOffsetY(0);
+      releaseTimerRef.current = null;
+      move(direction);
+    }, 160);
+  }
+
   function togglePlayback() {
     const video = videoRef.current;
 
@@ -1143,9 +1260,287 @@ export function FeedPage() {
     setCommentDraft("");
   }
 
+  const mobileReelStyle = dragOffsetY
+    ? { transform: `translateY(${dragOffsetY}px)` }
+    : undefined;
+
   return (
-    <div className="space-y-5">
-      <section className="rounded-[2rem] border border-slate-200/90 bg-white/95 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.06)]">
+    <div className="sm:space-y-5">
+      <section className="sm:hidden">
+        {activeShort ? (
+          <article
+            key={`${activeShort.id}-${lastMoveDirection}-mobile`}
+            className={cn(
+              "relative h-[100svh] overflow-hidden bg-slate-950 text-white",
+              isReleaseAnimating && "transition-transform duration-200 ease-out",
+            )}
+            style={mobileReelStyle}
+          >
+            <div
+              className="relative h-full touch-none overflow-hidden"
+              onPointerDown={handleSurfacePointerDown}
+              onPointerMove={handleSurfacePointerMove}
+              onPointerUp={finishSurfaceDrag}
+              onPointerCancel={resetDragState}
+              onClick={() => {
+                if (suppressSurfaceClickRef.current) {
+                  suppressSurfaceClickRef.current = false;
+                  return;
+                }
+
+                if (activeShort.media?.type === "video") {
+                  togglePlayback();
+                }
+              }}
+            >
+              {activeShort.media?.type === "video" ? (
+                <video
+                  ref={videoRef}
+                  src={activeShort.media.src}
+                  autoPlay
+                  muted={isMuted}
+                  loop
+                  playsInline
+                  preload="metadata"
+                  className="h-full w-full cursor-pointer object-cover"
+                  aria-label={activeShort.media.alt}
+                  onPlay={() => setIsPlaying(true)}
+                  onPause={() => setIsPlaying(false)}
+                />
+              ) : activeShort.media ? (
+                <div className="relative h-full w-full">
+                  <Image
+                    src={activeShort.media.src}
+                    alt={activeShort.media.alt}
+                    fill
+                    sizes="100vw"
+                    className="object-cover"
+                  />
+                </div>
+              ) : (
+                <div className="grid h-full w-full place-items-center bg-slate-900 text-white/70">
+                  <VideoIcon className="h-8 w-8" aria-hidden="true" />
+                </div>
+              )}
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/80" />
+              {activeShort.media?.type === "video" && playbackIndicator ? (
+                <div className="pointer-events-none absolute inset-0 z-20 grid place-items-center">
+                  <div className="flex min-w-[8.5rem] flex-col items-center gap-2 rounded-[1.75rem] bg-black/52 px-5 py-4 text-white shadow-[0_20px_45px_rgba(15,23,42,0.28)] backdrop-blur-md">
+                    <span className="text-3xl font-bold leading-none">
+                      {playbackIndicator === "pause" ? "❚❚" : "▶"}
+                    </span>
+                    <span className="text-sm font-semibold tracking-[0.08em] text-white/90">
+                      {playbackIndicator === "pause" ? "Paused" : "Playing"}
+                    </span>
+                  </div>
+                </div>
+              ) : null}
+
+              <div
+                className={cn(
+                  "absolute bottom-24 right-3 z-30 grid content-end gap-2 justify-items-center transition-all duration-200",
+                  commentsOpen
+                    ? "pointer-events-none translate-x-3 opacity-0"
+                    : "pointer-events-auto translate-x-0 opacity-100",
+                )}
+                onClick={(event) => event.stopPropagation()}
+                data-reel-interactive="true"
+              >
+                <button
+                  type="button"
+                  onClick={handleTalentEndorseAttempt}
+                  className={cn(
+                    "grid h-12 w-12 place-items-center rounded-full bg-black/45 text-white transition-transform duration-200 active:scale-95",
+                    animatedAction === "endorse" && "reel-action-pop",
+                  )}
+                  aria-label="Endorse creator"
+                >
+                  <ThumbsUpIcon className="h-5 w-5" aria-hidden="true" />
+                </button>
+                <span className="text-sm font-bold text-white">{activeShort.endorsements ?? 0}</span>
+                <button
+                  type="button"
+                  onClick={() => setCommentsOpen((current) => !current)}
+                  className="grid h-12 w-12 place-items-center rounded-full bg-black/45 text-white transition-transform duration-200 active:scale-95"
+                  aria-label="Open comments"
+                >
+                  <MessageCircleIcon className="h-5 w-5" aria-hidden="true" />
+                </button>
+                <span className="text-sm font-bold text-white">{activeShort.comments}</span>
+                <button
+                  type="button"
+                  onClick={() => void handleShareShort(activeShort.id)}
+                  className="grid h-12 w-12 place-items-center rounded-full bg-black/45 text-white transition-transform duration-200 active:scale-95"
+                  aria-label="Share post"
+                >
+                  <Share2Icon className="h-5 w-5" aria-hidden="true" />
+                </button>
+                <span className="text-sm font-bold text-white">{activeShort.shares ?? 0}</span>
+                <button
+                  type="button"
+                  onClick={() => setIsMuted((current) => !current)}
+                  className="grid h-12 w-12 place-items-center rounded-full bg-black/45 text-white"
+                  aria-label={isMuted ? "Unmute reel" : "Mute reel"}
+                >
+                  <span className="text-lg">{isMuted ? "🔇" : "🔊"}</span>
+                </button>
+              </div>
+
+              <div
+                className="absolute inset-x-0 bottom-0 z-10 px-4 pt-8"
+                style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 1.25rem)" }}
+                onClick={(event) => event.stopPropagation()}
+                data-reel-interactive="true"
+              >
+                <div className="flex items-center gap-3">
+                  <Avatar src={activeShort.authorAvatar} alt={activeShort.authorName} size={44} />
+                  <div className="min-w-0">
+                    <p className="truncate text-[1.1rem] font-bold text-white">
+                      {activeShort.authorName}
+                    </p>
+                    <p className="truncate text-sm text-white/75">
+                      {activeShort.authorMeta}
+                      {activeShort.locationLabel ? ` · ${activeShort.locationLabel}` : ""}
+                    </p>
+                  </div>
+                </div>
+                <p className="mt-3 max-w-[16rem] text-[0.98rem] font-semibold leading-7 text-white">
+                  {activeShort.caption}
+                </p>
+                {activeShort.recommendationNote ? (
+                  <p className="mt-2 text-sm font-semibold text-white/80">
+                    {activeShort.recommendationNote}
+                  </p>
+                ) : null}
+              </div>
+
+              {commentsOpen ? (
+                <div
+                  className="ui-fade-up absolute inset-x-4 bottom-4 z-40 rounded-[1.5rem] bg-white p-4 shadow-[0_22px_55px_rgba(15,23,42,0.2)]"
+                  style={{ bottom: "calc(env(safe-area-inset-bottom) + 1rem)" }}
+                  onClick={(event) => event.stopPropagation()}
+                  data-reel-interactive="true"
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-bold text-slate-950">Comments</p>
+                      <p className="text-xs text-slate-500">
+                        {(activeShort.commentItems ?? []).length} replies
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setCommentsOpen(false)}
+                      className="text-xs font-bold text-slate-500"
+                    >
+                      Close
+                    </button>
+                  </div>
+                  <div className="mt-3 grid max-h-44 gap-2 overflow-y-auto">
+                    {(activeShort.commentItems ?? []).length ? (
+                      (activeShort.commentItems ?? []).map((comment) => (
+                        <div key={comment.id} className="rounded-2xl bg-slate-50 p-3">
+                          <div className="flex items-center gap-2">
+                            <p className="text-xs font-bold text-slate-900">{comment.author}</p>
+                            <span className="text-[11px] text-slate-500">{comment.time}</span>
+                          </div>
+                          <p className="mt-2 text-sm leading-6 text-slate-700">{comment.text}</p>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-sm text-slate-500">
+                        Start the conversation on this short.
+                      </p>
+                    )}
+                  </div>
+                  <div className="mt-3 flex gap-3">
+                    <Avatar src={author.avatar} alt={author.name} size={40} />
+                    <div className="flex-1">
+                      <textarea
+                        rows={3}
+                        value={commentDraft}
+                        onChange={(event) => setCommentDraft(event.target.value)}
+                        onKeyDown={(event) => {
+                          if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
+                            event.preventDefault();
+                            submitShortComment();
+                          }
+                        }}
+                        placeholder="Add a thoughtful reply..."
+                        className="w-full rounded-[1.25rem] border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none focus:border-slate-300 focus:bg-white"
+                      />
+                      <div className="mt-3 flex justify-end">
+                        <button
+                          type="button"
+                          onClick={submitShortComment}
+                          className="rounded-full bg-slate-950 px-4 py-2 text-sm font-bold text-white"
+                        >
+                          Send
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+
+              {recruiterPromptOpen ? (
+                <div
+                  className="ui-fade-up absolute inset-0 z-50 grid place-items-center bg-slate-950/45 px-4 backdrop-blur-[2px]"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setRecruiterPromptOpen(false);
+                  }}
+                >
+                  <div
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="Recruiter endorsement required"
+                    className="w-full max-w-sm rounded-[1.6rem] bg-white p-5 shadow-[0_24px_60px_rgba(15,23,42,0.22)]"
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-700">
+                      Recruiter-only action
+                    </p>
+                    <h2 className="mt-2 text-xl font-bold text-slate-950">
+                      Register as a recruiter to endorse
+                    </h2>
+                    <p className="mt-3 text-sm leading-6 text-slate-600">
+                      Endorsements are reserved for recruiter and enterprise accounts.
+                      Create a recruiter profile to endorse talent from the feed.
+                    </p>
+                    <div className="mt-5 flex flex-wrap gap-3">
+                      <Link
+                        href="/signup?role=recruiter"
+                        className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-950 px-5 text-sm font-bold text-white"
+                      >
+                        Register as recruiter
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => setRecruiterPromptOpen(false)}
+                        className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-100 px-5 text-sm font-bold text-slate-700"
+                      >
+                        Maybe later
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          </article>
+        ) : (
+          <div className="grid h-[100svh] place-items-center bg-slate-950 px-6 text-center text-white">
+            <div>
+              <h2 className="font-display text-2xl font-bold">No shorts yet</h2>
+              <p className="mt-3 text-sm leading-6 text-white/75">
+                Publish the first short to activate the immersive mobile feed.
+              </p>
+            </div>
+          </div>
+        )}
+      </section>
+
+      <section className="hidden rounded-[2rem] border border-slate-200/90 bg-white/95 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.06)] sm:block">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-indigo-700">
@@ -1592,7 +1987,7 @@ export function FeedPage() {
         </div>
       </section>
 
-      <section id="feed-tools" aria-label="Feed tools" className="space-y-5">
+      <section id="feed-tools" aria-label="Feed tools" className="hidden space-y-5 sm:block">
         <ProfileNudge avatarSrc={author.avatar} profileReadiness={profileReadiness} />
         <ComposeCard
           authorAvatar={author.avatar}
