@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, type ReactNode } from "react";
+import Link from "next/link";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { usePathname, useRouter } from "next/navigation";
 
@@ -46,6 +47,17 @@ export function KindredChrome({ children }: { children: ReactNode }) {
   const router = useRouter();
   const { hydrated, user } = useKindredAuth();
   const immersiveFeedRoute = pathname === "/";
+  const [guestPromptDismissed, setGuestPromptDismissed] = useState(() => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+
+    try {
+      return window.sessionStorage.getItem("bejeli-guest-prompt-dismissed") === "true";
+    } catch {
+      return false;
+    }
+  });
 
   useEffect(() => {
     if (!hydrated) {
@@ -53,7 +65,9 @@ export function KindredChrome({ children }: { children: ReactNode }) {
     }
 
     if (!user && isAppRoute(pathname)) {
-      router.replace("/login");
+      if (pathname !== "/") {
+        router.replace("/");
+      }
       return;
     }
 
@@ -75,6 +89,18 @@ export function KindredChrome({ children }: { children: ReactNode }) {
       router.replace("/");
     }
   }, [hydrated, pathname, router, user]);
+
+  const guestPromptOpen = hydrated && !user && pathname === "/" && !guestPromptDismissed;
+
+  function dismissGuestPrompt() {
+    setGuestPromptDismissed(true);
+
+    try {
+      window.sessionStorage.setItem("bejeli-guest-prompt-dismissed", "true");
+    } catch {
+      // Ignore storage limitations and just close the prompt in memory.
+    }
+  }
 
   if (!hydrated && (APP_ROUTES.has(pathname) || AUTH_ROUTES.has(pathname))) {
     return <div className="min-h-screen bg-canvas" />;
@@ -115,6 +141,52 @@ export function KindredChrome({ children }: { children: ReactNode }) {
           </main>
         </div>
         <BottomNav />
+        {guestPromptOpen ? (
+          <div
+            className="fixed inset-0 z-50 grid place-items-center bg-slate-950/45 px-4 backdrop-blur-[2px]"
+            onClick={dismissGuestPrompt}
+          >
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-label="Login prompt"
+              className="w-full max-w-md rounded-[1.75rem] bg-white p-6 shadow-[0_24px_60px_rgba(15,23,42,0.22)]"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-700">
+                Welcome to BEJELI
+              </p>
+              <h2 className="mt-2 text-2xl font-bold text-slate-950">
+                Do you want to log in?
+              </h2>
+              <p className="mt-3 text-sm leading-6 text-slate-600">
+                You can explore the feed first, then choose to log in for your personalized
+                workspace or stay signed out for now.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link
+                  href="/login"
+                  className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-950 px-5 text-sm font-bold text-white"
+                >
+                  Log in
+                </Link>
+                <Link
+                  href="/signup"
+                  className="inline-flex min-h-11 items-center justify-center rounded-full bg-indigo-50 px-5 text-sm font-bold text-indigo-800"
+                >
+                  Sign up
+                </Link>
+                <button
+                  type="button"
+                  onClick={dismissGuestPrompt}
+                  className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-100 px-5 text-sm font-bold text-slate-700"
+                >
+                  Stay signed out
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
       </div>
     );
   }
