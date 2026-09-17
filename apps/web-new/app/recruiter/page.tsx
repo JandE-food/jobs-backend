@@ -1,5 +1,5 @@
-import { RecruiterDashboardPage } from "@/components/kindred/pages/RecruiterDashboardPage";
+import { FeedPage } from "@/components/kindred/pages/FeedPage";
 
 export default function RecruiterPage() {
-  return <RecruiterDashboardPage />;
+  return <FeedPage />;
 }

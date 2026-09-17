@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BellIcon, BriefcaseBusinessIcon, ClapperboardIcon, UserIcon } from "lucide-react";
+import { BellIcon, BookmarkIcon, BriefcaseBusinessIcon, ClapperboardIcon, UserIcon } from "lucide-react";
 
 import { useKindredAuth } from "./app/kindred-provider";
 import { cn } from "./primitives";
@@ -14,8 +14,8 @@ export function BottomNav() {
   const items = recruiterMode
     ? [
         { href: "/recruiter", label: "Feed", icon: ClapperboardIcon },
-        { href: "/companies", label: "Companies", icon: BriefcaseBusinessIcon },
-        { href: "/notifications", label: "Activity", icon: BellIcon },
+        { href: "/recruiter/companies", label: "Companies", icon: BriefcaseBusinessIcon },
+        { href: "/recruiter/shortlists", label: "Shortlists", icon: BookmarkIcon, startsWith: true },
         { href: "/profile", label: "You", icon: UserIcon },
       ]
     : [
@@ -31,8 +31,10 @@ export function BottomNav() {
       className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white/95 backdrop-blur lg:hidden"
     >
       <div className="mx-auto flex max-w-md items-stretch">
-        {items.map(({ href, label, icon: Icon }) => {
-          const isActive = pathname === href;
+        {items.map(({ href, label, icon: Icon, startsWith }) => {
+          const isActive = startsWith
+            ? pathname === href || pathname.startsWith(`${href}/`)
+            : pathname === href;
 
           return (
             <Link

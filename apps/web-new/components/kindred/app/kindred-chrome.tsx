@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState, type ReactNode } from "react";
 
 import { usePathname, useRouter } from "next/navigation";
@@ -8,6 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { BottomNav } from "../BottomNav";
 import { SideNav } from "../SideNav";
 import { TopBar } from "../TopBar";
+import { TransitionLink } from "../TransitionLink";
 import { useKindredAuth } from "./kindred-provider";
 
 const APP_ROUTES = new Set([
@@ -19,6 +19,7 @@ const APP_ROUTES = new Set([
   "/profile",
   "/companies",
   "/recruiter",
+  "/recruiter/home",
   "/recruiter/candidates",
   "/recruiter/post",
   "/recruiter/shortlists",
@@ -99,7 +100,8 @@ export function KindredChrome({ children }: { children: ReactNode }) {
     }
 
     if (user && AUTH_ROUTES.has(pathname)) {
-      router.replace("/");
+      const homePath = user.role === "recruiter" || user.role === "admin" ? "/recruiter" : "/";
+      router.replace(homePath);
     }
   }, [hydrated, pathname, router, user]);
 
@@ -177,12 +179,12 @@ export function KindredChrome({ children }: { children: ReactNode }) {
                 for now.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
-                <Link
+                <TransitionLink
                   href="/login"
                   className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-950 px-5 text-sm font-bold text-white"
                 >
                   Log in
-                </Link>
+                </TransitionLink>
                 <button
                   type="button"
                   onClick={dismissGuestPrompt}

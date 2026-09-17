@@ -24,6 +24,7 @@ type NavItem = {
   label: string;
   icon: typeof BellIcon;
   badge?: number;
+  startsWith?: boolean;
 };
 
 function buildProfileHandle(fullName?: string, email?: string) {
@@ -55,23 +56,24 @@ const talentSecondary: NavItem[] = [
 
 const recruiterPrimary: NavItem[] = [
   { href: "/recruiter", label: "Feed", icon: ClapperboardIcon },
-  { href: "/recruiter/candidates", label: "Candidate search", icon: UsersIcon },
-  { href: "/companies", label: "Companies", icon: Building2Icon },
-  { href: "/network", label: "Network", icon: UsersIcon },
-  { href: "/notifications", label: "Activity", icon: BellIcon, badge: 3 },
+  { href: "/recruiter/companies", label: "Companies", icon: Building2Icon },
+  { href: "/recruiter/shortlists", label: "Shortlists", icon: BookmarkIcon, startsWith: true },
+  { href: "/profile", label: "You", icon: UserIcon },
 ];
 
 const recruiterSecondary: NavItem[] = [
-  { href: "/recruiter/operations", label: "Dashboard", icon: LayoutDashboardIcon },
-  { href: "/recruiter/shortlists", label: "Shortlists", icon: BookmarkIcon },
-  { href: "/profile", label: "Profile", icon: UserIcon },
+  { href: "/recruiter/home", label: "Home", icon: LayoutDashboardIcon },
+  { href: "/recruiter/candidates", label: "Candidate search", icon: UsersIcon, startsWith: true },
+  { href: "/notifications", label: "Activity", icon: BellIcon, badge: 3 },
   { href: "/settings/privacy", label: "Settings", icon: SettingsIcon },
 ];
 
 function NavItemRow({ item }: { item: NavItem }) {
   const pathname = usePathname();
   const Icon = item.icon;
-  const isActive = pathname === item.href;
+  const isActive = item.startsWith
+    ? pathname === item.href || pathname.startsWith(`${item.href}/`)
+    : pathname === item.href;
 
   return (
     <Link

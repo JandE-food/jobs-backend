@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   BellIcon,
+  BookmarkIcon,
   BriefcaseBusinessIcon,
   Building2Icon,
   PlusIcon,
@@ -363,13 +364,22 @@ export function TopBar() {
 
         <div className="flex items-center gap-1.5">
           {recruiterMode ? (
-            <Link
-              href="/companies"
-              className="hidden h-9 items-center gap-1.5 rounded-full border border-line px-3.5 text-sm font-bold text-ink transition-colors duration-150 hover:bg-canvas sm:inline-flex"
-            >
-              <Building2Icon className="h-4 w-4 text-ink-mute" />
-              Companies
-            </Link>
+            <>
+              <Link
+                href="/recruiter/companies"
+                className="hidden h-9 items-center gap-1.5 rounded-full border border-line px-3.5 text-sm font-bold text-ink transition-colors duration-150 hover:bg-canvas sm:inline-flex"
+              >
+                <Building2Icon className="h-4 w-4 text-ink-mute" />
+                Companies
+              </Link>
+              <Link
+                href="/recruiter/shortlists"
+                className="hidden h-9 items-center gap-1.5 rounded-full border border-line px-3.5 text-sm font-bold text-ink transition-colors duration-150 hover:bg-canvas lg:inline-flex"
+              >
+                <BookmarkIcon className="h-4 w-4 text-ink-mute" />
+                Shortlists
+              </Link>
+            </>
           ) : null}
 
           <span className="mr-1 hidden items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-success lg:inline-flex">
