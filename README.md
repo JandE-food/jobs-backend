@@ -132,7 +132,7 @@ Files included for production deployment:
 - `docker-compose.prod.yml`
 - `.env.production.example`
 - `infra/caddy/Caddyfile`
-- `apps/web/.env.production.example`
+- `apps/web-new/.env.production.example`
 - `apps/mobile/.env.example`
 
 ### Deploy To OVH
@@ -180,7 +180,7 @@ development and emulators.
 ### Frontend
 
 ```bash
-cd apps/web
+cd apps/web-new
 npm install
 npm run dev
 ```

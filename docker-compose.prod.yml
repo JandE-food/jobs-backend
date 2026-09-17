@@ -52,7 +52,7 @@ services:
 
   web:
     build:
-      context: ./apps/web
+      context: ./apps/web-new
       args:
         NEXT_PUBLIC_API_URL: https://${APP_DOMAIN}/api
         NEXT_PUBLIC_ADMIN_TOKEN: ${ADMIN_TOKEN}
