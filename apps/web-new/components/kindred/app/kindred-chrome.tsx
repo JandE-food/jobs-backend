@@ -60,7 +60,7 @@ export function KindredChrome({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const { hydrated, user } = useKindredAuth();
-  const immersiveFeedRoute = pathname === "/";
+  const immersiveFeedRoute = pathname === "/" || pathname === "/recruiter";
   const [guestPromptDismissed, setGuestPromptDismissed] = useState(() => {
     if (typeof window === "undefined") {
       return false;
@@ -147,7 +147,7 @@ export function KindredChrome({ children }: { children: ReactNode }) {
             id="main-content"
             aria-label={isRecruiterRoute(pathname) ? "BEJELI recruiter workspace" : "BEJELI talent workspace"}
             className={
-              pathname === "/" || pathname === "/recruiter"
+              immersiveFeedRoute
                 ? "min-w-0 flex-1 pt-0 sm:pt-3"
                 : "min-w-0 flex-1 pb-24 pt-5 lg:pb-12"
             }
