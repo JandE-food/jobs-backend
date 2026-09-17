@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BellIcon, BookmarkIcon, BriefcaseBusinessIcon, ClapperboardIcon, UserIcon } from "lucide-react";
+import { BellIcon, BookmarkIcon, BriefcaseBusinessIcon, Building2Icon, ClapperboardIcon, UserIcon } from "lucide-react";
 
 import { useKindredAuth } from "./app/kindred-provider";
 import { cn } from "./primitives";
@@ -14,7 +14,7 @@ export function BottomNav() {
   const items = recruiterMode
     ? [
         { href: "/recruiter", label: "Feed", icon: ClapperboardIcon },
-        { href: "/recruiter/companies", label: "Companies", icon: BriefcaseBusinessIcon },
+        { href: "/recruiter/companies", label: "Companies", icon: Building2Icon },
         { href: "/recruiter/shortlists", label: "Shortlists", icon: BookmarkIcon, startsWith: true },
         { href: "/profile", label: "You", icon: UserIcon },
       ]
