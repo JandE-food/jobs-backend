@@ -24,6 +24,12 @@ services:
     depends_on:
       - postgres
       - redis
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3001/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
     environment:
       NODE_ENV: production
       HOST: 0.0.0.0
@@ -58,7 +64,14 @@ services:
         NEXT_PUBLIC_ADMIN_TOKEN: ${ADMIN_TOKEN}
     restart: unless-stopped
     depends_on:
-      - api
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3000/login || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
     environment:
       NODE_ENV: production
       NEXT_PUBLIC_API_URL: https://${APP_DOMAIN}/api
@@ -68,8 +81,10 @@ services:
     image: caddy:2-alpine
     restart: unless-stopped
     depends_on:
-      - web
-      - api
+      web:
+        condition: service_healthy
+      api:
+        condition: service_healthy
     ports:
       - "80:80"
       - "443:443"
