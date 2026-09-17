@@ -82,8 +82,8 @@ export async function listDiscoveryTalent(filters: DiscoveryFilters) {
       `(LOWER(p.sector) LIKE $${values.length}
         OR EXISTS (
           SELECT 1
-          FROM jsonb_array_elements_text(p.skills) AS skill
-          WHERE LOWER(skill) LIKE $${values.length}
+          FROM jsonb_array_elements_text(p.skills) AS skill(value)
+          WHERE LOWER(skill.value) LIKE $${values.length}
         ))`,
     );
   }

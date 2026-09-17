@@ -106,13 +106,13 @@ export async function searchCandidates(input: {
         OR LOWER(p.location) LIKE $${values.length}
         OR EXISTS (
           SELECT 1
-          FROM jsonb_array_elements_text(p.skills) AS skill
-          WHERE LOWER(skill) LIKE $${values.length}
+          FROM jsonb_array_elements_text(p.skills) AS skill(value)
+          WHERE LOWER(skill.value) LIKE $${values.length}
         )
         OR EXISTS (
           SELECT 1
-          FROM jsonb_array_elements_text(p.education) AS education
-          WHERE LOWER(education) LIKE $${values.length}
+          FROM jsonb_array_elements_text(p.education) AS education(value)
+          WHERE LOWER(education.value) LIKE $${values.length}
         )
       )`,
     );
@@ -128,8 +128,8 @@ export async function searchCandidates(input: {
     queryParts.push(
       `EXISTS (
         SELECT 1
-        FROM jsonb_array_elements_text(p.skills) AS skill
-        WHERE LOWER(skill) LIKE '%' || $${values.length} || '%'
+        FROM jsonb_array_elements_text(p.skills) AS skill(value)
+        WHERE LOWER(skill.value) LIKE '%' || $${values.length} || '%'
       )`,
     );
   }
@@ -139,8 +139,8 @@ export async function searchCandidates(input: {
     queryParts.push(
       `EXISTS (
         SELECT 1
-        FROM jsonb_array_elements_text(p.education) AS education
-        WHERE LOWER(education) LIKE '%' || $${values.length} || '%'
+        FROM jsonb_array_elements_text(p.education) AS education(value)
+        WHERE LOWER(education.value) LIKE '%' || $${values.length} || '%'
       )`,
     );
   }
