@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -15,6 +15,7 @@ import {
 } from "../icons";
 
 import { motion, useReducedMotion } from "../motion";
+import { useKindredAuth } from "../app/kindred-provider";
 import { jobs, type Job } from "../mock";
 import { Badge, Button, Card, MatchRing, cn } from "../primitives";
 
@@ -120,11 +121,13 @@ function JobCard({
 }
 
 export function JobsPage() {
+  const { hydrated, user } = useKindredAuth();
   const searchParams = useSearchParams();
   const [active, setActive] = useState<(typeof filters)[number]>("All");
   const [appliedIds, setAppliedIds] = useState<string[]>([]);
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [hiddenIds, setHiddenIds] = useState<string[]>([]);
+  const selectedRoleRef = useRef<HTMLElement | null>(null);
   const reduceMotion = useReducedMotion();
   const searchQuery = (searchParams.get("query") ?? "").trim().toLowerCase();
 
@@ -151,6 +154,45 @@ export function JobsPage() {
   }, [active, hiddenIds, searchQuery]);
   const [selectedId, setSelectedId] = useState(jobs[0]?.id ?? "");
   const selectedJob = list.find((job) => job.id === selectedId) ?? list[0] ?? null;
+
+  function handleSelectJob(jobId: string) {
+    setSelectedId(jobId);
+
+    window.requestAnimationFrame(() => {
+      selectedRoleRef.current?.scrollIntoView({
+        behavior: reduceMotion ? "auto" : "smooth",
+        block: "start",
+      });
+    });
+  }
+
+  if (hydrated && !user) {
+    return (
+      <div className="ui-fade-up space-y-6 xl:space-y-8">
+        <section className="rounded-[2rem] border border-slate-200/90 bg-white/95 p-7 shadow-[0_18px_45px_rgba(15,23,42,0.05)] sm:p-9">
+          <div className="mx-auto max-w-md text-center">
+            <p className="flex items-center justify-center gap-1 text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
+              <SparklesIcon className="h-4 w-4" aria-hidden="true" />
+              Talent jobs
+            </p>
+            <h1 className="mt-2 font-display text-3xl font-bold tracking-tight text-slate-950">
+              Log in to unlock your job matches
+            </h1>
+            <p className="mt-3 text-sm leading-7 text-slate-600">
+              Stay signed out on the feed, then log in when you want your saved roles, match
+              ranking, and application workspace to appear.
+            </p>
+            <Link
+              href="/login"
+              className="mt-6 inline-flex min-h-11 items-center justify-center rounded-full bg-slate-950 px-5 text-sm font-bold text-white transition-colors hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
+            >
+              Log in
+            </Link>
+          </div>
+        </section>
+      </div>
+    );
+  }
 
   return (
     <div className="ui-fade-up space-y-8 xl:space-y-10">
@@ -250,7 +292,8 @@ export function JobsPage() {
 
         <div className="space-y-7">
           {selectedJob ? (
-            <Card className="overflow-hidden rounded-[2rem] p-0 shadow-[0_20px_55px_rgba(15,23,42,0.07)]">
+            <section ref={selectedRoleRef} className="scroll-mt-24">
+              <Card className="overflow-hidden rounded-[2rem] p-0 shadow-[0_20px_55px_rgba(15,23,42,0.07)]">
               <div className="border-b border-slate-200 bg-[linear-gradient(135deg,rgba(238,242,255,0.9),rgba(255,255,255,0.96))] px-6 py-6 sm:px-7">
                 <div className="space-y-6">
                   <div className="min-w-0 space-y-3">
@@ -379,7 +422,8 @@ export function JobsPage() {
                   </div>
                 </div>
               </div>
-            </Card>
+              </Card>
+            </section>
           ) : (
             <Card className="p-5">
               <p className="text-sm text-slate-600">Choose a job to see the full fit summary.</p>
@@ -392,7 +436,7 @@ export function JobsPage() {
                 initial={reduceMotion ? false : { opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: reduceMotion ? 0 : 0.2, delay: index * 0.04 }}
-                onClick={() => setSelectedId(job.id)}
+                onClick={() => handleSelectJob(job.id)}
                 className={cn(
                   "block w-full cursor-pointer rounded-2xl text-left",
                   selectedJob?.id === job.id && "ring-2 ring-indigo-600 ring-offset-2",
@@ -405,7 +449,7 @@ export function JobsPage() {
                   onKeyDown={(event) => {
                     if (event.key === "Enter" || event.key === " ") {
                       event.preventDefault();
-                      setSelectedId(job.id);
+                      handleSelectJob(job.id);
                     }
                   }}
                   className="rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"

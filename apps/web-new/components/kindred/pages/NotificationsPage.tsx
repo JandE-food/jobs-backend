@@ -3,12 +3,66 @@
 import Link from "next/link";
 
 import { BellIcon, CheckCircle2Icon, SparklesIcon } from "../icons";
+import { useKindredAuth } from "../app/kindred-provider";
 import { notifications } from "../mock";
 import { Badge, Card } from "../primitives";
 
 const unreadCount = notifications.filter((item) => item.unread).length;
 
 export function NotificationsPage() {
+  const { hydrated, user } = useKindredAuth();
+
+  if (hydrated && !user) {
+    return (
+      <div className="ui-fade-up space-y-6 xl:space-y-8">
+        <section className="rounded-[2rem] border border-slate-200 bg-white p-7 shadow-[0_18px_45px_rgba(15,23,42,0.05)] sm:p-9">
+          <div>
+            <p className="flex items-center gap-1 text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
+              <BellIcon className="h-4 w-4" aria-hidden="true" />
+              Notifications
+            </p>
+            <h1 className="mt-2 font-display text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
+              Log in to see your activity
+            </h1>
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
+              While you are signed out, BEJELI keeps your activity private and shows only one
+              secure reminder to log in.
+            </p>
+          </div>
+        </section>
+
+        <section aria-label="Guest notification">
+          <Link
+            href="/login"
+            className="block rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
+          >
+            <Card className="border-indigo-200 bg-indigo-50/50 p-5 hover:-translate-y-[1px] hover:border-indigo-300 hover:shadow-[0_14px_35px_rgba(15,23,42,0.08)]">
+              <div className="flex items-start gap-4">
+                <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-slate-950 text-white">
+                  <BellIcon className="h-5 w-5" aria-hidden="true" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h2 className="font-bold text-slate-950">Log in to unlock your activity</h2>
+                    <Badge tone="indigo">Account</Badge>
+                    <Badge tone="emerald">New</Badge>
+                  </div>
+                  <p className="mt-2 text-sm leading-7 text-slate-600">
+                    Sign in to view your real notifications, shortlist updates, and recruiter
+                    activity.
+                  </p>
+                  <p className="mt-3 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
+                    Tap to go to login
+                  </p>
+                </div>
+              </div>
+            </Card>
+          </Link>
+        </section>
+      </div>
+    );
+  }
+
   return (
     <div className="ui-fade-up space-y-8 xl:space-y-10">
       <section className="rounded-[2rem] border border-slate-200 bg-white p-7 shadow-[0_18px_45px_rgba(15,23,42,0.05)] sm:p-9">

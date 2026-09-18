@@ -11,6 +11,7 @@ import {
   GraduationCapIcon,
   MapPinIcon,
   PencilIcon,
+  ShieldCheckIcon,
   PlusIcon,
   SparklesIcon,
   UploadCloudIcon,
@@ -62,7 +63,7 @@ type RewardsLedger = {
 
 export function ProfilePage() {
   const router = useRouter();
-  const { signOut, user } = useKindredAuth();
+  const { hydrated, signOut, user } = useKindredAuth();
   const workspaceIdentity = {
     userId: user?.id,
     userFullName: user?.fullName,
@@ -91,6 +92,36 @@ export function ProfilePage() {
   const [skills, setSkills] = useState(savedProfile.skills);
   const [avatarSrc, setAvatarSrc] = useState(savedProfile.avatarSrc);
   const [portfolio, setPortfolio] = useState<PortfolioClip[]>(savedProfile.portfolio);
+
+  if (hydrated && !user) {
+    return (
+      <div className="ui-fade-up space-y-6">
+        <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_18px_45px_rgba(15,23,42,0.05)] sm:p-8">
+          <div className="mx-auto flex max-w-md flex-col items-center text-center">
+            <div className="grid h-16 w-16 place-items-center rounded-[1.5rem] bg-indigo-50 text-indigo-700 shadow-[0_12px_30px_rgba(79,70,229,0.12)]">
+              <ShieldCheckIcon className="h-7 w-7" aria-hidden="true" />
+            </div>
+            <p className="mt-5 text-xs font-bold uppercase tracking-[0.16em] text-indigo-700">
+              Your space
+            </p>
+            <h1 className="mt-2 font-display text-3xl font-bold tracking-tight text-slate-950">
+              Log in to open your profile
+            </h1>
+            <p className="mt-3 text-sm leading-7 text-slate-600">
+              You are browsing signed out, so your personal profile, rewards, and workspace
+              details stay hidden until you log in.
+            </p>
+            <Link
+              href="/login"
+              className="mt-6 inline-flex min-h-11 items-center justify-center rounded-full bg-slate-950 px-5 text-sm font-bold text-white transition-colors hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
+            >
+              Log in
+            </Link>
+          </div>
+        </section>
+      </div>
+    );
+  }
 
   const profileName = useMemo(
     () => profileDraft.fullName.trim() || savedProfile.fullName || user?.fullName || me.name,
