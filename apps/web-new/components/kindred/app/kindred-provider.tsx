@@ -25,6 +25,8 @@ type AuthUser = {
   fullName: string;
   email: string;
   role: "professional" | "recruiter" | "admin";
+  availableRoles: Array<"professional" | "recruiter" | "admin">;
+  hasSwitchPin: boolean;
 };
 
 type KindredContextValue = {
@@ -33,6 +35,16 @@ type KindredContextValue = {
   token: string | null;
   signIn: (input: StoredSession) => void;
   signOut: () => Promise<void>;
+  switchRole: (
+    role: "professional" | "recruiter",
+    pin?: string,
+  ) => Promise<
+    | { ok: true; user: AuthUser }
+    | {
+        ok: false;
+        message: string;
+      }
+  >;
   refreshSession: () => Promise<void>;
 };
 
@@ -102,18 +114,71 @@ export function KindredProvider({ children }: { children: ReactNode }) {
       },
       async signOut() {
         const activeToken = getStoredSession()?.token;
+        setSession(null);
+        clearStoredSession();
+
+        if (typeof window !== "undefined") {
+          try {
+            window.sessionStorage.removeItem("bejeli-guest-prompt-dismissed");
+          } catch {
+            // Ignore session storage limitations during logout cleanup.
+          }
+        }
 
         if (activeToken) {
-          await fetch(`${apiUrl}/auth/logout`, {
+          void fetch(`${apiUrl}/auth/logout`, {
             method: "POST",
             headers: {
               Authorization: `Bearer ${activeToken}`,
             },
           }).catch(() => undefined);
         }
+      },
+      async switchRole(role, pin) {
+        const currentSession = getStoredSession();
 
-        setSession(null);
-        clearStoredSession();
+        if (!currentSession?.token) {
+          return {
+            ok: false,
+            message: "Sign in to switch account view.",
+          };
+        }
+
+        const response = await fetch(`${apiUrl}/auth/switch-role`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${currentSession.token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            role,
+            pin,
+          }),
+        });
+        const payload = await readJsonResponse<{
+          user?: SessionUser;
+          message?: string;
+        }>(response);
+
+        if (!response.ok || !payload.user) {
+          return {
+            ok: false,
+            message: payload.message ?? "Unable to switch account view.",
+          };
+        }
+
+        const nextSession = {
+          token: currentSession.token,
+          user: payload.user,
+        };
+
+        setSession(nextSession);
+        setStoredSession(nextSession);
+
+        return {
+          ok: true,
+          user: payload.user,
+        };
       },
       async refreshSession() {
         const currentSession = getStoredSession();

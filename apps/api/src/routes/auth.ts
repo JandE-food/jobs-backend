@@ -6,9 +6,12 @@ import {
 } from "../lib/request-context.js";
 import {
   createUser,
+  enableUserRole,
   getUserByEmail,
   isAppUserRole,
+  switchUserRole,
   toSessionUser,
+  updateSwitchPinHash,
   updateLastLogin,
 } from "../lib/users.js";
 
@@ -30,8 +33,19 @@ type AdminTokenBody = {
   password?: string;
 };
 
+type EnableRoleBody = {
+  role?: string;
+  switchPin?: string;
+};
+
+type SwitchRoleBody = {
+  role?: string;
+  pin?: string;
+};
+
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const adminPermissions = ["create", "read", "update", "delete"];
+const pinPattern = /^\d{4,8}$/;
 
 export async function registerAuthRoutes(app: FastifyInstance) {
   app.get("/auth/me", async (request, reply) => {
@@ -104,6 +118,64 @@ export async function registerAuthRoutes(app: FastifyInstance) {
     });
   });
 
+  app.post<{ Body: EnableRoleBody }>("/auth/enable-role", async (request, reply) => {
+    const user = await getAuthenticatedUserFromRequest(request);
+
+    if (!user) {
+      reply.code(401).send({
+        error: "Unauthorized",
+        message: "Sign in to add another account view.",
+      });
+      return;
+    }
+
+    const role = request.body?.role ?? "";
+    const switchPin = request.body?.switchPin?.trim() ?? "";
+
+    if (!isAppUserRole(role) || role === "admin") {
+      reply.code(400).send({
+        error: "Invalid role.",
+        message: "Use professional or recruiter.",
+      });
+      return;
+    }
+
+    if (switchPin && !pinPattern.test(switchPin)) {
+      reply.code(400).send({
+        error: "Invalid switch pin.",
+        message: "Use a 4 to 8 digit PIN or leave it empty.",
+      });
+      return;
+    }
+
+    let nextUser = await enableUserRole(Number(user.id), role);
+
+    if (!nextUser) {
+      reply.code(404).send({
+        error: "Account not found.",
+        message: "Unable to update this account.",
+      });
+      return;
+    }
+
+    if (switchPin) {
+      nextUser = await updateSwitchPinHash(Number(user.id), hashPassword(switchPin));
+    }
+
+    if (!nextUser) {
+      reply.code(500).send({
+        error: "Unable to update account.",
+        message: "Try again.",
+      });
+      return;
+    }
+
+    reply.send({
+      ok: true,
+      user: toSessionUser(nextUser),
+    });
+  });
+
   app.post<{ Body: LoginBody }>("/auth/login", async (request, reply) => {
     const email = request.body?.email?.trim().toLowerCase() ?? "";
     const password = request.body?.password ?? "";
@@ -138,6 +210,72 @@ export async function registerAuthRoutes(app: FastifyInstance) {
     reply.send({
       token,
       user: sessionUser,
+    });
+  });
+
+  app.post<{ Body: SwitchRoleBody }>("/auth/switch-role", async (request, reply) => {
+    const user = await getAuthenticatedUserFromRequest(request);
+
+    if (!user) {
+      reply.code(401).send({
+        error: "Unauthorized",
+        message: "Sign in to switch account view.",
+      });
+      return;
+    }
+
+    const role = request.body?.role ?? "";
+    const pin = request.body?.pin?.trim() ?? "";
+
+    if (!isAppUserRole(role) || role === "admin") {
+      reply.code(400).send({
+        error: "Invalid role.",
+        message: "Use professional or recruiter.",
+      });
+      return;
+    }
+
+    const enabledRoles = Array.isArray(user.enabled_roles) ? user.enabled_roles : [user.role];
+
+    if (!enabledRoles.includes(role)) {
+      reply.code(409).send({
+        error: "Role unavailable.",
+        message: "Create that account view first.",
+      });
+      return;
+    }
+
+    if (user.switch_pin_hash) {
+      if (!pin) {
+        reply.code(400).send({
+          error: "Switch pin required.",
+          message: "Enter your switch PIN to continue.",
+        });
+        return;
+      }
+
+      if (!verifyPassword(pin, user.switch_pin_hash)) {
+        reply.code(401).send({
+          error: "Invalid switch pin.",
+          message: "That switch PIN is incorrect.",
+        });
+        return;
+      }
+    }
+
+    const nextUser = await switchUserRole(Number(user.id), role);
+
+    if (!nextUser) {
+      reply.code(500).send({
+        error: "Unable to switch account.",
+        message: "Try again.",
+      });
+      return;
+    }
+
+    reply.send({
+      ok: true,
+      user: toSessionUser(nextUser),
     });
   });
 

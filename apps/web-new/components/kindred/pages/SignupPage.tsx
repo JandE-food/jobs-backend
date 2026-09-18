@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useMemo, useState, type FormEvent } from "react";
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { apiUrl, readJsonResponse } from "../../api";
+import { apiUrl, getStoredSession, readJsonResponse, type SessionUser } from "../../api";
 import {
   CheckIcon,
   EyeIcon,
@@ -16,33 +16,62 @@ import {
 } from "../icons";
 
 import { AuthLayout } from "../AuthLayout";
+import { useKindredAuth } from "../app/kindred-provider";
 import { Button, Card, IconButton } from "../primitives";
+import { TransitionLink, navigateWithTransition } from "../TransitionLink";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const pinPattern = /^\d{4,8}$/;
 
 export function SignupPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { signIn, user } = useKindredAuth();
   const initialRole =
     searchParams.get("role") === "recruiter" || searchParams.get("role") === "professional"
       ? searchParams.get("role")
       : "professional";
+  const linkExisting = searchParams.get("linkExisting") === "1";
+  const enableExistingAccount = linkExisting && Boolean(user);
+  const targetRoute = initialRole === "recruiter" ? "/recruiter" : "/";
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({
-    name: "",
-    email: "",
+    name: user?.fullName ?? "",
+    email: user?.email ?? "",
     password: "",
     role: initialRole,
     agreed: false,
+    switchPin: "",
+    confirmSwitchPin: "",
   });
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const roleLabel = useMemo(
+    () => (form.role === "recruiter" ? "recruiter" : "talent"),
+    [form.role],
+  );
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!form.name.trim() || !emailPattern.test(form.email) || form.password.length < 8) {
+    if (!form.name.trim() || !emailPattern.test(form.email)) {
+      setError("Add your name and a valid email address to continue.");
+      return;
+    }
+
+    if (!enableExistingAccount && form.password.length < 8) {
       setError("Add your name, a valid email, and a password with at least 8 characters.");
+      return;
+    }
+
+    const normalizedSwitchPin = form.switchPin.trim();
+    if (normalizedSwitchPin && !pinPattern.test(normalizedSwitchPin)) {
+      setError("Use a 4 to 8 digit PIN or leave it empty.");
+      return;
+    }
+
+    if (normalizedSwitchPin !== form.confirmSwitchPin.trim()) {
+      setError("Your switch PIN confirmation does not match.");
       return;
     }
 
@@ -55,34 +84,60 @@ export function SignupPage() {
     setError("");
 
     try {
-      const response = await fetch(`${apiUrl}/auth/signup`, {
+      const endpoint = enableExistingAccount ? `${apiUrl}/auth/enable-role` : `${apiUrl}/auth/signup`;
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          ...(enableExistingAccount && user
+            ? {
+                Authorization: `Bearer ${getStoredSession()?.token ?? ""}`,
+              }
+            : {}),
         },
         body: JSON.stringify({
-          fullName: form.name.trim(),
-          email: form.email.trim(),
-          password: form.password,
-          role: form.role,
+          ...(enableExistingAccount
+            ? {
+                role: form.role,
+                switchPin: normalizedSwitchPin || undefined,
+              }
+            : {
+                fullName: form.name.trim(),
+                email: form.email.trim(),
+                password: form.password,
+                role: form.role,
+              }),
         }),
       });
       const payload = await readJsonResponse<{
         token?: string;
-        user?: {
-          id: number;
-          fullName: string;
-          email: string;
-          role: "professional" | "recruiter" | "admin";
-        };
+        user?: SessionUser;
+        ok?: boolean;
         message?: string;
       }>(response);
 
-      if (!response.ok || !payload.token || !payload.user) {
-        throw new Error(payload.message ?? "Unable to create account.");
+      if (!response.ok || !payload.user || (!enableExistingAccount && !payload.token)) {
+        throw new Error(
+          payload.message ??
+            (enableExistingAccount ? "Unable to add this account view." : "Unable to create account."),
+        );
       }
 
-      router.push("/login");
+      if (enableExistingAccount) {
+        const stored = getStoredSession();
+        if (!stored?.token) {
+          throw new Error("Sign in again to finish adding this account view.");
+        }
+
+        signIn({
+          token: stored.token,
+          user: payload.user,
+        });
+        navigateWithTransition(router, targetRoute);
+        return;
+      }
+
+      navigateWithTransition(router, "/login");
     } catch (caughtError) {
       setError(
         caughtError instanceof Error
@@ -100,13 +155,15 @@ export function SignupPage() {
     <AuthLayout>
       <Card className="w-full max-w-xl p-5 shadow-[0_18px_45px_rgba(15,23,42,0.06)] sm:p-7">
         <p className="text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
-          Build your professional signal
+          {enableExistingAccount ? "Add another account view" : "Build your professional signal"}
         </p>
         <h1 className="mt-2 font-display text-3xl font-bold tracking-tight text-slate-950">
-          Create your account
+          {enableExistingAccount ? `Create your ${roleLabel} view` : "Create your account"}
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-slate-600">
-          Join the same connected ecosystem used by the mobile app, with separate flows for talent and recruiters.
+          {enableExistingAccount
+            ? "Use the same email and core identity, then optionally add a switch PIN for moving between talent and recruiter views."
+            : "Join the same connected ecosystem used by the mobile app, with separate flows for talent and recruiters."}
         </p>
 
         <ul className="mt-5 space-y-2 rounded-xl bg-slate-50 p-3 text-sm text-slate-700">
@@ -173,6 +230,7 @@ export function SignupPage() {
                 autoComplete="name"
                 value={form.name}
                 onChange={(event) => setForm({ ...form, name: event.target.value })}
+                disabled={enableExistingAccount}
                 className="min-h-12 w-full rounded-xl border border-slate-300 bg-white py-3 pl-10 pr-3 text-base text-slate-900 placeholder:text-slate-500 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-100"
                 placeholder="Your name"
                 required
@@ -198,6 +256,7 @@ export function SignupPage() {
                 autoComplete="email"
                 value={form.email}
                 onChange={(event) => setForm({ ...form, email: event.target.value })}
+                disabled={enableExistingAccount}
                 className="min-h-12 w-full rounded-xl border border-slate-300 bg-white py-3 pl-10 pr-3 text-base text-slate-900 placeholder:text-slate-500 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-100"
                 placeholder="you@example.com"
                 required
@@ -205,6 +264,53 @@ export function SignupPage() {
             </div>
           </div>
 
+          {enableExistingAccount ? (
+            <div className="space-y-4 rounded-2xl border border-indigo-100 bg-indigo-50/70 p-4">
+              <div>
+                <label htmlFor="signup-switch-pin" className="mb-1.5 block text-sm font-bold text-slate-800">
+                  Switch PIN (optional)
+                </label>
+                <div className="relative">
+                  <LockKeyholeIcon
+                    className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500"
+                    aria-hidden="true"
+                  />
+                  <input
+                    id="signup-switch-pin"
+                    inputMode="numeric"
+                    autoComplete="off"
+                    value={form.switchPin}
+                    onChange={(event) => setForm({ ...form, switchPin: event.target.value })}
+                    className="min-h-12 w-full rounded-xl border border-slate-300 bg-white py-3 pl-10 pr-3 text-base text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+                    placeholder="4 to 8 digits"
+                  />
+                </div>
+              </div>
+              <div>
+                <label htmlFor="signup-switch-pin-confirm" className="mb-1.5 block text-sm font-bold text-slate-800">
+                  Confirm switch PIN
+                </label>
+                <div className="relative">
+                  <LockKeyholeIcon
+                    className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500"
+                    aria-hidden="true"
+                  />
+                  <input
+                    id="signup-switch-pin-confirm"
+                    inputMode="numeric"
+                    autoComplete="off"
+                    value={form.confirmSwitchPin}
+                    onChange={(event) => setForm({ ...form, confirmSwitchPin: event.target.value })}
+                    className="min-h-12 w-full rounded-xl border border-slate-300 bg-white py-3 pl-10 pr-3 text-base text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+                    placeholder="Repeat your PIN"
+                  />
+                </div>
+                <p className="mt-1.5 text-xs text-slate-600">
+                  Leave both PIN fields empty if you want instant switching without a PIN prompt.
+                </p>
+              </div>
+            </div>
+          ) : (
           <div>
             <label
               htmlFor="signup-password"
@@ -243,6 +349,7 @@ export function SignupPage() {
               At least 8 characters.
             </p>
           </div>
+          )}
 
           <div className="flex min-h-11 items-start gap-3 rounded-xl p-1 text-sm leading-relaxed text-slate-700 focus-within:ring-2 focus-within:ring-indigo-600">
             <input
@@ -266,18 +373,24 @@ export function SignupPage() {
           </div>
 
           <Button type="submit" className="w-full">
-            {busy ? "Creating account..." : "Create account"}
+            {busy
+              ? enableExistingAccount
+                ? "Creating account view..."
+                : "Creating account..."
+              : enableExistingAccount
+                ? `Create ${roleLabel} view`
+                : "Create account"}
           </Button>
         </form>
 
         <p className="mt-6 text-center text-sm text-slate-600">
           Already have an account?{" "}
-          <Link
+          <TransitionLink
             href="/login"
             className="font-bold text-indigo-800 underline decoration-indigo-300 underline-offset-4 hover:text-indigo-950 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
           >
             Sign in
-          </Link>
+          </TransitionLink>
         </p>
       </Card>
     </AuthLayout>

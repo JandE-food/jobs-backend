@@ -20,6 +20,7 @@ import {
 import { useKindredAuth } from "../app/kindred-provider";
 import { AVATARS, me, skillSuggestions, type PortfolioClip } from "../mock";
 import { Avatar, Badge, Button, Card } from "../primitives";
+import { navigateWithTransition } from "../TransitionLink";
 import {
   availabilityDays,
   availabilitySlots,
@@ -61,9 +62,21 @@ type RewardsLedger = {
   }>;
 };
 
+type AccountViewRole = "professional" | "recruiter";
+
+type AccountSwitchDialogState =
+  | {
+      mode: "switch";
+      targetRole: AccountViewRole;
+    }
+  | {
+      mode: "create";
+      targetRole: AccountViewRole;
+    };
+
 export function ProfilePage() {
   const router = useRouter();
-  const { hydrated, signOut, user } = useKindredAuth();
+  const { hydrated, signOut, switchRole, user } = useKindredAuth();
   const workspaceIdentity = {
     userId: user?.id,
     userFullName: user?.fullName,
@@ -79,6 +92,9 @@ export function ProfilePage() {
   const [availability, setAvailability] = useState<AvailabilityCell[]>([]);
   const [availabilityBusy, setAvailabilityBusy] = useState(false);
   const [rewardsLedger, setRewardsLedger] = useState<RewardsLedger | null>(null);
+  const [accountDialog, setAccountDialog] = useState<AccountSwitchDialogState | null>(null);
+  const [switchPin, setSwitchPin] = useState("");
+  const [switchBusy, setSwitchBusy] = useState(false);
   const [payoutDraft, setPayoutDraft] = useState({
     bankLabel: "",
     accountLast4: "",
@@ -157,6 +173,21 @@ export function ProfilePage() {
   useEffect(() => {
     savePersonaMode(personaMode);
   }, [personaMode]);
+
+  const availableAccountRoles = useMemo<AccountViewRole[]>(
+    () =>
+      Array.from(
+        new Set(
+          (user?.availableRoles?.filter(
+            (role): role is AccountViewRole => role === "professional" || role === "recruiter",
+          ) ?? (user ? ([user.role] as AccountViewRole[]) : [])),
+        ),
+      ),
+    [user],
+  );
+  const activeAccountRole: AccountViewRole = user?.role === "recruiter" ? "recruiter" : "professional";
+  const targetAccountRole: AccountViewRole =
+    activeAccountRole === "recruiter" ? "professional" : "recruiter";
 
   useEffect(() => {
     let active = true;
@@ -257,6 +288,54 @@ export function ProfilePage() {
     });
     setIsEditing(false);
     setStatusMessage("Profile edits discarded.");
+  }
+
+  function openAccountDialog(targetRole: AccountViewRole) {
+    if (!user) {
+      navigateWithTransition(router, "/login");
+      return;
+    }
+
+    setSwitchPin("");
+    setStatusMessage("");
+    setAccountDialog(
+      availableAccountRoles.includes(targetRole)
+        ? { mode: "switch", targetRole }
+        : { mode: "create", targetRole },
+    );
+  }
+
+  async function handleAccountDialogConfirm() {
+    if (!accountDialog) {
+      return;
+    }
+
+    if (accountDialog.mode === "create") {
+      setAccountDialog(null);
+      navigateWithTransition(
+        router,
+        `/signup?role=${accountDialog.targetRole}&linkExisting=1`,
+      );
+      return;
+    }
+
+    setSwitchBusy(true);
+    const result = await switchRole(accountDialog.targetRole, switchPin.trim() || undefined);
+    setSwitchBusy(false);
+
+    if (!result.ok) {
+      setStatusMessage(result.message);
+      return;
+    }
+
+    setAccountDialog(null);
+    setSwitchPin("");
+    setStatusMessage(
+      accountDialog.targetRole === "recruiter"
+        ? "Recruiter view enabled."
+        : "Talent view enabled.",
+    );
+    navigateWithTransition(router, accountDialog.targetRole === "recruiter" ? "/recruiter" : "/");
   }
 
   function handleAddSkill() {
@@ -749,6 +828,66 @@ export function ProfilePage() {
           </Card>
 
           <section className="grid gap-4 lg:grid-cols-2">
+            {user?.role !== "admin" ? (
+              <Card className="p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
+                      Account switch
+                    </p>
+                    <h2 className="mt-2 font-bold text-slate-950">Move between talent and recruiter views</h2>
+                  </div>
+                  <Badge tone="indigo">
+                    {activeAccountRole === "recruiter" ? "Recruiter active" : "Talent active"}
+                  </Badge>
+                </div>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  Keep one email and profile identity, then switch the active view with an optional PIN.
+                </p>
+                <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                  {(["professional", "recruiter"] as AccountViewRole[]).map((role) => {
+                    const selected = activeAccountRole === role;
+                    const enabled = availableAccountRoles.includes(role);
+
+                    return (
+                      <button
+                        key={role}
+                        type="button"
+                        onClick={() => {
+                          if (!selected) {
+                            openAccountDialog(role);
+                          }
+                        }}
+                        className={`min-h-12 rounded-2xl border px-4 py-3 text-left transition-colors ${
+                          selected
+                            ? "border-slate-950 bg-slate-950 text-white"
+                            : "border-slate-200 bg-slate-50 text-slate-800 hover:bg-slate-100"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-3">
+                          <span className="text-sm font-semibold">
+                            {role === "professional" ? "Talent view" : "Recruiter view"}
+                          </span>
+                          <Badge tone={enabled ? "emerald" : "amber"} className={selected ? "bg-white/15 text-white" : ""}>
+                            {enabled ? (selected ? "Active" : "Ready") : "Create"}
+                          </Badge>
+                        </div>
+                        <p className={`mt-2 text-xs leading-5 ${selected ? "text-white/80" : "text-slate-500"}`}>
+                          {enabled
+                            ? role === "professional"
+                              ? "Open your talent feed, jobs, and profile workspace."
+                              : "Open companies, shortlists, and recruiter controls."
+                            : role === "professional"
+                              ? "Create your talent view with the same email."
+                              : "Create your recruiter view with the same email."}
+                        </p>
+                      </button>
+                    );
+                  })}
+                </div>
+              </Card>
+            ) : null}
+
             <Card className="p-5">
               <div className="flex items-center justify-between gap-3">
                 <div>
@@ -1137,6 +1276,55 @@ export function ProfilePage() {
           </Card>
         </section>
       </div>
+      {accountDialog ? (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-slate-950/45 p-4 backdrop-blur-sm sm:items-center">
+          <Card className="w-full max-w-md p-5 sm:p-6">
+            <p className="text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
+              {accountDialog.mode === "create" ? "Create account view" : "Switch account view"}
+            </p>
+            <h2 className="mt-2 font-display text-2xl font-bold tracking-tight text-slate-950">
+              {accountDialog.mode === "create"
+                ? `Create your ${accountDialog.targetRole === "recruiter" ? "recruiter" : "talent"} account view?`
+                : `Switch to ${accountDialog.targetRole === "recruiter" ? "recruiter" : "talent"} view?`}
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-slate-600">
+              {accountDialog.mode === "create"
+                ? `You will keep the same email and identity, then finish a quick ${accountDialog.targetRole === "recruiter" ? "recruiter" : "talent"} setup without creating another password.`
+                : user?.hasSwitchPin
+                  ? "Enter your switch PIN to continue."
+                  : "Your account has no switch PIN yet, so this switch will happen immediately."}
+            </p>
+            {accountDialog.mode === "switch" && user?.hasSwitchPin ? (
+              <div className="mt-4">
+                <label htmlFor="account-switch-pin" className="mb-1.5 block text-sm font-bold text-slate-800">
+                  Switch PIN
+                </label>
+                <input
+                  id="account-switch-pin"
+                  type="password"
+                  inputMode="numeric"
+                  value={switchPin}
+                  onChange={(event) => setSwitchPin(event.target.value)}
+                  className="min-h-12 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 text-base text-slate-900 outline-none transition-colors focus:border-indigo-500 focus:bg-white"
+                  placeholder="Enter your PIN"
+                />
+              </div>
+            ) : null}
+            <div className="mt-6 flex gap-3">
+              <Button variant="outline" className="flex-1" onClick={() => setAccountDialog(null)}>
+                Cancel
+              </Button>
+              <Button className="flex-1" onClick={() => void handleAccountDialogConfirm()} disabled={switchBusy}>
+                {switchBusy
+                  ? "Switching..."
+                  : accountDialog.mode === "create"
+                    ? "Continue"
+                    : "Switch view"}
+              </Button>
+            </div>
+          </Card>
+        </div>
+      ) : null}
     </div>
   );
 }

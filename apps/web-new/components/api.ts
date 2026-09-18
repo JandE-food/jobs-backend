@@ -1,6 +1,4 @@
-const defaultApiUrl = "https://135.125.184.123.sslip.io/api";
-
-export const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? defaultApiUrl;
+export const apiUrl = "/api";
 
 export const adminToken =
   process.env.NEXT_PUBLIC_ADMIN_TOKEN ?? "dev-admin-token";
@@ -12,6 +10,8 @@ export type SessionUser = {
   fullName: string;
   email: string;
   role: "professional" | "recruiter" | "admin";
+  availableRoles: Array<"professional" | "recruiter" | "admin">;
+  hasSwitchPin: boolean;
 };
 
 export type StoredSession = {
