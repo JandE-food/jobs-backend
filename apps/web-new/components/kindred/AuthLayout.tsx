@@ -2,16 +2,22 @@
 
 import type { ReactNode } from "react";
 
-import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { BriefcaseBusinessIcon, ShieldCheckIcon } from "./icons";
+import { TransitionLink } from "./TransitionLink";
 
 export function AuthLayout({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.09),_transparent_28%),linear-gradient(180deg,#f8faff_0%,#f1f5fb_48%,#ecf1f8_100%)] px-4 py-5 sm:p-8">
+    <main
+      key={pathname}
+      className="auth-shell-enter min-h-screen bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.09),_transparent_28%),linear-gradient(180deg,#f8faff_0%,#f1f5fb_48%,#ecf1f8_100%)] px-4 py-5 sm:p-8"
+    >
       <div className="mx-auto flex min-h-[calc(100vh-2.5rem)] w-full max-w-6xl flex-col">
         <header className="flex flex-wrap items-center justify-between gap-3">
-          <Link
+          <TransitionLink
             href="/login"
             className="inline-flex min-h-11 items-center gap-2 rounded-full px-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
             aria-label="BEJELI sign in"
@@ -22,7 +28,7 @@ export function AuthLayout({ children }: { children: ReactNode }) {
             <span className="font-display text-xl font-bold tracking-tight text-slate-950">
               BEJELI
             </span>
-          </Link>
+          </TransitionLink>
           <span className="inline-flex min-h-11 items-center gap-1.5 rounded-full bg-emerald-50 px-4 text-xs font-semibold text-emerald-700">
             <ShieldCheckIcon className="h-4 w-4 text-emerald-700" aria-hidden="true" />
             UK data protected
@@ -32,18 +38,15 @@ export function AuthLayout({ children }: { children: ReactNode }) {
         <div className="flex flex-1 items-center py-8 sm:py-10">
           <div className="grid w-full gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(26rem,0.95fr)]">
             <section className="hidden rounded-[2.25rem] border border-slate-200/90 bg-white/80 p-8 shadow-[0_28px_70px_rgba(15,23,42,0.08)] backdrop-blur xl:grid">
-              <div className="flex items-start justify-between gap-4">
-                <div>
+              <div className="flex items-start gap-4">
+                <div className="w-full">
                   <p className="text-xs font-bold uppercase tracking-[0.18em] text-indigo-700">
                     Social hiring ecosystem
                   </p>
-                  <h1 className="mt-3 max-w-md font-display text-5xl font-bold tracking-tight text-slate-950">
+                  <h1 className="auth-hero-typewriter mt-3 max-w-none font-display text-5xl font-bold tracking-tight text-slate-950">
                     One design system for talent and recruiters.
                   </h1>
                 </div>
-                <span className="rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white">
-                  Live on the shared BEJELI API
-                </span>
               </div>
 
               <div className="mt-8 grid gap-4 md:grid-cols-2">
@@ -80,7 +83,7 @@ export function AuthLayout({ children }: { children: ReactNode }) {
               </div>
             </section>
 
-            <div className="flex items-center justify-center">{children}</div>
+            <div className="auth-card-enter flex items-center justify-center">{children}</div>
           </div>
         </div>
 

@@ -1091,6 +1091,56 @@ a {
   animation: fade-up 320ms cubic-bezier(0.2, 0.65, 0.2, 1);
 }
 
+.auth-shell-enter {
+  animation: auth-shell-enter 420ms cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: top center;
+}
+
+.auth-card-enter {
+  animation: auth-card-enter 460ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.auth-hero-typewriter {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  clip-path: inset(0 100% 0 0);
+  animation: auth-typewriter-reveal 1.8s steps(28, end) 120ms forwards;
+}
+
+.auth-hero-typewriter::after {
+  content: "";
+  position: absolute;
+  top: 0.08em;
+  bottom: 0.08em;
+  right: 0;
+  width: 0.08em;
+  background: currentColor;
+  opacity: 0;
+  animation:
+    auth-typewriter-caret 1.8s steps(28, end) 120ms forwards,
+    auth-typewriter-caret-blink 900ms steps(1, end) 120ms 3;
+}
+
+.creator-profile-enter {
+  animation: creator-profile-enter 420ms cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: top center;
+}
+
+html.route-transitioning body {
+  pointer-events: none;
+}
+
+html.route-transitioning body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: linear-gradient(180deg, rgba(238, 237, 252, 0.06), rgba(238, 237, 252, 0.2));
+  animation: route-overlay-fade 360ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
 .reel-action-pop {
   animation: reel-action-pop 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -1122,6 +1172,151 @@ a {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes auth-shell-enter {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.988);
+    filter: saturate(0.92);
+  }
+
+  60% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: saturate(1);
+  }
+}
+
+@keyframes auth-card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.975);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+  }
+
+  55% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+  }
+}
+
+@keyframes auth-typewriter-reveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes auth-typewriter-caret {
+  0% {
+    opacity: 1;
+    right: 100%;
+  }
+
+  90% {
+    opacity: 1;
+    right: 0;
+  }
+
+  100% {
+    opacity: 0;
+    right: 0;
+  }
+}
+
+@keyframes auth-typewriter-caret-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes creator-profile-enter {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.985);
+  }
+
+  60% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes route-overlay-fade {
+  from {
+    opacity: 0;
+  }
+
+  35% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@supports (view-transition-name: root) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 320ms;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  ::view-transition-old(root) {
+    animation-name: route-view-old;
+  }
+
+  ::view-transition-new(root) {
+    animation-name: route-view-new;
+  }
+}
+
+@keyframes route-view-old {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  to {
+    opacity: 0.2;
+    transform: translateY(10px) scale(0.985);
+  }
+}
+
+@keyframes route-view-new {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.99);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
