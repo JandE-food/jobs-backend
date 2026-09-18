@@ -30,7 +30,7 @@ export default async function Profile({
     const creatorMediaPosts = creatorPosts.filter((post) => post.media?.length);
 
     return (
-      <div className="space-y-6 pb-8 pt-4">
+      <div className="creator-profile-enter space-y-6 pb-8 pt-4">
         <Card className="overflow-hidden border-slate-200/90 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.18),_rgba(15,23,42,0.96)_48%,_rgba(2,6,23,1))] p-6 text-white shadow-[0_28px_70px_rgba(15,23,42,0.22)]">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <Link
@@ -45,9 +45,14 @@ export default async function Profile({
           </div>
 
           <div className="mt-6 flex flex-wrap items-center gap-4">
-            <Avatar src={profile.avatar} alt={profile.name} size={88} ring />
+            <span style={{ viewTransitionName: `creator-avatar-${profile.id}` }}>
+              <Avatar src={profile.avatar} alt={profile.name} size={88} ring />
+            </span>
             <div className="min-w-0">
-              <h1 className="truncate text-[2rem] font-bold tracking-tight text-white">
+              <h1
+                className="truncate text-[2rem] font-bold tracking-tight text-white"
+                style={{ viewTransitionName: `creator-name-${profile.id}` }}
+              >
                 {profile.name}
               </h1>
               <p className="mt-2 text-lg text-white/86">
