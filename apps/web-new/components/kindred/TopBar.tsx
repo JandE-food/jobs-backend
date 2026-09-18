@@ -296,7 +296,7 @@ export function TopBar() {
                 }
               }}
               placeholder="Search people, roles, companies"
-              className="h-9 w-full rounded-full border border-line bg-canvas pl-9 pr-3 text-sm text-ink placeholder:text-ink-faint focus:border-brand-300 focus:bg-white focus:outline-none"
+              className="h-9 w-full rounded-full border border-line bg-canvas pl-9 pr-3 text-base text-ink placeholder:text-ink-faint focus:border-brand-300 focus:bg-white focus:outline-none sm:text-sm"
               autoComplete="off"
               onKeyDown={handleSearchKeyDown}
               role="combobox"

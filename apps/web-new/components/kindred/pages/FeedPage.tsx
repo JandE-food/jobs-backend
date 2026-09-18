@@ -13,15 +13,20 @@ import {
   ImageIcon,
   MapPinIcon,
   MessageCircleIcon,
+  PlusIcon,
   Share2Icon,
   SparklesIcon,
   FileTextIcon,
   ThumbsUpIcon,
   UploadCloudIcon,
   VideoIcon,
+  VolumeOffIcon,
+  VolumeOnIcon,
+  SearchIcon,
 } from "../icons";
 
 import { motion, useReducedMotion } from "../motion";
+import { TransitionLink } from "../TransitionLink";
 import { feed, me, type FeedItem } from "../mock";
 import { useKindredAuth } from "../app/kindred-provider";
 import { Avatar, Badge, Button, Card, MatchRing, cn } from "../primitives";
@@ -763,6 +768,7 @@ export function FeedPage() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [commentsOpen, setCommentsOpen] = useState(false);
   const [commentDraft, setCommentDraft] = useState("");
+  const [mobileComposerOpen, setMobileComposerOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const [isPlaying, setIsPlaying] = useState(true);
   const [playbackIndicator, setPlaybackIndicator] = useState<"play" | "pause" | null>(null);
@@ -937,6 +943,19 @@ export function FeedPage() {
   }, [feedItems]);
 
   useEffect(() => {
+    if (!mobileComposerOpen || typeof document === "undefined") {
+      return undefined;
+    }
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [mobileComposerOpen]);
+
+  useEffect(() => {
     if (!token) {
       return;
     }
@@ -1090,6 +1109,7 @@ export function FeedPage() {
     setComposerMedia([]);
     setComposerChannel("Work");
     setComposerStatus("Post published to your feed.");
+    setMobileComposerOpen(false);
   }
 
   async function handleShareShort(shortId: string) {
@@ -1445,6 +1465,19 @@ export function FeedPage() {
                 className: "cursor-pointer",
               })}
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/80" />
+              <div
+                className="absolute right-4 top-[calc(env(safe-area-inset-top)+0.9rem)] z-30"
+                onClick={(event) => event.stopPropagation()}
+                data-reel-interactive="true"
+              >
+                <TransitionLink
+                  href="/jobs?focus=search"
+                  aria-label="Search jobs"
+                  className="grid h-11 w-11 place-items-center rounded-full bg-black/45 text-white shadow-[0_16px_36px_rgba(15,23,42,0.22)] backdrop-blur-md transition-transform duration-200 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+                >
+                  <SearchIcon className="h-5 w-5" aria-hidden="true" />
+                </TransitionLink>
+              </div>
               {activeShort.media?.type === "video" && playbackIndicator ? (
                 <div className="pointer-events-none absolute inset-0 z-20 grid place-items-center">
                   <div className="flex min-w-[8.5rem] flex-col items-center gap-2 rounded-[1.75rem] bg-black/52 px-5 py-4 text-white shadow-[0_20px_45px_rgba(15,23,42,0.28)] backdrop-blur-md">
@@ -1477,7 +1510,7 @@ export function FeedPage() {
                   )}
                   aria-label="Endorse creator"
                 >
-                  <ThumbsUpIcon className="h-5 w-5" aria-hidden="true" />
+                  <ThumbsUpIcon className="h-5 w-5 -translate-y-px" aria-hidden="true" />
                 </button>
                 <span className="text-sm font-bold text-white">{activeShort.endorsements ?? 0}</span>
                 <button
@@ -1501,10 +1534,14 @@ export function FeedPage() {
                 <button
                   type="button"
                   onClick={() => setIsMuted((current) => !current)}
-                  className="grid h-12 w-12 place-items-center rounded-full bg-black/45 text-white"
+                  className="grid h-12 w-12 place-items-center rounded-full bg-black/45 text-white transition-transform duration-200 active:scale-95"
                   aria-label={isMuted ? "Unmute reel" : "Mute reel"}
                 >
-                  <span className="text-lg">{isMuted ? "🔇" : "🔊"}</span>
+                  {isMuted ? (
+                    <VolumeOffIcon className="h-5 w-5" aria-hidden="true" />
+                  ) : (
+                    <VolumeOnIcon className="h-5 w-5" aria-hidden="true" />
+                  )}
                 </button>
               </div>
 
@@ -1514,14 +1551,19 @@ export function FeedPage() {
                 onClick={(event) => event.stopPropagation()}
               >
                 <div className="max-w-[12.75rem] space-y-2.5">
-                  <Link
+                  <TransitionLink
                     href={`/profile?creator=${activeShort.authorId}`}
                     className="flex items-center gap-2.5 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
                     data-reel-interactive="true"
                   >
-                    <Avatar src={activeShort.authorAvatar} alt={activeShort.authorName} size={36} />
+                    <span style={{ viewTransitionName: `creator-avatar-${activeShort.authorId}` }}>
+                      <Avatar src={activeShort.authorAvatar} alt={activeShort.authorName} size={36} />
+                    </span>
                     <div className="min-w-0">
-                      <p className="truncate text-[0.98rem] font-bold text-white">
+                      <p
+                        className="truncate text-[0.98rem] font-bold text-white"
+                        style={{ viewTransitionName: `creator-name-${activeShort.authorId}` }}
+                      >
                         {activeShort.authorName}
                       </p>
                       <p className="truncate text-[0.78rem] text-white/72">
@@ -1529,7 +1571,7 @@ export function FeedPage() {
                         {activeShort.locationLabel ? ` · ${activeShort.locationLabel}` : ""}
                       </p>
                     </div>
-                  </Link>
+                  </TransitionLink>
                   <p className="text-[0.84rem] font-semibold leading-[1.45rem] text-white/96">
                     {activeShort.caption}
                   </p>
@@ -1636,12 +1678,12 @@ export function FeedPage() {
                       Create a recruiter profile to endorse talent from the feed.
                     </p>
                     <div className="mt-5 flex flex-wrap gap-3">
-                      <Link
+                      <TransitionLink
                         href="/signup?role=recruiter"
                         className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-950 px-5 text-sm font-bold text-white"
                       >
                         Register as recruiter
-                      </Link>
+                      </TransitionLink>
                       <button
                         type="button"
                         onClick={() => setRecruiterPromptOpen(false)}
@@ -1666,6 +1708,74 @@ export function FeedPage() {
           </div>
         )}
       </section>
+
+      <div className="fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+4.75rem)] z-30 flex justify-center px-4 sm:hidden">
+        <button
+          type="button"
+          onClick={() => setMobileComposerOpen(true)}
+          className="inline-flex min-h-12 items-center gap-2 rounded-full bg-brand-600 px-5 text-sm font-bold text-white shadow-[0_18px_40px_rgba(79,70,229,0.32)] transition-transform duration-200 active:scale-95"
+          aria-label="Create a post"
+        >
+          <PlusIcon className="h-4 w-4" strokeWidth={2.6} />
+          Post
+        </button>
+      </div>
+
+      {mobileComposerOpen ? (
+        <div
+          className="ui-fade-up fixed inset-0 z-50 bg-slate-950/55 sm:hidden"
+          onClick={() => setMobileComposerOpen(false)}
+        >
+          <div className="flex min-h-full items-end">
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-label="Create post"
+              className="max-h-[88svh] w-full overflow-y-auto rounded-t-[2rem] bg-canvas px-4 pb-[calc(env(safe-area-inset-bottom)+1rem)] pt-4 shadow-[0_-20px_60px_rgba(15,23,42,0.24)]"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="mx-auto mb-4 h-1.5 w-14 rounded-full bg-slate-300" />
+              <div className="mb-4 flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-sm font-bold uppercase tracking-[0.14em] text-indigo-700">
+                    Mobile composer
+                  </p>
+                  <h2 className="mt-1 text-xl font-bold text-slate-950">Create a post</h2>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setMobileComposerOpen(false)}
+                  className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-100 px-4 text-sm font-bold text-slate-700"
+                >
+                  Close
+                </button>
+              </div>
+
+              <ComposeCard
+                authorAvatar={author.avatar}
+                authorName={author.name}
+                body={composerText}
+                onBodyChange={setComposerText}
+                media={composerMedia}
+                selectedChannel={composerChannel}
+                onSelectChannel={(value) => {
+                  if (value !== "All") {
+                    setComposerChannel(value);
+                  }
+                }}
+                onCreateDraft={handleCreateDraft}
+                onPickImages={(event) => handleMediaUpload(event, "image")}
+                onPickVideos={(event) => handleMediaUpload(event, "video")}
+                onRemoveMedia={(mediaId) =>
+                  setComposerMedia((current) => current.filter((item) => item.id !== mediaId))
+                }
+                onPublish={handlePublishPost}
+                statusMessage={composerStatus}
+              />
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       <section className="hidden rounded-[2rem] border border-slate-200/90 bg-white/95 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.06)] sm:block">
         <div className="flex flex-wrap items-center justify-between gap-4">
@@ -1769,7 +1879,7 @@ export function FeedPage() {
                         )}
                         aria-label="Endorse creator"
                       >
-                        <ThumbsUpIcon className="h-5 w-5" aria-hidden="true" />
+                        <ThumbsUpIcon className="h-5 w-5 -translate-y-px" aria-hidden="true" />
                       </button>
                       <span className="text-sm font-bold text-white">
                         {activeShort.endorsements ?? 0}
@@ -1795,10 +1905,14 @@ export function FeedPage() {
                       <button
                         type="button"
                         onClick={() => setIsMuted((current) => !current)}
-                        className="grid h-12 w-12 place-items-center rounded-full bg-black/45 text-white"
+                        className="grid h-12 w-12 place-items-center rounded-full bg-black/45 text-white transition-transform duration-200 hover:scale-105 active:scale-95"
                         aria-label={isMuted ? "Unmute reel" : "Mute reel"}
                       >
-                        <span className="text-lg">{isMuted ? "🔇" : "🔊"}</span>
+                        {isMuted ? (
+                          <VolumeOffIcon className="h-5 w-5" aria-hidden="true" />
+                        ) : (
+                          <VolumeOnIcon className="h-5 w-5" aria-hidden="true" />
+                        )}
                       </button>
                     </div>
 
@@ -1806,14 +1920,19 @@ export function FeedPage() {
                       className="absolute inset-x-0 bottom-0 z-10 p-5"
                       onClick={(event) => event.stopPropagation()}
                     >
-                      <Link
+                      <TransitionLink
                         href={`/profile?creator=${activeShort.authorId}`}
                         className="flex items-center gap-3 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
                         data-reel-interactive="true"
                       >
-                        <Avatar src={activeShort.authorAvatar} alt={activeShort.authorName} size={44} />
+                        <span style={{ viewTransitionName: `creator-avatar-${activeShort.authorId}` }}>
+                          <Avatar src={activeShort.authorAvatar} alt={activeShort.authorName} size={44} />
+                        </span>
                         <div className="min-w-0">
-                          <p className="truncate text-[1.15rem] font-bold text-white">
+                          <p
+                            className="truncate text-[1.15rem] font-bold text-white"
+                            style={{ viewTransitionName: `creator-name-${activeShort.authorId}` }}
+                          >
                             {activeShort.authorName}
                           </p>
                           <p className="truncate text-sm text-white/75">
@@ -1821,7 +1940,7 @@ export function FeedPage() {
                             {activeShort.locationLabel ? ` · ${activeShort.locationLabel}` : ""}
                           </p>
                         </div>
-                      </Link>
+                      </TransitionLink>
                       <p className="mt-4 max-w-[16rem] text-[0.95rem] font-semibold leading-7 text-white">
                         {activeShort.caption}
                       </p>
@@ -1937,12 +2056,12 @@ export function FeedPage() {
                             Create a recruiter profile to endorse talent from the feed.
                           </p>
                           <div className="mt-5 flex flex-wrap gap-3">
-                            <Link
+                            <TransitionLink
                               href="/signup?role=recruiter"
                               className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-950 px-5 text-sm font-bold text-white"
                             >
                               Register as recruiter
-                            </Link>
+                            </TransitionLink>
                             <button
                               type="button"
                               onClick={() => setRecruiterPromptOpen(false)}

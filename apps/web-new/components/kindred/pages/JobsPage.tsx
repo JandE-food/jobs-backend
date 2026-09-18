@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   BanknoteIcon,
   CheckCircle2Icon,
@@ -12,6 +12,7 @@ import {
   SparklesIcon,
   BriefcaseBusinessIcon,
   ArrowRightIcon,
+  SearchIcon,
 } from "../icons";
 
 import { motion, useReducedMotion } from "../motion";
@@ -122,14 +123,56 @@ function JobCard({
 
 export function JobsPage() {
   const { hydrated, user } = useKindredAuth();
+  const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const [active, setActive] = useState<(typeof filters)[number]>("All");
   const [appliedIds, setAppliedIds] = useState<string[]>([]);
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [hiddenIds, setHiddenIds] = useState<string[]>([]);
   const selectedRoleRef = useRef<HTMLElement | null>(null);
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
   const reduceMotion = useReducedMotion();
-  const searchQuery = (searchParams.get("query") ?? "").trim().toLowerCase();
+  const searchQueryParam = searchParams.get("query") ?? "";
+  const shouldFocusSearch = searchParams.get("focus") === "search";
+  const [searchValue, setSearchValue] = useState(searchQueryParam);
+  const searchQuery = searchValue.trim().toLowerCase();
+
+  useEffect(() => {
+    setSearchValue(searchQueryParam);
+  }, [searchQueryParam]);
+
+  useEffect(() => {
+    if (!shouldFocusSearch) {
+      return;
+    }
+
+    const focusTimer = window.setTimeout(() => {
+      searchInputRef.current?.focus();
+      searchInputRef.current?.select();
+    }, 120);
+
+    return () => {
+      window.clearTimeout(focusTimer);
+    };
+  }, [shouldFocusSearch]);
+
+  function handleSearchChange(value: string) {
+    setSearchValue(value);
+
+    const params = new URLSearchParams(searchParams.toString());
+    const trimmed = value.trim();
+
+    if (trimmed) {
+      params.set("query", value);
+    } else {
+      params.delete("query");
+    }
+
+    params.delete("focus");
+    const nextQuery = params.toString();
+    router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
+  }
 
   const list = useMemo(() => {
     const visible = jobs.filter((job) => !hiddenIds.includes(job.id));
@@ -217,7 +260,7 @@ export function JobsPage() {
             </p>
             {searchQuery ? (
               <p className="mt-2 text-sm font-semibold text-indigo-700">
-                Showing results for &quot;{searchParams.get("query")}&quot;
+                Showing results for &quot;{searchValue.trim()}&quot;
               </p>
             ) : null}
           </div>
@@ -248,6 +291,27 @@ export function JobsPage() {
           <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
             Employer directory links
           </span>
+        </div>
+        <div className="mt-5">
+          <label htmlFor="jobs-search" className="sr-only">
+            Search jobs
+          </label>
+          <div className="relative">
+            <SearchIcon
+              className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
+              aria-hidden="true"
+            />
+            <input
+              ref={searchInputRef}
+              id="jobs-search"
+              type="search"
+              value={searchValue}
+              autoFocus={shouldFocusSearch}
+              onChange={(event) => handleSearchChange(event.target.value)}
+              placeholder="Search roles, companies, locations"
+              className="min-h-12 w-full rounded-full border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-base text-slate-900 placeholder:text-slate-500 focus:border-indigo-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-100 sm:text-sm"
+            />
+          </div>
         </div>
       </section>
 
