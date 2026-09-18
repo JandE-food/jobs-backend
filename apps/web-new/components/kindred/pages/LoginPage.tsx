@@ -2,14 +2,14 @@
 
 import { useState, type FormEvent } from "react";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { apiUrl, readJsonResponse } from "../../api";
+import { apiUrl, readJsonResponse, type SessionUser } from "../../api";
 import { useKindredAuth } from "../app/kindred-provider";
 import { AuthLayout } from "../AuthLayout";
 import { EyeIcon, EyeOffIcon, LockKeyholeIcon, MailIcon } from "../icons";
 import { Button, Card, IconButton } from "../primitives";
+import { TransitionLink } from "../TransitionLink";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -51,12 +51,7 @@ export function LoginPage() {
       });
       const payload = await readJsonResponse<{
         token?: string;
-        user?: {
-          id: number;
-          fullName: string;
-          email: string;
-          role: "professional" | "recruiter" | "admin";
-        };
+        user?: SessionUser;
         message?: string;
       }>(response);
 
@@ -193,12 +188,12 @@ export function LoginPage() {
 
         <p className="mt-6 text-center text-sm text-slate-600">
           New to BEJELI?{" "}
-          <Link
+          <TransitionLink
             href="/signup"
             className="font-bold text-indigo-800 underline decoration-indigo-300 underline-offset-4 hover:text-indigo-950 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
           >
             Create an account
-          </Link>
+          </TransitionLink>
         </p>
       </Card>
     </AuthLayout>
