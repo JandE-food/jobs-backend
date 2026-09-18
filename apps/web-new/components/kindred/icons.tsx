@@ -205,9 +205,29 @@ export function MessageCircleIcon(props: IconProps) {
 export function ThumbsUpIcon(props: IconProps) {
   return (
     <IconBase {...props}>
-      <path d="M14 10V5.5A2.5 2.5 0 0 0 11.5 3L10 10" />
-      <path d="M10 10H6.2A2.2 2.2 0 0 0 4 12.2v5.6A2.2 2.2 0 0 0 6.2 20H16a3 3 0 0 0 2.9-2.2l1.1-4.5A2.7 2.7 0 0 0 17.4 10Z" />
-      <path d="M4 10v10" />
+      <path d="M8 11v9" />
+      <path d="M12.2 11 13 6.6A2.7 2.7 0 0 1 15.6 4h.2A2.2 2.2 0 0 1 18 6.2v3.3h1.3A2.7 2.7 0 0 1 22 12.2l-1.1 5A3.5 3.5 0 0 1 17.5 20H10a2 2 0 0 1-2-2v-5a2 2 0 0 1 .6-1.4L12.2 8" />
+      <path d="M8 11H5.7A1.7 1.7 0 0 0 4 12.7v5.6A1.7 1.7 0 0 0 5.7 20H8" />
+    </IconBase>
+  );
+}
+
+export function VolumeOnIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M5 15h3l4 4V5L8 9H5Z" />
+      <path d="M16 9.5a4.5 4.5 0 0 1 0 5" />
+      <path d="M18.8 7a8 8 0 0 1 0 10" />
+    </IconBase>
+  );
+}
+
+export function VolumeOffIcon(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M5 15h3l4 4V5L8 9H5Z" />
+      <path d="m16 10 4 4" />
+      <path d="m20 10-4 4" />
     </IconBase>
   );
 }
