@@ -12,6 +12,7 @@ import {
   PlusIcon,
   SearchIcon,
   ShieldCheckIcon,
+  UserRoundIcon,
 } from "lucide-react";
 
 import { apiUrl, authedFetch, readJsonResponse } from "../api";
@@ -19,6 +20,7 @@ import { useKindredAuth } from "./app/kindred-provider";
 import { jobs } from "./mock";
 import { me } from "./mock";
 import { Avatar } from "./primitives";
+import { TransitionLink } from "./TransitionLink";
 
 type SearchSuggestion = {
   key: string;
@@ -52,7 +54,8 @@ export function TopBar() {
   const { user } = useKindredAuth();
   const recruiterMode = user?.role === "recruiter" || user?.role === "admin";
   const homeHref = recruiterMode ? "/recruiter" : "/";
-  const postHref = recruiterMode ? "/recruiter/post" : "/#feed-tools";
+  const postHref = !user ? "/login" : recruiterMode ? "/recruiter/post" : "/#feed-tools";
+  const profileHref = user ? "/profile" : "/profile";
   const searchShellRef = useRef<HTMLDivElement | null>(null);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -387,13 +390,13 @@ export function TopBar() {
             UK data protected
           </span>
 
-          <Link
+          <TransitionLink
             href={postHref}
             className="inline-flex h-9 items-center gap-1.5 rounded-full bg-brand-600 px-3.5 text-sm font-bold text-white transition-colors duration-150 hover:bg-brand-700"
           >
             <PlusIcon className="h-4 w-4" strokeWidth={2.6} />
             <span className="hidden sm:inline">Post</span>
-          </Link>
+          </TransitionLink>
 
           <Link
             href="/notifications"
@@ -404,9 +407,15 @@ export function TopBar() {
             <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-brand-600 ring-2 ring-white" />
           </Link>
 
-          <Link href="/profile" aria-label="Your profile" className="ml-0.5">
-            <Avatar src={me.avatar} alt={user?.fullName ?? me.name} size={36} />
-          </Link>
+          <TransitionLink href={profileHref} aria-label="Your profile" className="ml-0.5">
+            {user ? (
+              <Avatar src={me.avatar} alt={user.fullName} size={36} />
+            ) : (
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-line bg-slate-100 text-slate-500 transition-colors duration-150 hover:bg-slate-200">
+                <UserRoundIcon className="h-4.5 w-4.5" strokeWidth={2.2} aria-hidden="true" />
+              </span>
+            )}
+          </TransitionLink>
         </div>
       </div>
     </header>
