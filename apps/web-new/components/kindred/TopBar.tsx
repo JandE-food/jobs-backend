@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   BellIcon,
   BookmarkIcon,
@@ -45,6 +45,8 @@ type CandidateSuggestion = {
 };
 
 export function TopBar() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [query, setQuery] = useState("");
   const [companies, setCompanies] = useState<CompanySuggestion[]>([]);
   const [candidates, setCandidates] = useState<CandidateSuggestion[]>([]);
@@ -54,10 +56,14 @@ export function TopBar() {
   const { user } = useKindredAuth();
   const recruiterMode = user?.role === "recruiter" || user?.role === "admin";
   const homeHref = recruiterMode ? "/recruiter" : "/";
-  const postHref = !user ? "/login" : recruiterMode ? "/recruiter/post" : "/#feed-tools";
+  const postHref = !user ? "/login" : recruiterMode ? "/recruiter/post" : "/post";
   const profileHref = user ? "/profile" : "/profile";
   const searchShellRef = useRef<HTMLDivElement | null>(null);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
+  const shouldFocusSearch =
+    searchParams.get("focus") === "search" &&
+    (pathname === "/jobs" || pathname === "/recruiter/candidates");
+  const searchQueryParam = searchParams.get("query") ?? "";
 
   function buildSearchHref(value: string) {
     const searchValue = value.trim();
@@ -112,6 +118,26 @@ export function TopBar() {
   }, [recruiterMode]);
 
   useEffect(() => {
+    setQuery(searchQueryParam);
+  }, [searchQueryParam]);
+
+  useEffect(() => {
+    if (!shouldFocusSearch) {
+      return;
+    }
+
+    const focusTimer = window.setTimeout(() => {
+      searchInputRef.current?.focus();
+      searchInputRef.current?.select();
+      setSearchOpen(true);
+    }, 120);
+
+    return () => {
+      window.clearTimeout(focusTimer);
+    };
+  }, [shouldFocusSearch]);
+
+  useEffect(() => {
     function handlePointerDown(event: MouseEvent) {
       if (!searchShellRef.current?.contains(event.target as Node)) {
         setSearchOpen(false);
@@ -157,7 +183,7 @@ export function TopBar() {
           key: `candidate-${candidate.id}`,
           label: candidate.full_name,
           meta: `${candidate.headline || "Candidate"} · ${candidate.location || "Anywhere"} · Candidate`,
-          href: `/recruiter/candidates?query=${encodeURIComponent(candidate.full_name)}`,
+      href: `/recruiter/candidates?query=${encodeURIComponent(candidate.full_name)}`,
         }));
 
       return [...candidateMatches, ...companyMatches].slice(0, 6);

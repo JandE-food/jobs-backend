@@ -18,6 +18,7 @@ const APP_ROUTES = new Set([
   "/network",
   "/profile",
   "/companies",
+  "/post",
   "/recruiter",
   "/recruiter/home",
   "/recruiter/candidates",
