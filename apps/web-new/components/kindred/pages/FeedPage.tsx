@@ -738,6 +738,10 @@ function FeedItemView({
 
 export function FeedPage() {
   const { token, user } = useKindredAuth();
+  const searchHref =
+    user?.role === "recruiter" || user?.role === "admin"
+      ? "/recruiter/candidates?focus=search"
+      : "/jobs?focus=search";
   const workspaceIdentity = {
     userId: user?.id,
     userFullName: user?.fullName,
@@ -1455,7 +1459,7 @@ export function FeedPage() {
                 data-reel-interactive="true"
               >
                 <TransitionLink
-                  href="/jobs?focus=search"
+                  href={searchHref}
                   aria-label="Search jobs"
                   className="grid h-11 w-11 place-items-center rounded-full bg-black/45 text-white shadow-[0_16px_36px_rgba(15,23,42,0.22)] backdrop-blur-md transition-transform duration-200 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
                 >

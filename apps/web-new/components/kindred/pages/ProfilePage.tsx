@@ -312,6 +312,11 @@ export function ProfilePage() {
 
     if (accountDialog.mode === "create") {
       setAccountDialog(null);
+      try {
+        window.sessionStorage.setItem("bejeli-linked-signup", "1");
+      } catch {
+        // Ignore storage limitations and continue with navigation.
+      }
       navigateWithTransition(
         router,
         `/signup?role=${accountDialog.targetRole}&linkExisting=1`,

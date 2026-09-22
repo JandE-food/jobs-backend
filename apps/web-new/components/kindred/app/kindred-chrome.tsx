@@ -65,7 +65,10 @@ export function KindredChrome({ children }: { children: ReactNode }) {
   const allowLinkedSignup =
     pathname === "/signup" &&
     typeof window !== "undefined" &&
-    new URLSearchParams(window.location.search).get("linkExisting") === "1";
+    (
+      new URLSearchParams(window.location.search).get("linkExisting") === "1" ||
+      window.sessionStorage.getItem("bejeli-linked-signup") === "1"
+    );
   const [guestPromptDismissed, setGuestPromptDismissed] = useState(() => {
     if (typeof window === "undefined") {
       return false;
@@ -77,6 +80,18 @@ export function KindredChrome({ children }: { children: ReactNode }) {
       return false;
     }
   });
+
+  useEffect(() => {
+    if (pathname === "/signup" || typeof window === "undefined") {
+      return;
+    }
+
+    try {
+      window.sessionStorage.removeItem("bejeli-linked-signup");
+    } catch {
+      // Ignore storage cleanup issues.
+    }
+  }, [pathname]);
 
   useEffect(() => {
     if (!hydrated) {
