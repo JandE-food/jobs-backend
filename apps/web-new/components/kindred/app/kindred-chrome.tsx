@@ -62,6 +62,10 @@ export function KindredChrome({ children }: { children: ReactNode }) {
   const router = useRouter();
   const { hydrated, user } = useKindredAuth();
   const immersiveFeedRoute = pathname === "/" || pathname === "/recruiter";
+  const allowLinkedSignup =
+    pathname === "/signup" &&
+    typeof window !== "undefined" &&
+    new URLSearchParams(window.location.search).get("linkExisting") === "1";
   const [guestPromptDismissed, setGuestPromptDismissed] = useState(() => {
     if (typeof window === "undefined") {
       return false;
@@ -100,11 +104,11 @@ export function KindredChrome({ children }: { children: ReactNode }) {
       return;
     }
 
-    if (user && AUTH_ROUTES.has(pathname)) {
+    if (user && AUTH_ROUTES.has(pathname) && !allowLinkedSignup) {
       const homePath = user.role === "recruiter" || user.role === "admin" ? "/recruiter" : "/";
       router.replace(homePath);
     }
-  }, [hydrated, pathname, router, user]);
+  }, [allowLinkedSignup, hydrated, pathname, router, user]);
 
   const guestPromptOpen = hydrated && !user && pathname === "/" && !guestPromptDismissed;
 
