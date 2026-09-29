@@ -36,6 +36,8 @@ const schemaStatements = [
      ADD COLUMN IF NOT EXISTS enabled_roles JSONB`,
   `ALTER TABLE users
      ADD COLUMN IF NOT EXISTS switch_pin_hash TEXT`,
+  `ALTER TABLE users
+     ADD COLUMN IF NOT EXISTS date_of_birth DATE`,
   `UPDATE users
      SET enabled_roles = jsonb_build_array(role)
      WHERE enabled_roles IS NULL
@@ -529,7 +531,7 @@ export async function initializeDatabase() {
 
 export async function getUserById(userId: number) {
   const result = await pool.query(
-    `SELECT id, email, role, enabled_roles, full_name, password_hash, switch_pin_hash, auth_provider, email_verified_at, last_login_at, created_at, deleted_at
+    `SELECT id, email, role, enabled_roles, full_name, password_hash, switch_pin_hash, date_of_birth, auth_provider, email_verified_at, last_login_at, created_at, deleted_at
      FROM users
      WHERE id = $1`,
     [userId],

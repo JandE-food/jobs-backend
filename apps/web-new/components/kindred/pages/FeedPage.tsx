@@ -1453,6 +1453,11 @@ export function FeedPage() {
                 className: "cursor-pointer",
               })}
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/80" />
+              <div className="pointer-events-none absolute left-1/2 top-[calc(env(safe-area-inset-top)+0.95rem)] z-30 -translate-x-1/2">
+                <span className="font-['Brush_Script_MT','Segoe_Script','Lucida_Handwriting',cursive] text-[1.55rem] font-semibold tracking-[0.08em] text-white drop-shadow-[0_10px_22px_rgba(15,23,42,0.42)]">
+                  BEJELI
+                </span>
+              </div>
               <div
                 className="absolute right-4 top-[calc(env(safe-area-inset-top)+0.9rem)] z-30"
                 onClick={(event) => event.stopPropagation()}

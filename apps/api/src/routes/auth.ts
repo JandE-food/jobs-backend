@@ -18,6 +18,7 @@ import {
 type SignupBody = {
   fullName?: string;
   email?: string;
+  dateOfBirth?: string;
   password?: string;
   role?: string;
 };
@@ -47,6 +48,49 @@ const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const adminPermissions = ["create", "read", "update", "delete"];
 const pinPattern = /^\d{4,8}$/;
 
+function parseDateInput(value: string) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value.trim());
+
+  if (!match) {
+    return null;
+  }
+
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  const parsed = new Date(Date.UTC(year, month - 1, day));
+
+  if (
+    Number.isNaN(parsed.getTime()) ||
+    parsed.getUTCFullYear() !== year ||
+    parsed.getUTCMonth() !== month - 1 ||
+    parsed.getUTCDate() !== day
+  ) {
+    return null;
+  }
+
+  return { year, month, day };
+}
+
+function isAtLeast18(dateOfBirth: string) {
+  const parsed = parseDateInput(dateOfBirth);
+
+  if (!parsed) {
+    return false;
+  }
+
+  const now = new Date();
+  let age = now.getUTCFullYear() - parsed.year;
+  const monthDelta = now.getUTCMonth() + 1 - parsed.month;
+  const dayDelta = now.getUTCDate() - parsed.day;
+
+  if (monthDelta < 0 || (monthDelta === 0 && dayDelta < 0)) {
+    age -= 1;
+  }
+
+  return age >= 18;
+}
+
 export async function registerAuthRoutes(app: FastifyInstance) {
   app.get("/auth/me", async (request, reply) => {
     const user = await getAuthenticatedUserFromRequest(request);
@@ -67,14 +111,23 @@ export async function registerAuthRoutes(app: FastifyInstance) {
   app.post<{ Body: SignupBody }>("/auth/signup", async (request, reply) => {
     const fullName = request.body?.fullName?.trim() ?? "";
     const email = request.body?.email?.trim().toLowerCase() ?? "";
+    const dateOfBirth = request.body?.dateOfBirth?.trim() ?? "";
     const password = request.body?.password ?? "";
     const role = request.body?.role ?? "professional";
 
-    if (!fullName || !emailPattern.test(email) || password.length < 8) {
+    if (!fullName || !emailPattern.test(email) || !dateOfBirth || password.length < 8) {
       reply.code(400).send({
         error: "Invalid signup payload.",
         message:
-          "Provide a full name, valid email address, and password with at least 8 characters.",
+          "Provide a full name, valid email address, date of birth, and password with at least 8 characters.",
+      });
+      return;
+    }
+
+    if (!isAtLeast18(dateOfBirth)) {
+      reply.code(400).send({
+        error: "Underage signup blocked.",
+        message: "You must be at least 18 years old to sign up.",
       });
       return;
     }
@@ -100,6 +153,7 @@ export async function registerAuthRoutes(app: FastifyInstance) {
     const user = await createUser({
       fullName,
       email,
+      dateOfBirth,
       passwordHash: hashPassword(password),
       role,
     });

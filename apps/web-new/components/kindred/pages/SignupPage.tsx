@@ -23,6 +23,58 @@ import { TransitionLink, navigateWithTransition } from "../TransitionLink";
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const pinPattern = /^\d{4,8}$/;
 
+function parseDateInput(value: string) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value.trim());
+
+  if (!match) {
+    return null;
+  }
+
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  const parsed = new Date(Date.UTC(year, month - 1, day));
+
+  if (
+    Number.isNaN(parsed.getTime()) ||
+    parsed.getUTCFullYear() !== year ||
+    parsed.getUTCMonth() !== month - 1 ||
+    parsed.getUTCDate() !== day
+  ) {
+    return null;
+  }
+
+  return { year, month, day };
+}
+
+function isAtLeast18(dateOfBirth: string) {
+  const parsed = parseDateInput(dateOfBirth);
+
+  if (!parsed) {
+    return false;
+  }
+
+  const now = new Date();
+  let age = now.getUTCFullYear() - parsed.year;
+  const monthDelta = now.getUTCMonth() + 1 - parsed.month;
+  const dayDelta = now.getUTCDate() - parsed.day;
+
+  if (monthDelta < 0 || (monthDelta === 0 && dayDelta < 0)) {
+    age -= 1;
+  }
+
+  return age >= 18;
+}
+
+function getAdultDateLimit() {
+  const now = new Date();
+  const adultDate = new Date(
+    Date.UTC(now.getUTCFullYear() - 18, now.getUTCMonth(), now.getUTCDate()),
+  );
+
+  return adultDate.toISOString().slice(0, 10);
+}
+
 export function SignupPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -38,6 +90,7 @@ export function SignupPage() {
   const [form, setForm] = useState({
     name: user?.fullName ?? "",
     email: user?.email ?? "",
+    dateOfBirth: "",
     password: "",
     role: initialRole,
     agreed: false,
@@ -56,6 +109,16 @@ export function SignupPage() {
 
     if (!form.name.trim() || !emailPattern.test(form.email)) {
       setError("Add your name and a valid email address to continue.");
+      return;
+    }
+
+    if (!enableExistingAccount && !form.dateOfBirth) {
+      setError("Add your date of birth to continue.");
+      return;
+    }
+
+    if (!enableExistingAccount && !isAtLeast18(form.dateOfBirth)) {
+      setError("You must be at least 18 years old to sign up.");
       return;
     }
 
@@ -104,6 +167,7 @@ export function SignupPage() {
             : {
                 fullName: form.name.trim(),
                 email: form.email.trim(),
+                dateOfBirth: form.dateOfBirth,
                 password: form.password,
                 role: form.role,
               }),
@@ -311,44 +375,63 @@ export function SignupPage() {
               </div>
             </div>
           ) : (
-          <div>
-            <label
-              htmlFor="signup-password"
-              className="mb-1.5 block text-sm font-bold text-slate-800"
-            >
-              Create password
-            </label>
-            <div className="relative">
-              <LockKeyholeIcon
-                className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500"
-                aria-hidden="true"
-              />
-              <input
-                id="signup-password"
-                type={showPassword ? "text" : "password"}
-                autoComplete="new-password"
-                value={form.password}
-                onChange={(event) => setForm({ ...form, password: event.target.value })}
-                aria-describedby="password-help"
-                className="min-h-12 w-full rounded-xl border border-slate-300 bg-white py-3 pl-10 pr-12 text-base text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-100"
-                required
-              />
-              <IconButton
-                label={showPassword ? "Hide password" : "Show password"}
-                onClick={() => setShowPassword((visible) => !visible)}
-                className="absolute right-0 top-1/2 -translate-y-1/2"
-              >
-                {showPassword ? (
-                  <EyeOffIcon className="h-5 w-5" aria-hidden="true" />
-                ) : (
-                  <EyeIcon className="h-5 w-5" aria-hidden="true" />
-                )}
-              </IconButton>
-            </div>
-            <p id="password-help" className="mt-1.5 text-xs text-slate-600">
-              At least 8 characters.
-            </p>
-          </div>
+            <>
+              <div>
+                <label htmlFor="signup-dob" className="mb-1.5 block text-sm font-bold text-slate-800">
+                  DOB
+                </label>
+                <input
+                  id="signup-dob"
+                  type="date"
+                  value={form.dateOfBirth}
+                  onChange={(event) => setForm({ ...form, dateOfBirth: event.target.value })}
+                  max={getAdultDateLimit()}
+                  className="min-h-12 w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-base text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+                  required
+                />
+                <p className="mt-1.5 text-xs text-slate-600">
+                  You must be at least 18 years old to create an account.
+                </p>
+              </div>
+              <div>
+                <label
+                  htmlFor="signup-password"
+                  className="mb-1.5 block text-sm font-bold text-slate-800"
+                >
+                  Create password
+                </label>
+                <div className="relative">
+                  <LockKeyholeIcon
+                    className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500"
+                    aria-hidden="true"
+                  />
+                  <input
+                    id="signup-password"
+                    type={showPassword ? "text" : "password"}
+                    autoComplete="new-password"
+                    value={form.password}
+                    onChange={(event) => setForm({ ...form, password: event.target.value })}
+                    aria-describedby="password-help"
+                    className="min-h-12 w-full rounded-xl border border-slate-300 bg-white py-3 pl-10 pr-12 text-base text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+                    required
+                  />
+                  <IconButton
+                    label={showPassword ? "Hide password" : "Show password"}
+                    onClick={() => setShowPassword((visible) => !visible)}
+                    className="absolute right-0 top-1/2 -translate-y-1/2"
+                  >
+                    {showPassword ? (
+                      <EyeOffIcon className="h-5 w-5" aria-hidden="true" />
+                    ) : (
+                      <EyeIcon className="h-5 w-5" aria-hidden="true" />
+                    )}
+                  </IconButton>
+                </div>
+                <p id="password-help" className="mt-1.5 text-xs text-slate-600">
+                  At least 8 characters.
+                </p>
+              </div>
+            </>
           )}
 
           <div className="flex min-h-11 items-start gap-3 rounded-xl p-1 text-sm leading-relaxed text-slate-700 focus-within:ring-2 focus-within:ring-indigo-600">

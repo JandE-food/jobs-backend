@@ -10,6 +10,7 @@ export type AppUser = {
   full_name: string | null;
   password_hash: string | null;
   switch_pin_hash: string | null;
+  date_of_birth: string | null;
   auth_provider: string;
   email_verified_at: string | null;
   last_login_at: string | null;
@@ -40,6 +41,7 @@ function toDatabaseUser(row: {
   full_name: string | null;
   password_hash: string | null;
   switch_pin_hash: string | null;
+  date_of_birth: string | null;
   auth_provider: string;
   email_verified_at: string | null;
   last_login_at: string | null;
@@ -57,7 +59,7 @@ function toDatabaseUser(row: {
 
 export async function getUserByEmail(email: string) {
   const result = await pool.query(
-    `SELECT id, email, role, enabled_roles, full_name, password_hash, switch_pin_hash, auth_provider, email_verified_at, last_login_at, created_at, deleted_at
+    `SELECT id, email, role, enabled_roles, full_name, password_hash, switch_pin_hash, date_of_birth, auth_provider, email_verified_at, last_login_at, created_at, deleted_at
      FROM users
      WHERE LOWER(email) = LOWER($1)`,
     [email],
@@ -69,6 +71,7 @@ export async function getUserByEmail(email: string) {
 export async function createUser(input: {
   fullName: string;
   email: string;
+  dateOfBirth: string;
   passwordHash: string;
   role: AppUserRole;
 }) {
@@ -79,12 +82,20 @@ export async function createUser(input: {
       password_hash,
       role,
       enabled_roles,
+      date_of_birth,
       auth_provider,
       email_verified_at
      )
-     VALUES ($1, LOWER($2), $3, $4, $5::jsonb, 'password', NOW())
-     RETURNING id, email, role, enabled_roles, full_name, password_hash, switch_pin_hash, auth_provider, email_verified_at, last_login_at, created_at, deleted_at`,
-    [input.fullName, input.email, input.passwordHash, input.role, JSON.stringify([input.role])],
+     VALUES ($1, LOWER($2), $3, $4, $5::jsonb, $6, 'password', NOW())
+     RETURNING id, email, role, enabled_roles, full_name, password_hash, switch_pin_hash, date_of_birth, auth_provider, email_verified_at, last_login_at, created_at, deleted_at`,
+    [
+      input.fullName,
+      input.email,
+      input.passwordHash,
+      input.role,
+      JSON.stringify([input.role]),
+      input.dateOfBirth,
+    ],
   );
 
   await pool.query(
@@ -108,7 +119,7 @@ export async function updateLastLogin(userId: number) {
 
 export async function enableUserRole(userId: number, role: AppUserRole) {
   const existingUser = await pool.query(
-    `SELECT id, email, role, enabled_roles, full_name, password_hash, switch_pin_hash, auth_provider, email_verified_at, last_login_at, created_at, deleted_at
+    `SELECT id, email, role, enabled_roles, full_name, password_hash, switch_pin_hash, date_of_birth, auth_provider, email_verified_at, last_login_at, created_at, deleted_at
      FROM users
      WHERE id = $1`,
     [userId],
@@ -126,7 +137,7 @@ export async function enableUserRole(userId: number, role: AppUserRole) {
      SET role = $2,
          enabled_roles = $3::jsonb
      WHERE id = $1
-     RETURNING id, email, role, enabled_roles, full_name, password_hash, switch_pin_hash, auth_provider, email_verified_at, last_login_at, created_at, deleted_at`,
+     RETURNING id, email, role, enabled_roles, full_name, password_hash, switch_pin_hash, date_of_birth, auth_provider, email_verified_at, last_login_at, created_at, deleted_at`,
     [userId, role, JSON.stringify(nextRoles)],
   );
 
@@ -138,7 +149,7 @@ export async function updateSwitchPinHash(userId: number, switchPinHash: string 
     `UPDATE users
      SET switch_pin_hash = $2
      WHERE id = $1
-     RETURNING id, email, role, enabled_roles, full_name, password_hash, switch_pin_hash, auth_provider, email_verified_at, last_login_at, created_at, deleted_at`,
+     RETURNING id, email, role, enabled_roles, full_name, password_hash, switch_pin_hash, date_of_birth, auth_provider, email_verified_at, last_login_at, created_at, deleted_at`,
     [userId, switchPinHash],
   );
 
@@ -150,7 +161,7 @@ export async function switchUserRole(userId: number, role: AppUserRole) {
     `UPDATE users
      SET role = $2
      WHERE id = $1
-     RETURNING id, email, role, enabled_roles, full_name, password_hash, switch_pin_hash, auth_provider, email_verified_at, last_login_at, created_at, deleted_at`,
+     RETURNING id, email, role, enabled_roles, full_name, password_hash, switch_pin_hash, date_of_birth, auth_provider, email_verified_at, last_login_at, created_at, deleted_at`,
     [userId, role],
   );
 
