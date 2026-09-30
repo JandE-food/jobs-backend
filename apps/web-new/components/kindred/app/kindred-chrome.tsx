@@ -12,6 +12,7 @@ import { useKindredAuth } from "./kindred-provider";
 
 const APP_ROUTES = new Set([
   "/",
+  "/discovery-settings",
   "/jobs",
   "/notifications",
   "/resume",
@@ -20,6 +21,7 @@ const APP_ROUTES = new Set([
   "/companies",
   "/post",
   "/recruiter",
+  "/recruiter/discovery-settings",
   "/recruiter/home",
   "/recruiter/candidates",
   "/recruiter/post",
@@ -32,6 +34,7 @@ const APP_ROUTES = new Set([
 const AUTH_ROUTES = new Set(["/login", "/signup"]);
 const GUEST_ALLOWED_ROUTES = new Set([
   "/",
+  "/discovery-settings",
   "/jobs",
   "/notifications",
   "/network",
@@ -62,6 +65,8 @@ export function KindredChrome({ children }: { children: ReactNode }) {
   const router = useRouter();
   const { hydrated, user } = useKindredAuth();
   const immersiveFeedRoute = pathname === "/" || pathname === "/recruiter";
+  const discoverySettingsRoute =
+    pathname === "/discovery-settings" || pathname === "/recruiter/discovery-settings";
   const allowLinkedSignup =
     pathname === "/signup" &&
     typeof window !== "undefined" &&
@@ -150,7 +155,7 @@ export function KindredChrome({ children }: { children: ReactNode }) {
         >
           Skip to main content
         </a>
-        <div className={immersiveFeedRoute ? "hidden sm:block" : ""}>
+        <div className={immersiveFeedRoute || discoverySettingsRoute ? "hidden sm:block" : ""}>
           <TopBar />
         </div>
         <div
@@ -167,7 +172,7 @@ export function KindredChrome({ children }: { children: ReactNode }) {
             id="main-content"
             aria-label={isRecruiterRoute(pathname) ? "BEJELI recruiter workspace" : "BEJELI talent workspace"}
             className={
-              immersiveFeedRoute
+              immersiveFeedRoute || discoverySettingsRoute
                 ? "min-w-0 flex-1 pt-0 sm:pt-3"
                 : "min-w-0 flex-1 pb-24 pt-5 lg:pb-12"
             }

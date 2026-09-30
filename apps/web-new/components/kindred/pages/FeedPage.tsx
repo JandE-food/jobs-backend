@@ -22,6 +22,7 @@ import {
   VolumeOffIcon,
   VolumeOnIcon,
   SearchIcon,
+  SlidersHorizontalIcon,
 } from "../icons";
 
 import { motion, useReducedMotion } from "../motion";
@@ -742,6 +743,10 @@ export function FeedPage() {
     user?.role === "recruiter" || user?.role === "admin"
       ? "/recruiter/candidates?focus=search"
       : "/jobs?focus=search";
+  const discoveryHref =
+    user?.role === "recruiter" || user?.role === "admin"
+      ? "/recruiter/discovery-settings"
+      : "/discovery-settings";
   const workspaceIdentity = {
     userId: user?.id,
     userFullName: user?.fullName,
@@ -1453,6 +1458,19 @@ export function FeedPage() {
                 className: "cursor-pointer",
               })}
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/80" />
+              <div
+                className="absolute left-4 top-[calc(env(safe-area-inset-top)+0.9rem)] z-30"
+                onClick={(event) => event.stopPropagation()}
+                data-reel-interactive="true"
+              >
+                <TransitionLink
+                  href={discoveryHref}
+                  aria-label="Open discovery settings"
+                  className="grid h-11 w-11 place-items-center rounded-full bg-black/45 text-white shadow-[0_16px_36px_rgba(15,23,42,0.22)] backdrop-blur-md transition-transform duration-200 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+                >
+                  <SlidersHorizontalIcon className="h-5 w-5" aria-hidden="true" />
+                </TransitionLink>
+              </div>
               <div className="pointer-events-none absolute left-1/2 top-[calc(env(safe-area-inset-top)+0.95rem)] z-30 -translate-x-1/2">
                 <span className="font-['Palatino_Linotype','Book_Antiqua','URW_Palladio_L',serif] text-[1.55rem] italic font-semibold tracking-[0.12em] text-white drop-shadow-[0_10px_22px_rgba(15,23,42,0.42)]">
                   BEJELI
