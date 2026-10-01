@@ -29,13 +29,16 @@ import { motion, useReducedMotion } from "../motion";
 import { TransitionLink } from "../TransitionLink";
 import { feed, me, type FeedItem } from "../mock";
 import { useKindredAuth } from "../app/kindred-provider";
+import { rankFeedForRecruiter, rankFeedForTalent } from "../discovery-matching";
 import { Avatar, Badge, Button, Card, MatchRing, cn } from "../primitives";
 import { type ImmersiveShortItem } from "./ImmersiveShortsHome";
 import { apiUrl } from "../../api";
 import {
   feedStorageKey,
   getStoredProfileWorkspace,
+  getStoredRecruiterDiscoverySettings,
   getStoredResumeWorkspace,
+  getStoredTalentDiscoverySettings,
   readFileAsDataUrl,
   type ProfileWorkspace,
   type ResumeWorkspace,
@@ -739,12 +742,13 @@ function FeedItemView({
 
 export function FeedPage() {
   const { token, user } = useKindredAuth();
+  const recruiterViewer = user?.role === "recruiter" || user?.role === "admin";
   const searchHref =
-    user?.role === "recruiter" || user?.role === "admin"
+    recruiterViewer
       ? "/recruiter/candidates?focus=search"
       : "/jobs?focus=search";
   const discoveryHref =
-    user?.role === "recruiter" || user?.role === "admin"
+    recruiterViewer
       ? "/recruiter/discovery-settings"
       : "/discovery-settings";
   const workspaceIdentity = {
@@ -769,9 +773,6 @@ export function FeedPage() {
   const [composerStatus, setComposerStatus] = useState("");
   const [composerChannel, setComposerChannel] = useState<Exclude<FeedMode, "All">>("Work");
   const [shortsMode, setShortsMode] = useState<"curated" | "latest">("curated");
-  const [discoveryLocation] = useState("All locations");
-  const [discoverySector] = useState("All sectors");
-  const [discoveryRating] = useState("All ratings");
   const [sharedShortIds, setSharedShortIds] = useState<Record<string, boolean>>({});
   const [activeIndex, setActiveIndex] = useState(0);
   const [commentsOpen, setCommentsOpen] = useState(false);
@@ -794,6 +795,14 @@ export function FeedPage() {
   const suppressSurfaceClickRef = useRef(false);
   const [profile] = useState(() => getStoredProfileWorkspace(workspaceIdentity));
   const [resume] = useState(() => getStoredResumeWorkspace(workspaceIdentity));
+  const talentDiscoverySettings = useMemo(
+    () => getStoredTalentDiscoverySettings(workspaceIdentity),
+    [workspaceIdentity.userEmail, workspaceIdentity.userFullName, workspaceIdentity.userId],
+  );
+  const recruiterDiscoverySettings = useMemo(
+    () => getStoredRecruiterDiscoverySettings(workspaceIdentity),
+    [workspaceIdentity.userEmail, workspaceIdentity.userFullName, workspaceIdentity.userId],
+  );
   const author = useMemo(() => buildCurrentAuthor(profile), [profile]);
   const profileReadiness = useMemo(
     () =>
@@ -803,48 +812,66 @@ export function FeedPage() {
       ),
     [profile.portfolio.length, resume.skills.length],
   );
+  const rankedDiscoveryItems = useMemo(
+    () =>
+      recruiterViewer
+        ? rankFeedForRecruiter(feedItems, recruiterDiscoverySettings)
+        : rankFeedForTalent(feedItems, talentDiscoverySettings, profile, resume),
+    [
+      feedItems,
+      profile,
+      recruiterDiscoverySettings,
+      recruiterViewer,
+      resume,
+      talentDiscoverySettings,
+    ],
+  );
+  const discoveryMetaById = useMemo(
+    () => new Map(rankedDiscoveryItems.map((entry) => [entry.item.id, entry])),
+    [rankedDiscoveryItems],
+  );
+  const rankedFeedItems = useMemo(
+    () => rankedDiscoveryItems.map((entry) => entry.item),
+    [rankedDiscoveryItems],
+  );
   const mediaPosts = useMemo(
     () =>
-      feedItems.filter(
+      rankedFeedItems.filter(
         (item): item is Extract<FeedItem, { kind: "post" }> =>
           item.kind === "post" && Boolean(item.media?.length),
       ),
-    [feedItems],
+    [rankedFeedItems],
   );
   const streamItems = useMemo(
-    () => feedItems.filter((item) => item.kind !== "post" || !item.media?.length),
-    [feedItems],
+    () => rankedFeedItems.filter((item) => item.kind !== "post" || !item.media?.length),
+    [rankedFeedItems],
   );
   const shortsItems = useMemo(() => {
-    const base = mediaPosts.filter((item) => {
-      const rating = 4 + Math.min(0.9, item.likes / 300 + item.comments / 500);
-      const passesLocation =
-        discoveryLocation === "All locations" || item.author.location === discoveryLocation;
-      const passesSector =
-        discoverySector === "All sectors" || item.tags.includes(discoverySector);
-      const passesRating =
-        discoveryRating === "All ratings" ||
-        rating >= Number.parseFloat(discoveryRating.replace("★+", ""));
-
-      return passesLocation && passesSector && passesRating;
-    });
+    const base = mediaPosts;
 
     if (shortsMode === "latest") {
-      return base;
+      return [...base].sort((left, right) => {
+        const leftValue = parseFloat(left.time) || 0;
+        const rightValue = parseFloat(right.time) || 0;
+        return leftValue - rightValue;
+      });
     }
 
     return [...base].sort((left, right) => {
+      const leftDiscovery = discoveryMetaById.get(left.id)?.score ?? 0;
+      const rightDiscovery = discoveryMetaById.get(right.id)?.score ?? 0;
       const leftScore = left.likes * 2 + left.comments * 3;
       const rightScore = right.likes * 2 + right.comments * 3;
-      return rightScore - leftScore;
+      return rightDiscovery + rightScore - (leftDiscovery + leftScore);
     });
-  }, [discoveryLocation, discoveryRating, discoverySector, mediaPosts, shortsMode]);
+  }, [discoveryMetaById, mediaPosts, shortsMode]);
 
   const immersiveShorts = useMemo<ImmersiveShortItem[]>(
     () =>
       shortsItems.map((item) => {
         const rating = 4 + Math.min(0.9, item.likes / 300 + item.comments / 500);
         const estimatedShares = Math.max(1, Math.round(item.likes / 6));
+        const discoveryMeta = discoveryMetaById.get(item.id);
 
         return {
           id: item.id,
@@ -857,11 +884,14 @@ export function FeedPage() {
           tags: item.tags,
           media: item.media?.[0],
           locationLabel: item.author.location,
-          recommendationLabel: `${rating.toFixed(1)}★ creator signal`,
+          recommendationLabel:
+            discoveryMeta?.summaryLabel ??
+            `${rating.toFixed(1)}★ creator signal`,
           recommendationNote:
-            shortsMode === "curated"
+            discoveryMeta?.summaryNote ||
+            (shortsMode === "curated"
               ? "Curated to surface strong proof-of-work and standout momentum."
-              : "Latest short from your professional graph.",
+              : "Latest short from your professional graph."),
           ctaLabel: item.tags[0] ?? "Open profile",
           likes: item.likes,
           comments: item.comments,
@@ -870,10 +900,10 @@ export function FeedPage() {
           shared: Boolean(sharedShortIds[item.id]),
           liked: item.liked,
           commentItems: item.commentItems ?? [],
-          searchText: `${item.author.location} ${item.tags.join(" ")}`,
+          searchText: `${item.author.location} ${item.tags.join(" ")} ${discoveryMeta?.reasons.join(" ") ?? ""}`,
         };
       }),
-    [sharedShortIds, shortsItems, shortsMode],
+    [discoveryMetaById, sharedShortIds, shortsItems, shortsMode],
   );
   const safeActiveIndex = immersiveShorts.length
     ? Math.min(activeIndex, immersiveShorts.length - 1)
