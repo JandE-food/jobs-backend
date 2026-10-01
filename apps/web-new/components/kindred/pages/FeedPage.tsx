@@ -740,6 +740,48 @@ function FeedItemView({
   );
 }
 
+function ShortCaption({
+  caption,
+  recommendationNote,
+  expanded,
+  onToggle,
+  captionClassName,
+  noteClassName,
+  buttonClassName,
+}: {
+  caption: string;
+  recommendationNote?: string;
+  expanded: boolean;
+  onToggle: () => void;
+  captionClassName: string;
+  noteClassName: string;
+  buttonClassName: string;
+}) {
+  const trimmedCaption = caption.trim();
+  const canToggle = trimmedCaption.length > 72 || Boolean(recommendationNote?.trim());
+
+  return (
+    <div className="space-y-1.5">
+      <p className={cn(captionClassName, !expanded && canToggle && "line-clamp-1")}>
+        {trimmedCaption}
+      </p>
+      {expanded && recommendationNote ? (
+        <p className={noteClassName}>{recommendationNote}</p>
+      ) : null}
+      {canToggle ? (
+        <button
+          type="button"
+          onClick={onToggle}
+          className={buttonClassName}
+          aria-expanded={expanded}
+        >
+          {expanded ? "See less" : "See more"}
+        </button>
+      ) : null}
+    </div>
+  );
+}
+
 export function FeedPage() {
   const { token, user } = useKindredAuth();
   const recruiterViewer = user?.role === "recruiter" || user?.role === "admin";
@@ -777,6 +819,7 @@ export function FeedPage() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [commentsOpen, setCommentsOpen] = useState(false);
   const [commentDraft, setCommentDraft] = useState("");
+  const [expandedShortCaptions, setExpandedShortCaptions] = useState<Record<string, boolean>>({});
   const [isMuted, setIsMuted] = useState(true);
   const [isPlaying, setIsPlaying] = useState(true);
   const [playbackIndicator, setPlaybackIndicator] = useState<"play" | "pause" | null>(null);
@@ -909,6 +952,7 @@ export function FeedPage() {
     ? Math.min(activeIndex, immersiveShorts.length - 1)
     : 0;
   const activeShort = immersiveShorts[safeActiveIndex] ?? null;
+  const activeShortCaptionExpanded = activeShort ? Boolean(expandedShortCaptions[activeShort.id]) : false;
 
   useEffect(() => {
     const videos = [mobileVideoRef.current, desktopVideoRef.current].filter(
@@ -1156,6 +1200,13 @@ export function FeedPage() {
     }
 
     setSharedShortIds((current) => ({ ...current, [shortId]: true }));
+  }
+
+  function toggleShortCaption(shortId: string) {
+    setExpandedShortCaptions((current) => ({
+      ...current,
+      [shortId]: !current[shortId],
+    }));
   }
 
   function resetTransientState() {
@@ -1613,14 +1664,15 @@ export function FeedPage() {
                       </p>
                     </div>
                   </TransitionLink>
-                  <p className="text-[0.84rem] font-semibold leading-[1.45rem] text-white/96">
-                    {activeShort.caption}
-                  </p>
-                  {activeShort.recommendationNote ? (
-                    <p className="text-[0.78rem] leading-5 text-white/78">
-                      {activeShort.recommendationNote}
-                    </p>
-                  ) : null}
+                  <ShortCaption
+                    caption={activeShort.caption}
+                    recommendationNote={activeShort.recommendationNote}
+                    expanded={activeShortCaptionExpanded}
+                    onToggle={() => toggleShortCaption(activeShort.id)}
+                    captionClassName="text-[0.84rem] font-semibold leading-[1.45rem] text-white/96"
+                    noteClassName="text-[0.78rem] leading-5 text-white/78"
+                    buttonClassName="text-left text-[0.78rem] font-bold text-white/88 underline decoration-white/45 underline-offset-2"
+                  />
                 </div>
               </div>
 
@@ -1914,9 +1966,17 @@ export function FeedPage() {
                           </p>
                         </div>
                       </TransitionLink>
-                      <p className="mt-4 max-w-[16rem] text-[0.95rem] font-semibold leading-7 text-white">
-                        {activeShort.caption}
-                      </p>
+                      <div className="mt-4 max-w-[16rem]">
+                        <ShortCaption
+                          caption={activeShort.caption}
+                          recommendationNote={activeShort.recommendationNote}
+                          expanded={activeShortCaptionExpanded}
+                          onToggle={() => toggleShortCaption(activeShort.id)}
+                          captionClassName="text-[0.95rem] font-semibold leading-7 text-white"
+                          noteClassName="text-sm font-semibold text-white/85"
+                          buttonClassName="text-left text-sm font-bold text-white/88 underline decoration-white/45 underline-offset-2"
+                        />
+                      </div>
                       <div className="mt-4 flex flex-wrap gap-2">
                         <span className="rounded-full bg-white px-3 py-1 text-sm font-bold text-indigo-700">
                           {activeShort.recommendationLabel}
@@ -1930,11 +1990,6 @@ export function FeedPage() {
                           </span>
                         ))}
                       </div>
-                      {activeShort.recommendationNote ? (
-                        <p className="mt-3 text-sm font-semibold text-white/85">
-                          {activeShort.recommendationNote}
-                        </p>
-                      ) : null}
                     </div>
 
                     {commentsOpen ? (
