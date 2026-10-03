@@ -24,15 +24,16 @@ test("supports explicit provider overrides", () => {
 });
 
 test("recognizes valid plans", () => {
-  assert.equal(isBillingPlan("free"), true);
-  assert.equal(isBillingPlan("growth"), true);
-  assert.equal(isBillingPlan("scale"), true);
+  assert.equal(isBillingPlan("user_basic"), true);
+  assert.equal(isBillingPlan("company_basic"), true);
+  assert.equal(isBillingPlan("user_premium"), true);
+  assert.equal(isBillingPlan("company_premium"), true);
   assert.equal(isBillingPlan("enterprise"), false);
 });
 
 test("returns plan metadata", () => {
-  assert.equal(getPlanConfig("free").activeJobs, "1 active job");
-  assert.equal(getPlanConfig("growth").amountMinor, 4900);
+  assert.equal(getPlanConfig("user_basic").monthlyEndorsements, 10);
+  assert.equal(getPlanConfig("company_premium").amountMinor, 4000);
 });
 
 test("recognizes valid providers", () => {

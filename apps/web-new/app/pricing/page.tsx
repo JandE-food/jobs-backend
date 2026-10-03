@@ -7,11 +7,11 @@ export default function PricingPage() {
     <main className="page-shell">
       <section className="page-header">
         <span className="hero-kicker">Billing</span>
-        <h1>Plans and subscription checkout</h1>
+        <h1>Subscription plans and monthly endorsements</h1>
         <p className="muted-copy">
-          Choose Free, Growth, or Scale for recruiter and enterprise workflows.
-          Stripe handles UK and EU checkout. Flutterwave is ready for African
-          checkout routing.
+          Choose between the BEJELI basic and premium subscriptions for users
+          and companies. Every active plan includes monthly endorsements, and
+          premium expands that allowance dramatically.
         </p>
         <Link className="secondary-button" href="/">
           Back home

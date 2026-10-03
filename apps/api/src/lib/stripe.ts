@@ -16,8 +16,10 @@ function getStripeClient() {
 
 function getStripePriceId(plan: BillingPlan) {
   const priceIds: Partial<Record<BillingPlan, string>> = {
-    growth: process.env.STRIPE_PRICE_GROWTH,
-    scale: process.env.STRIPE_PRICE_SCALE,
+    user_basic: process.env.STRIPE_PRICE_USER_BASIC,
+    company_basic: process.env.STRIPE_PRICE_COMPANY_BASIC,
+    user_premium: process.env.STRIPE_PRICE_USER_PREMIUM,
+    company_premium: process.env.STRIPE_PRICE_COMPANY_PREMIUM,
   };
 
   return priceIds[plan] ?? null;
@@ -25,7 +27,7 @@ function getStripePriceId(plan: BillingPlan) {
 
 export async function createStripeCheckout(input: {
   userId: number;
-  plan: Exclude<BillingPlan, "free">;
+  plan: BillingPlan;
   country: string;
 }) {
   const user = await getUserById(input.userId);
@@ -104,7 +106,7 @@ export async function handleStripeWebhook(input: {
     const userId = Number(metadata.userId);
     const plan = metadata.plan as BillingPlan | undefined;
 
-    if (userId && plan && plan !== "free") {
+    if (userId && plan) {
       await upsertSubscription({
         userId,
         plan,

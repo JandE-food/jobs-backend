@@ -6,16 +6,19 @@ import { upsertSubscription } from "./subscriptions.js";
 
 export async function createPaystackCheckout(input: {
   userId: number;
-  plan: Exclude<BillingPlan, "free">;
+  plan: BillingPlan;
   country: string;
 }) {
   const user = await getUserById(input.userId);
   const secretKey = process.env.PAYSTACK_SECRET_KEY;
   const appUrl = process.env.APP_URL ?? "http://localhost:3000";
-  const planCode =
-    input.plan === "growth"
-      ? process.env.PAYSTACK_PLAN_CODE_GROWTH
-      : process.env.PAYSTACK_PLAN_CODE_SCALE;
+  const planCodes: Partial<Record<BillingPlan, string>> = {
+    user_basic: process.env.PAYSTACK_PLAN_CODE_USER_BASIC,
+    company_basic: process.env.PAYSTACK_PLAN_CODE_COMPANY_BASIC,
+    user_premium: process.env.PAYSTACK_PLAN_CODE_USER_PREMIUM,
+    company_premium: process.env.PAYSTACK_PLAN_CODE_COMPANY_PREMIUM,
+  };
+  const planCode = planCodes[input.plan];
 
   if (!user) {
     throw new Error("User not found.");
@@ -106,7 +109,7 @@ export async function handlePaystackWebhook(rawBody: string) {
     const userId = Number(payload.data?.metadata?.userId);
     const plan = payload.data?.metadata?.plan;
 
-    if (userId && plan && plan !== "free") {
+    if (userId && plan) {
       await upsertSubscription({
         userId,
         plan,

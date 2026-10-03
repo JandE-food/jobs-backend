@@ -85,7 +85,7 @@ async function verifyFlutterwaveTransaction(transactionId: number) {
 
 export async function createFlutterwaveCheckout(input: {
   userId: number;
-  plan: Exclude<BillingPlan, "free">;
+  plan: BillingPlan;
   country: string;
 }) {
   const user = await getUserById(input.userId);
@@ -130,7 +130,7 @@ export async function createFlutterwaveCheckout(input: {
         email: user.email,
       },
       customizations: {
-        title: "BEJELI Recruiter Billing",
+        title: "BEJELI Subscription Billing",
         description: `${config.name} subscription`,
       },
       meta: {
@@ -194,7 +194,7 @@ export async function handleFlutterwaveWebhook(rawBody: string) {
     paymentStatus === "successful" &&
     userId &&
     plan &&
-    plan !== "free"
+    plan
   ) {
     await upsertSubscription({
       userId,

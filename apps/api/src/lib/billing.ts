@@ -1,47 +1,63 @@
-export type BillingPlan = "free" | "growth" | "scale" | "enterprise";
+import { type AppUserRole } from "./users.js";
+
+export type BillingPlan =
+  | "user_basic"
+  | "company_basic"
+  | "user_premium"
+  | "company_premium";
 export type BillingProvider = "stripe" | "paystack" | "flutterwave";
 
 type PlanConfig = {
   id: BillingPlan;
   name: string;
-  activeJobs: string;
+  audience: "talent" | "company";
+  tier: "basic" | "premium";
+  monthlyEndorsements: number;
   amountMinor: number;
   intervalDays: number;
-  featured: boolean;
+  checkoutDescription: string;
 };
 
 const planConfigs: Record<BillingPlan, PlanConfig> = {
-  free: {
-    id: "free",
-    name: "Free",
-    activeJobs: "1 active job",
-    amountMinor: 0,
+  user_basic: {
+    id: "user_basic",
+    name: "Users",
+    audience: "talent",
+    tier: "basic",
+    monthlyEndorsements: 10,
+    amountMinor: 300,
     intervalDays: 30,
-    featured: false,
+    checkoutDescription: "10 endorsements each month for talent accounts.",
   },
-  growth: {
-    id: "growth",
-    name: "Growth",
-    activeJobs: "10 active jobs",
-    amountMinor: 4900,
+  company_basic: {
+    id: "company_basic",
+    name: "Companies",
+    audience: "company",
+    tier: "basic",
+    monthlyEndorsements: 10,
+    amountMinor: 300,
     intervalDays: 30,
-    featured: false,
+    checkoutDescription: "10 endorsements each month for company accounts.",
   },
-  scale: {
-    id: "scale",
-    name: "Scale",
-    activeJobs: "Many jobs + featured",
-    amountMinor: 14900,
+  user_premium: {
+    id: "user_premium",
+    name: "Premium Users",
+    audience: "talent",
+    tier: "premium",
+    monthlyEndorsements: 200,
+    amountMinor: 4000,
     intervalDays: 30,
-    featured: true,
+    checkoutDescription: "200 endorsements each month for premium talent accounts.",
   },
-  enterprise: {
-    id: "enterprise",
-    name: "Enterprise",
-    activeJobs: "Unlimited jobs + escrow, analytics, and admin controls",
-    amountMinor: 39900,
+  company_premium: {
+    id: "company_premium",
+    name: "Premium Companies",
+    audience: "company",
+    tier: "premium",
+    monthlyEndorsements: 200,
+    amountMinor: 4000,
     intervalDays: 30,
-    featured: true,
+    checkoutDescription: "200 endorsements each month for premium company accounts.",
   },
 };
 
@@ -119,15 +135,31 @@ export function getBillingProvider(
 
 export function isBillingPlan(value: string): value is BillingPlan {
   return (
-    value === "free" ||
-    value === "growth" ||
-    value === "scale" ||
-    value === "enterprise"
+    value === "user_basic" ||
+    value === "company_basic" ||
+    value === "user_premium" ||
+    value === "company_premium"
   );
 }
 
 export function getPlanConfig(plan: BillingPlan) {
   return planConfigs[plan];
+}
+
+export function isPremiumPlan(plan: BillingPlan) {
+  return getPlanConfig(plan).tier === "premium";
+}
+
+export function getMonthlyEndorsementLimit(plan: BillingPlan) {
+  return getPlanConfig(plan).monthlyEndorsements;
+}
+
+export function getDefaultPlanForRole(role: AppUserRole | "company") {
+  return role === "recruiter" || role === "company" ? "company_basic" : "user_basic";
+}
+
+export function getPremiumPlanForRole(role: AppUserRole | "company") {
+  return role === "recruiter" || role === "company" ? "company_premium" : "user_premium";
 }
 
 export function getPeriodEnd(plan: BillingPlan) {

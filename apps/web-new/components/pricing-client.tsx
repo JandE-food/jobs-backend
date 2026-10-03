@@ -1,46 +1,111 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+
+import { useSearchParams } from "next/navigation";
 
 import { apiUrl, authedFetch, readJsonResponse } from "./api";
 
-type PlanId = "free" | "growth" | "scale" | "enterprise";
+type PlanId = "user_basic" | "company_basic" | "user_premium" | "company_premium";
+
+type SubscriptionResponse = {
+  subscription?: {
+    plan?: PlanId;
+    status?: string;
+    current_period_end?: string | null;
+  } | null;
+  entitlements?: {
+    active?: boolean;
+    monthlyEndorsements?: number;
+    endorsementsUsedThisMonth?: number;
+    remainingEndorsements?: number;
+    premium?: boolean;
+    audience?: "talent" | "company" | null;
+    tier?: "basic" | "premium" | null;
+    planName?: string | null;
+  };
+};
 
 const plans = [
   {
-    id: "free" as const,
-    name: "Free",
-    price: "£0",
-    copy: "For early testing and one active job.",
-    limit: "1 active job",
+    id: "user_basic" as const,
+    name: "Users",
+    price: "£3",
+    audience: "Talent",
+    copy: "For normal users who want full access and monthly endorsements.",
+    limit: "10 endorsements / month",
+    premium: false,
   },
   {
-    id: "growth" as const,
-    name: "Growth",
-    price: "£49",
-    copy: "For growing recruiters that need more capacity.",
-    limit: "10 active jobs",
+    id: "company_basic" as const,
+    name: "Companies",
+    price: "£3",
+    audience: "Recruiter / Company",
+    copy: "For companies that want full access and monthly endorsements.",
+    limit: "10 endorsements / month",
+    premium: false,
   },
   {
-    id: "scale" as const,
-    name: "Scale",
-    price: "£149",
-    copy: "For higher-volume hiring with featured placement.",
-    limit: "Many jobs + featured",
+    id: "user_premium" as const,
+    name: "Premium Users",
+    price: "£40",
+    audience: "Talent",
+    copy: "For power users who need a much larger endorsement allowance every month.",
+    limit: "200 endorsements / month",
+    premium: true,
   },
   {
-    id: "enterprise" as const,
-    name: "Enterprise",
-    price: "£399",
-    copy: "For escrow-backed hiring, compliance automation, and platform analytics.",
-    limit: "Unlimited jobs + operations controls",
+    id: "company_premium" as const,
+    name: "Premium Companies",
+    price: "£40",
+    audience: "Recruiter / Company",
+    copy: "For companies that want premium visibility plus a higher endorsement allowance.",
+    limit: "200 endorsements / month",
+    premium: true,
   },
 ];
 
 export function PricingClient() {
+  const searchParams = useSearchParams();
   const [country, setCountry] = useState("UK");
   const [loadingPlan, setLoadingPlan] = useState<PlanId | null>(null);
   const [error, setError] = useState("");
+  const [subscriptionState, setSubscriptionState] = useState<SubscriptionResponse | null>(null);
+
+  const highlightedPlan = searchParams.get("highlight") as PlanId | null;
+
+  useEffect(() => {
+    let active = true;
+
+    authedFetch(`${apiUrl}/billing/subscription`)
+      .then(async (response) => {
+        const payload = await readJsonResponse<SubscriptionResponse & { error?: string }>(response);
+
+        if (!response.ok || !active) {
+          return;
+        }
+
+        setSubscriptionState(payload);
+      })
+      .catch(() => undefined);
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const currentPlan = subscriptionState?.subscription?.plan ?? null;
+  const remainingEndorsements = subscriptionState?.entitlements?.remainingEndorsements ?? 0;
+  const currentPlanLabel = subscriptionState?.entitlements?.planName ?? "No active plan";
+  const planCards = useMemo(
+    () =>
+      plans.map((plan) => ({
+        ...plan,
+        isCurrent: currentPlan === plan.id,
+        isHighlighted: highlightedPlan === plan.id,
+      })),
+    [currentPlan, highlightedPlan],
+  );
 
   async function subscribe(plan: PlanId) {
     setLoadingPlan(plan);
@@ -81,6 +146,16 @@ export function PricingClient() {
 
   return (
     <div className="stack-gap">
+      <section className="content-card">
+        <span className="pill">Current subscription</span>
+        <h2>{currentPlanLabel}</h2>
+        <p className="muted-copy">
+          {subscriptionState?.entitlements?.active
+            ? `You have ${remainingEndorsements} endorsements remaining in this monthly cycle.`
+            : "Choose a subscription to activate monthly endorsements and unlock the platform."}
+        </p>
+      </section>
+
       <label className="field-shell" htmlFor="country">
         <span className="field-label">Choose billing country</span>
         <input
@@ -93,20 +168,45 @@ export function PricingClient() {
       </label>
 
       <div className="grid-cards">
-        {plans.map((plan) => (
-          <article className="content-card" key={plan.id}>
+        {planCards.map((plan) => (
+          <article
+            className="content-card"
+            key={plan.id}
+            style={
+              plan.isHighlighted
+                ? {
+                    borderColor: "rgba(79,70,229,0.45)",
+                    boxShadow: "0 18px 40px rgba(79,70,229,0.18)",
+                  }
+                : undefined
+            }
+          >
             <span className="pill">{plan.name}</span>
+            <p className="muted-copy" style={{ marginBottom: "0.4rem" }}>
+              {plan.audience}
+            </p>
             <h2>{plan.name}</h2>
             <p className="price-tag">{plan.price}/mo</p>
             <p className="muted-copy">{plan.copy}</p>
             <p className="plan-limit">{plan.limit}</p>
+            {plan.premium ? (
+              <p className="muted-copy">Premium tier for higher endorsement volume.</p>
+            ) : (
+              <p className="muted-copy">Base subscription required to participate on BEJELI.</p>
+            )}
             <button
               className="primary-button"
               type="button"
               onClick={() => subscribe(plan.id)}
-              disabled={loadingPlan === plan.id}
+              disabled={loadingPlan === plan.id || plan.isCurrent}
             >
-              {loadingPlan === plan.id ? "Starting..." : "Subscribe"}
+              {loadingPlan === plan.id
+                ? "Starting..."
+                : plan.isCurrent
+                  ? "Current plan"
+                  : plan.premium
+                    ? "Upgrade to premium"
+                    : "Subscribe"}
             </button>
           </article>
         ))}
@@ -114,11 +214,11 @@ export function PricingClient() {
 
       {error ? <p className="error-copy">{error}</p> : null}
       <p className="muted-copy">
-        UK and EU countries route to Stripe. African countries route to
+        Every active plan includes endorsements. Basic plans include 10
+        endorsements per month, while premium plans include 200 endorsements per
+        month. UK and EU countries route to Stripe. African countries route to
         Flutterwave by default, with Paystack still available as a backend
-        override for future regional flows. If payment keys are not configured
-        yet, the API returns a mock success redirect so you can test the flow
-        locally.
+        override for future regional flows.
       </p>
     </div>
   );

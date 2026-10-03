@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState, type ChangeEvent, type RefObject } from "react";
 
 import Link from "next/link";
@@ -26,13 +27,13 @@ import {
 } from "../icons";
 
 import { motion, useReducedMotion } from "../motion";
-import { TransitionLink } from "../TransitionLink";
+import { navigateWithTransition, TransitionLink } from "../TransitionLink";
 import { feed, me, type FeedItem } from "../mock";
 import { useKindredAuth } from "../app/kindred-provider";
 import { rankFeedForRecruiter, rankFeedForTalent } from "../discovery-matching";
 import { Avatar, Badge, Button, Card, MatchRing, cn } from "../primitives";
 import { type ImmersiveShortItem } from "./ImmersiveShortsHome";
-import { apiUrl } from "../../api";
+import { apiUrl, authedFetch, readJsonResponse } from "../../api";
 import {
   feedStorageKey,
   getStoredProfileWorkspace,
@@ -782,7 +783,84 @@ function ShortCaption({
   );
 }
 
+type BillingSummary = {
+  subscription?: {
+    plan?: "user_basic" | "company_basic" | "user_premium" | "company_premium";
+    status?: string;
+    current_period_end?: string | null;
+  } | null;
+  entitlements?: {
+    active?: boolean;
+    monthlyEndorsements?: number;
+    endorsementsUsedThisMonth?: number;
+    remainingEndorsements?: number;
+    premium?: boolean;
+    audience?: "talent" | "company" | null;
+    tier?: "basic" | "premium" | null;
+    planName?: string | null;
+  };
+};
+
+type FeedPrompt = {
+  badge: string;
+  title: string;
+  copy: string;
+  ctaHref: string;
+  ctaLabel: string;
+};
+
+function FeedPromptModal({
+  prompt,
+  onClose,
+  onCta,
+}: {
+  prompt: FeedPrompt;
+  onClose: () => void;
+  onCta: () => void;
+}) {
+  return (
+    <div
+      className="ui-fade-up absolute inset-0 z-50 grid place-items-center bg-slate-950/45 px-4 backdrop-blur-[2px]"
+      onClick={(event) => {
+        event.stopPropagation();
+        onClose();
+      }}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={prompt.title}
+        className="w-full max-w-sm rounded-[1.6rem] bg-white p-5 shadow-[0_24px_60px_rgba(15,23,42,0.22)]"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-700">
+          {prompt.badge}
+        </p>
+        <h2 className="mt-2 text-xl font-bold text-slate-950">{prompt.title}</h2>
+        <p className="mt-3 text-sm leading-6 text-slate-600">{prompt.copy}</p>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <button
+            type="button"
+            onClick={onCta}
+            className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-950 px-5 text-sm font-bold text-white"
+          >
+            {prompt.ctaLabel}
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-100 px-5 text-sm font-bold text-slate-700"
+          >
+            Maybe later
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function FeedPage() {
+  const router = useRouter();
   const { token, user } = useKindredAuth();
   const recruiterViewer = user?.role === "recruiter" || user?.role === "admin";
   const searchHref =
@@ -825,7 +903,10 @@ export function FeedPage() {
   const [playbackIndicator, setPlaybackIndicator] = useState<"play" | "pause" | null>(null);
   const [lastMoveDirection, setLastMoveDirection] = useState<-1 | 0 | 1>(0);
   const [animatedAction, setAnimatedAction] = useState<"endorse" | null>(null);
-  const [recruiterPromptOpen, setRecruiterPromptOpen] = useState(false);
+  const [feedPrompt, setFeedPrompt] = useState<FeedPrompt | null>(null);
+  const [endorsementBusy, setEndorsementBusy] = useState(false);
+  const [endorsedShortCounts, setEndorsedShortCounts] = useState<Record<string, number>>({});
+  const [billingSummary, setBillingSummary] = useState<BillingSummary | null>(null);
   const [dragOffsetY, setDragOffsetY] = useState(0);
   const [isReleaseAnimating, setIsReleaseAnimating] = useState(false);
   const mobileVideoRef = useRef<HTMLVideoElement | null>(null);
@@ -938,7 +1019,8 @@ export function FeedPage() {
           ctaLabel: item.tags[0] ?? "Open profile",
           likes: item.likes,
           comments: item.comments,
-          endorsements: Math.max(1, Math.round(item.likes / 5)),
+          endorsements:
+            Math.max(1, Math.round(item.likes / 5)) + (endorsedShortCounts[item.id] ?? 0),
           shares: estimatedShares + (sharedShortIds[item.id] ? 1 : 0),
           shared: Boolean(sharedShortIds[item.id]),
           liked: item.liked,
@@ -946,13 +1028,88 @@ export function FeedPage() {
           searchText: `${item.author.location} ${item.tags.join(" ")} ${discoveryMeta?.reasons.join(" ") ?? ""}`,
         };
       }),
-    [discoveryMetaById, sharedShortIds, shortsItems, shortsMode],
+    [discoveryMetaById, endorsedShortCounts, sharedShortIds, shortsItems, shortsMode],
   );
   const safeActiveIndex = immersiveShorts.length
     ? Math.min(activeIndex, immersiveShorts.length - 1)
     : 0;
   const activeShort = immersiveShorts[safeActiveIndex] ?? null;
   const activeShortCaptionExpanded = activeShort ? Boolean(expandedShortCaptions[activeShort.id]) : false;
+
+  useEffect(() => {
+    if (!user) {
+      setBillingSummary(null);
+      return;
+    }
+
+    let active = true;
+
+    authedFetch(`${apiUrl}/billing/subscription`)
+      .then(async (response) => {
+        const payload = await readJsonResponse<BillingSummary & { error?: string }>(response);
+
+        if (!response.ok || !active) {
+          return;
+        }
+
+        setBillingSummary(payload);
+      })
+      .catch(() => undefined);
+
+    return () => {
+      active = false;
+    };
+  }, [user?.id]);
+
+  useEffect(() => {
+    if (
+      !user ||
+      feedPrompt ||
+      !billingSummary?.entitlements?.active ||
+      billingSummary.entitlements.premium
+    ) {
+      return;
+    }
+
+    const storageKey = `bejeli-premium-popup-${user.id}-${user.role}`;
+    const lastShown = Number(window.localStorage.getItem(storageKey) ?? "0");
+
+    if (Date.now() - lastShown < 1000 * 60 * 60 * 12) {
+      return;
+    }
+
+    if (Math.random() > 0.38) {
+      return;
+    }
+
+    const premiumHref = recruiterViewer
+      ? "/pricing?highlight=company_premium"
+      : "/pricing?highlight=user_premium";
+    const timer = window.setTimeout(() => {
+      setFeedPrompt({
+        badge: recruiterViewer ? "Premium companies" : "Premium users",
+        title: recruiterViewer
+          ? "Upgrade your company plan"
+          : "Upgrade your talent plan",
+        copy: recruiterViewer
+          ? "Basic Companies includes 10 endorsements each month. Premium Companies unlocks 200 endorsements every month."
+          : "Users includes 10 endorsements each month. Premium Users unlocks 200 endorsements every month.",
+        ctaHref: premiumHref,
+        ctaLabel: "Upgrade to premium",
+      });
+      window.localStorage.setItem(storageKey, String(Date.now()));
+    }, 2600 + Math.round(Math.random() * 2200));
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [
+    billingSummary?.entitlements?.active,
+    billingSummary?.entitlements?.premium,
+    feedPrompt,
+    recruiterViewer,
+    user,
+  ]);
 
   useEffect(() => {
     const videos = [mobileVideoRef.current, desktopVideoRef.current].filter(
@@ -1381,9 +1538,87 @@ export function FeedPage() {
     }, 320);
   }
 
-  function handleTalentEndorseAttempt() {
+  async function handleTalentEndorseAttempt() {
     triggerActionAnimation();
-    setRecruiterPromptOpen(true);
+
+    if (!activeShort || endorsementBusy) {
+      return;
+    }
+
+    if (!user) {
+      setFeedPrompt({
+        badge: "Subscription required",
+        title: "Choose a BEJELI subscription",
+        copy:
+          "Every account now uses a paid BEJELI plan. Subscribe first to unlock monthly endorsements.",
+        ctaHref: recruiterViewer ? "/pricing?highlight=company_basic" : "/pricing?highlight=user_basic",
+        ctaLabel: "Open pricing",
+      });
+      return;
+    }
+
+    setEndorsementBusy(true);
+
+    try {
+      const response = await authedFetch(`${apiUrl}/rewards/endorsements`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          targetUserId: activeShort.authorId,
+          note: `Feed endorsement for ${activeShort.authorName}`,
+        }),
+      });
+
+      const payload = await readJsonResponse<{
+        error?: string;
+        entitlements?: NonNullable<BillingSummary["entitlements"]>;
+      }>(response);
+
+      if (!response.ok) {
+        setFeedPrompt({
+          badge: payload.error?.includes("premium") ? "Upgrade required" : "Subscription required",
+          title: payload.error?.includes("used all")
+            ? "You used your monthly endorsements"
+            : "Subscription needed for endorsements",
+          copy:
+            payload.error ??
+            "Choose a subscription plan to unlock endorsements on the feed.",
+          ctaHref:
+            payload.error?.includes("used all") || billingSummary?.entitlements?.active
+              ? recruiterViewer
+                ? "/pricing?highlight=company_premium"
+                : "/pricing?highlight=user_premium"
+              : recruiterViewer
+                ? "/pricing?highlight=company_basic"
+                : "/pricing?highlight=user_basic",
+          ctaLabel:
+            payload.error?.includes("used all") || billingSummary?.entitlements?.active
+              ? "Upgrade to premium"
+              : "Open pricing",
+        });
+        return;
+      }
+
+      setEndorsedShortCounts((current) => ({
+        ...current,
+        [activeShort.id]: (current[activeShort.id] ?? 0) + 1,
+      }));
+
+      if (payload.entitlements) {
+        setBillingSummary((current) => ({
+          subscription: current?.subscription ?? null,
+          entitlements: {
+            ...(current?.entitlements ?? {}),
+            ...payload.entitlements,
+            active: true,
+          },
+        }));
+      }
+    } finally {
+      setEndorsementBusy(false);
+    }
   }
 
   function submitShortComment() {
@@ -1745,48 +1980,16 @@ export function FeedPage() {
                 </div>
               ) : null}
 
-              {recruiterPromptOpen ? (
-                <div
-                  className="ui-fade-up absolute inset-0 z-50 grid place-items-center bg-slate-950/45 px-4 backdrop-blur-[2px]"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    setRecruiterPromptOpen(false);
+              {feedPrompt ? (
+                <FeedPromptModal
+                  prompt={feedPrompt}
+                  onClose={() => setFeedPrompt(null)}
+                  onCta={() => {
+                    const href = feedPrompt.ctaHref;
+                    setFeedPrompt(null);
+                    navigateWithTransition(router, href);
                   }}
-                >
-                  <div
-                    role="dialog"
-                    aria-modal="true"
-                    aria-label="Recruiter endorsement required"
-                    className="w-full max-w-sm rounded-[1.6rem] bg-white p-5 shadow-[0_24px_60px_rgba(15,23,42,0.22)]"
-                    onClick={(event) => event.stopPropagation()}
-                  >
-                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-700">
-                      Recruiter-only action
-                    </p>
-                    <h2 className="mt-2 text-xl font-bold text-slate-950">
-                      Register as a recruiter to endorse
-                    </h2>
-                    <p className="mt-3 text-sm leading-6 text-slate-600">
-                      Endorsements are reserved for recruiter and enterprise accounts.
-                      Create a recruiter profile to endorse talent from the feed.
-                    </p>
-                    <div className="mt-5 flex flex-wrap gap-3">
-                      <TransitionLink
-                        href="/signup?role=recruiter"
-                        className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-950 px-5 text-sm font-bold text-white"
-                      >
-                        Register as recruiter
-                      </TransitionLink>
-                      <button
-                        type="button"
-                        onClick={() => setRecruiterPromptOpen(false)}
-                        className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-100 px-5 text-sm font-bold text-slate-700"
-                      >
-                        Maybe later
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                />
               ) : null}
             </div>
           </article>
@@ -2058,48 +2261,16 @@ export function FeedPage() {
                         </div>
                       </div>
                     ) : null}
-                    {recruiterPromptOpen ? (
-                      <div
-                        className="ui-fade-up absolute inset-0 z-50 grid place-items-center bg-slate-950/45 px-4 backdrop-blur-[2px]"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          setRecruiterPromptOpen(false);
+                    {feedPrompt ? (
+                      <FeedPromptModal
+                        prompt={feedPrompt}
+                        onClose={() => setFeedPrompt(null)}
+                        onCta={() => {
+                          const href = feedPrompt.ctaHref;
+                          setFeedPrompt(null);
+                          navigateWithTransition(router, href);
                         }}
-                      >
-                        <div
-                          role="dialog"
-                          aria-modal="true"
-                          aria-label="Recruiter endorsement required"
-                          className="w-full max-w-sm rounded-[1.6rem] bg-white p-5 shadow-[0_24px_60px_rgba(15,23,42,0.22)]"
-                          onClick={(event) => event.stopPropagation()}
-                        >
-                          <p className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-700">
-                            Recruiter-only action
-                          </p>
-                          <h2 className="mt-2 text-xl font-bold text-slate-950">
-                            Register as a recruiter to endorse
-                          </h2>
-                          <p className="mt-3 text-sm leading-6 text-slate-600">
-                            Endorsements are reserved for recruiter and enterprise accounts.
-                            Create a recruiter profile to endorse talent from the feed.
-                          </p>
-                          <div className="mt-5 flex flex-wrap gap-3">
-                            <TransitionLink
-                              href="/signup?role=recruiter"
-                              className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-950 px-5 text-sm font-bold text-white"
-                            >
-                              Register as recruiter
-                            </TransitionLink>
-                            <button
-                              type="button"
-                              onClick={() => setRecruiterPromptOpen(false)}
-                              className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-100 px-5 text-sm font-bold text-slate-700"
-                            >
-                              Maybe later
-                            </button>
-                          </div>
-                        </div>
-                      </div>
+                      />
                     ) : null}
                   </div>
                 </article>

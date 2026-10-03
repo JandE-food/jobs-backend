@@ -18,6 +18,7 @@ import {
   type AvailabilitySlotInput,
 } from "../lib/operations.js";
 import { requireRole, requireUser } from "../lib/request-context.js";
+import { getSubscriptionEntitlements } from "../lib/subscriptions.js";
 
 type AvailabilityBody = {
   slots?: AvailabilitySlotInput[];
@@ -154,12 +155,34 @@ export async function registerOperationsRoutes(app: FastifyInstance) {
       return;
     }
 
+    const entitlements = await getSubscriptionEntitlements(Number(user.id));
+
+    if (!entitlements.active) {
+      reply.code(402).send({
+        error: "An active subscription is required to endorse on BEJELI.",
+      });
+      return;
+    }
+
+    if (entitlements.remainingEndorsements <= 0) {
+      reply.code(403).send({
+        error: `You have used all ${entitlements.monthlyEndorsements} endorsements for this month. Upgrade to premium or wait for your next billing cycle.`,
+      });
+      return;
+    }
+
     reply.code(201).send({
       endorsement: await createEndorsement({
         endorserUserId: Number(user.id),
         targetUserId,
         note: request.body?.note,
       }),
+      entitlements: {
+        monthlyEndorsements: entitlements.monthlyEndorsements,
+        endorsementsUsedThisMonth: entitlements.endorsementsUsedThisMonth + 1,
+        remainingEndorsements: Math.max(0, entitlements.remainingEndorsements - 1),
+        premium: entitlements.premium,
+      },
     });
   });
 

@@ -1,17 +1,15 @@
 import { FastifyInstance } from "fastify";
 
 import {
-  BillingPlan,
   isBillingProvider,
   getBillingProvider,
-  getPeriodEnd,
   isBillingPlan,
 } from "../lib/billing.js";
 import { createFlutterwaveCheckout } from "../lib/flutterwave.js";
 import { createPaystackCheckout } from "../lib/paystack.js";
 import { getUserIdFromRequest } from "../lib/request-context.js";
 import { createStripeCheckout } from "../lib/stripe.js";
-import { getSubscription, upsertSubscription } from "../lib/subscriptions.js";
+import { getSubscriptionEntitlements } from "../lib/subscriptions.js";
 
 type CheckoutBody = {
   plan?: string;
@@ -22,11 +20,21 @@ type CheckoutBody = {
 export async function registerBillingRoutes(app: FastifyInstance) {
   app.get("/billing/subscription", async (request) => {
     const userId = await getUserIdFromRequest(request);
-    const subscription = await getSubscription(userId);
+    const entitlementSummary = await getSubscriptionEntitlements(userId);
 
     return {
       userId,
-      subscription,
+      subscription: entitlementSummary.subscription,
+      entitlements: {
+        active: entitlementSummary.active,
+        monthlyEndorsements: entitlementSummary.monthlyEndorsements,
+        endorsementsUsedThisMonth: entitlementSummary.endorsementsUsedThisMonth,
+        remainingEndorsements: entitlementSummary.remainingEndorsements,
+        premium: entitlementSummary.premium,
+        audience: entitlementSummary.audience,
+        tier: entitlementSummary.tier,
+        planName: entitlementSummary.planName,
+      },
     };
   });
 
@@ -44,37 +52,18 @@ export async function registerBillingRoutes(app: FastifyInstance) {
 
       if (!plan || !isBillingPlan(plan)) {
         reply.code(400).send({
-          error: "Invalid plan. Use free, growth, scale, or enterprise.",
+          error:
+            "Invalid plan. Use user_basic, company_basic, user_premium, or company_premium.",
         });
         return;
       }
 
-      if (plan === "free") {
-        const provider = getBillingProvider(country, providerOverride);
-        const subscription = await upsertSubscription({
-          userId,
-          plan,
-          provider,
-          status: "active",
-          currentPeriodEnd: getPeriodEnd(plan),
-        });
-
-        return {
-          provider,
-          mode: "internal",
-          plan,
-          subscription,
-          checkoutUrl: `${process.env.APP_URL ?? "http://localhost:3000"}/billing/active?plan=${plan}&provider=${provider}`,
-        };
-      }
-
       const provider = getBillingProvider(country, providerOverride);
-      const planForCheckout = plan as Exclude<BillingPlan, "free">;
 
       if (provider === "stripe") {
         return createStripeCheckout({
           userId,
-          plan: planForCheckout,
+          plan,
           country,
         });
       }
@@ -82,14 +71,14 @@ export async function registerBillingRoutes(app: FastifyInstance) {
       if (provider === "flutterwave") {
         return createFlutterwaveCheckout({
           userId,
-          plan: planForCheckout,
+          plan,
           country,
         });
       }
 
       return createPaystackCheckout({
         userId,
-        plan: planForCheckout,
+        plan,
         country,
       });
     },
