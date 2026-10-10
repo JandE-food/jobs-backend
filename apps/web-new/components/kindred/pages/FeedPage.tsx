@@ -830,26 +830,26 @@ function FeedPromptModal({
         role="dialog"
         aria-modal="true"
         aria-label={prompt.title}
-        className="w-full max-w-sm rounded-[1.6rem] bg-white p-5 shadow-[0_24px_60px_rgba(15,23,42,0.22)]"
+        className="w-full max-w-sm rounded-[1.6rem] border border-[#4a381b] bg-[#0f0b07] p-5 shadow-[0_24px_60px_rgba(0,0,0,0.36)]"
         onClick={(event) => event.stopPropagation()}
       >
-        <p className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-700">
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-brand-300">
           {prompt.badge}
         </p>
-        <h2 className="mt-2 text-xl font-bold text-slate-950">{prompt.title}</h2>
-        <p className="mt-3 text-sm leading-6 text-slate-600">{prompt.copy}</p>
+        <h2 className="mt-2 text-xl font-bold text-brand-50">{prompt.title}</h2>
+        <p className="mt-3 text-sm leading-6 text-brand-100/80">{prompt.copy}</p>
         <div className="mt-5 flex flex-wrap gap-3">
           <button
             type="button"
             onClick={onCta}
-            className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-950 px-5 text-sm font-bold text-white"
+            className="inline-flex min-h-11 items-center justify-center rounded-full bg-brand-500 px-5 text-sm font-bold text-[#140f08]"
           >
             {prompt.ctaLabel}
           </button>
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-100 px-5 text-sm font-bold text-slate-700"
+            className="inline-flex min-h-11 items-center justify-center rounded-full border border-[#3a2c17] bg-[#16110b] px-5 text-sm font-bold text-brand-100"
           >
             Maybe later
           </button>
@@ -1913,22 +1913,22 @@ export function FeedPage() {
 
               {commentsOpen ? (
                 <div
-                  className="ui-fade-up absolute inset-x-4 bottom-4 z-40 rounded-[1.5rem] bg-white p-4 shadow-[0_22px_55px_rgba(15,23,42,0.2)]"
+                  className="ui-fade-up absolute inset-x-4 bottom-4 z-40 rounded-[1.5rem] border border-[#4a381b] bg-[#0f0b07] p-4 shadow-[0_22px_55px_rgba(0,0,0,0.34)]"
                   style={{ bottom: "calc(env(safe-area-inset-bottom) + 5rem)" }}
                   onClick={(event) => event.stopPropagation()}
                   data-reel-interactive="true"
                 >
                   <div className="flex items-center justify-between gap-3">
                     <div>
-                      <p className="text-sm font-bold text-slate-950">Comments</p>
-                      <p className="text-xs text-slate-500">
+                      <p className="text-sm font-bold text-brand-50">Comments</p>
+                      <p className="text-xs text-brand-200/60">
                         {(activeShort.commentItems ?? []).length} replies
                       </p>
                     </div>
                     <button
                       type="button"
                       onClick={() => setCommentsOpen(false)}
-                      className="text-xs font-bold text-slate-500"
+                      className="text-xs font-bold text-brand-200/72"
                     >
                       Close
                     </button>
@@ -1936,16 +1936,16 @@ export function FeedPage() {
                   <div className="mt-3 grid max-h-44 gap-2 overflow-y-auto">
                     {(activeShort.commentItems ?? []).length ? (
                       (activeShort.commentItems ?? []).map((comment) => (
-                        <div key={comment.id} className="rounded-2xl bg-slate-50 p-3">
+                        <div key={comment.id} className="rounded-2xl border border-[#302312] bg-[#16110b] p-3">
                           <div className="flex items-center gap-2">
-                            <p className="text-xs font-bold text-slate-900">{comment.author}</p>
-                            <span className="text-[11px] text-slate-500">{comment.time}</span>
+                            <p className="text-xs font-bold text-brand-50">{comment.author}</p>
+                            <span className="text-[11px] text-brand-200/55">{comment.time}</span>
                           </div>
-                          <p className="mt-2 text-sm leading-6 text-slate-700">{comment.text}</p>
+                          <p className="mt-2 text-sm leading-6 text-brand-100/80">{comment.text}</p>
                         </div>
                       ))
                     ) : (
-                      <p className="text-sm text-slate-500">
+                      <p className="text-sm text-brand-200/70">
                         Start the conversation on this short.
                       </p>
                     )}
@@ -1964,13 +1964,13 @@ export function FeedPage() {
                           }
                         }}
                         placeholder="Add a thoughtful reply..."
-                        className="w-full rounded-[1.25rem] border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none focus:border-slate-300 focus:bg-white"
+                        className="w-full rounded-[1.25rem] border border-[#3a2c17] bg-[#16110b] px-4 py-3 text-sm text-brand-100 outline-none focus:border-brand-500/60 focus:bg-[#1a140d]"
                       />
                       <div className="mt-3 flex justify-end">
                         <button
                           type="button"
                           onClick={submitShortComment}
-                          className="rounded-full bg-slate-950 px-4 py-2 text-sm font-bold text-white"
+                          className="rounded-full bg-brand-500 px-4 py-2 text-sm font-bold text-[#140f08]"
                         >
                           Send
                         </button>
@@ -2197,20 +2197,20 @@ export function FeedPage() {
 
                     {commentsOpen ? (
                       <div
-                        className="ui-fade-up absolute inset-x-4 bottom-4 z-40 rounded-[1.5rem] bg-white p-4 shadow-[0_22px_55px_rgba(15,23,42,0.2)]"
+                        className="ui-fade-up absolute inset-x-4 bottom-4 z-40 rounded-[1.5rem] border border-[#4a381b] bg-[#0f0b07] p-4 shadow-[0_22px_55px_rgba(0,0,0,0.34)]"
                         onClick={(event) => event.stopPropagation()}
                       >
                         <div className="flex items-center justify-between gap-3">
                           <div>
-                            <p className="text-sm font-bold text-slate-950">Comments</p>
-                            <p className="text-xs text-slate-500">
+                            <p className="text-sm font-bold text-brand-50">Comments</p>
+                            <p className="text-xs text-brand-200/60">
                               {(activeShort.commentItems ?? []).length} replies
                             </p>
                           </div>
                           <button
                             type="button"
                             onClick={() => setCommentsOpen(false)}
-                            className="text-xs font-bold text-slate-500"
+                            className="text-xs font-bold text-brand-200/72"
                           >
                             Close
                           </button>
@@ -2218,16 +2218,16 @@ export function FeedPage() {
                         <div className="mt-3 grid max-h-44 gap-2 overflow-y-auto">
                           {(activeShort.commentItems ?? []).length ? (
                             (activeShort.commentItems ?? []).map((comment) => (
-                              <div key={comment.id} className="rounded-2xl bg-slate-50 p-3">
+                              <div key={comment.id} className="rounded-2xl border border-[#302312] bg-[#16110b] p-3">
                                 <div className="flex items-center gap-2">
-                                  <p className="text-xs font-bold text-slate-900">{comment.author}</p>
-                                  <span className="text-[11px] text-slate-500">{comment.time}</span>
+                                  <p className="text-xs font-bold text-brand-50">{comment.author}</p>
+                                  <span className="text-[11px] text-brand-200/55">{comment.time}</span>
                                 </div>
-                                <p className="mt-2 text-sm leading-6 text-slate-700">{comment.text}</p>
+                                <p className="mt-2 text-sm leading-6 text-brand-100/80">{comment.text}</p>
                               </div>
                             ))
                           ) : (
-                            <p className="text-sm text-slate-500">
+                            <p className="text-sm text-brand-200/70">
                               Start the conversation on this short.
                             </p>
                           )}
@@ -2246,13 +2246,13 @@ export function FeedPage() {
                                 }
                               }}
                               placeholder="Add a thoughtful reply..."
-                              className="w-full rounded-[1.25rem] border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none focus:border-slate-300 focus:bg-white"
+                              className="w-full rounded-[1.25rem] border border-[#3a2c17] bg-[#16110b] px-4 py-3 text-sm text-brand-100 outline-none focus:border-brand-500/60 focus:bg-[#1a140d]"
                             />
                             <div className="mt-3 flex justify-end">
                               <button
                                 type="button"
                                 onClick={submitShortComment}
-                                className="rounded-full bg-slate-950 px-4 py-2 text-sm font-bold text-white"
+                                className="rounded-full bg-brand-500 px-4 py-2 text-sm font-bold text-[#140f08]"
                               >
                                 Send
                               </button>
@@ -2322,7 +2322,7 @@ export function FeedPage() {
                       }}
                       className={cn(
                         "h-2.5 rounded-full transition-all",
-                        index === safeActiveIndex ? "w-8 bg-indigo-600" : "w-2.5 bg-slate-300",
+                        index === safeActiveIndex ? "w-8 bg-brand-500" : "w-2.5 bg-[#5a4822]",
                       )}
                       aria-label={`Open short ${index + 1}`}
                     />

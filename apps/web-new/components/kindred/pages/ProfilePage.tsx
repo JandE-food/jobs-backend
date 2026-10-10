@@ -112,24 +112,24 @@ export function ProfilePage() {
   if (hydrated && !user) {
     return (
       <div className="ui-fade-up space-y-6">
-        <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_18px_45px_rgba(15,23,42,0.05)] sm:p-8">
+        <section className="rounded-[2rem] border border-[#3a2c17] bg-[#0f0b07] p-6 shadow-[0_18px_45px_rgba(0,0,0,0.24)] sm:p-8">
           <div className="mx-auto flex max-w-md flex-col items-center text-center">
-            <div className="grid h-16 w-16 place-items-center rounded-[1.5rem] bg-indigo-50 text-indigo-700 shadow-[0_12px_30px_rgba(79,70,229,0.12)]">
+            <div className="grid h-16 w-16 place-items-center rounded-[1.5rem] bg-brand-500 text-[#140f08] shadow-[0_12px_30px_rgba(196,150,28,0.2)]">
               <ShieldCheckIcon className="h-7 w-7" aria-hidden="true" />
             </div>
-            <p className="mt-5 text-xs font-bold uppercase tracking-[0.16em] text-indigo-700">
+            <p className="mt-5 text-xs font-bold uppercase tracking-[0.16em] text-brand-300">
               Your space
             </p>
-            <h1 className="mt-2 font-display text-3xl font-bold tracking-tight text-slate-950">
+            <h1 className="mt-2 font-display text-3xl font-bold tracking-tight text-brand-50">
               Log in to open your profile
             </h1>
-            <p className="mt-3 text-sm leading-7 text-slate-600">
+            <p className="mt-3 text-sm leading-7 text-brand-100/80">
               You are browsing signed out, so your personal profile, rewards, and workspace
               details stay hidden until you log in.
             </p>
             <Link
               href="/login"
-              className="mt-6 inline-flex min-h-11 items-center justify-center rounded-full bg-slate-950 px-5 text-sm font-bold text-white transition-colors hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
+              className="mt-6 inline-flex min-h-11 items-center justify-center rounded-full bg-brand-500 px-5 text-sm font-bold text-[#140f08] transition-colors hover:bg-brand-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
             >
               Log in
             </Link>
@@ -655,8 +655,8 @@ export function ProfilePage() {
               <div className="flex items-end gap-4">
                 <div className="relative">
                   <Avatar src={avatarSrc} alt={me.name} size={88} ring />
-                  <label className="absolute -bottom-1 right-0 inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-full bg-white px-3 text-xs font-semibold text-slate-700 shadow-[0_10px_25px_rgba(15,23,42,0.12)] ring-1 ring-slate-200 hover:bg-slate-50">
-                    <UploadCloudIcon className="h-3.5 w-3.5 text-indigo-700" aria-hidden="true" />
+                  <label className="absolute -bottom-1 right-0 inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-full border border-[#3a2c17] bg-[#120d08] px-3 text-xs font-semibold text-brand-100 shadow-[0_10px_25px_rgba(0,0,0,0.24)] ring-1 ring-[#3a2c17] hover:bg-[#18110a]">
+                    <UploadCloudIcon className="h-3.5 w-3.5 text-brand-300" aria-hidden="true" />
                     Edit photo
                     <input
                       type="file"
@@ -677,7 +677,7 @@ export function ProfilePage() {
                     <button
                       type="button"
                       onClick={toggleOpenToWork}
-                      className="rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
+                      className="rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
                       aria-label={
                         profileDraft.openToWork
                           ? "Disable open to work"

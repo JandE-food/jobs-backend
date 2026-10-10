@@ -28,7 +28,7 @@ export function BottomNav() {
   return (
     <nav
       aria-label="Primary mobile"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white/95 backdrop-blur lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-[#080604]/95 backdrop-blur lg:hidden"
     >
       <div className="mx-auto flex max-w-md items-stretch">
         {items.map(({ href, label, icon: Icon, startsWith }) => {

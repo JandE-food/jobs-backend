@@ -16,7 +16,7 @@ export function Card({
   return (
     <div
       className={cn(
-        "rounded-[1.75rem] border border-slate-200/90 bg-white/95 shadow-[0_18px_45px_rgba(15,23,42,0.05)] transition-[transform,box-shadow,border-color] duration-200",
+        "rounded-[1.75rem] border border-[#342715]/90 bg-[#0f0b07]/95 shadow-[0_18px_45px_rgba(0,0,0,0.26)] transition-[transform,box-shadow,border-color] duration-200",
         className,
       )}
     >
@@ -39,15 +39,15 @@ export function Button({
   ...props
 }: ButtonProps) {
   const base =
-    "inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 text-sm font-semibold transition-[background-color,color,border-color,transform,box-shadow] duration-200 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0";
+    "inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 text-sm font-semibold transition-[background-color,color,border-color,transform,box-shadow] duration-200 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#080604] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0";
   const sizes = {
     sm: "min-h-11 px-3.5",
     md: "min-h-12 px-5",
   };
   const variants = {
-    primary: "bg-indigo-700 text-white shadow-[0_14px_35px_rgba(79,70,229,0.28)] hover:bg-indigo-800",
-    outline: "border border-slate-300 bg-white text-slate-800 hover:bg-slate-50",
-    ghost: "text-slate-700 hover:bg-slate-100",
+    primary: "bg-brand-500 text-[#140f08] shadow-[0_14px_35px_rgba(196,150,28,0.24)] hover:bg-brand-400",
+    outline: "border border-[#4d3a1d] bg-[#14100c] text-[#f7ebcb] hover:bg-[#1a140e]",
+    ghost: "text-brand-100 hover:bg-[#18130d]",
   };
 
   return (
@@ -78,8 +78,8 @@ export function IconButton({
       aria-label={label}
       title={label}
       className={cn(
-        "grid h-11 w-11 place-items-center rounded-xl text-slate-600 transition-colors hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2",
-        "grid h-11 w-11 place-items-center rounded-full text-slate-600 transition-colors hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2",
+        "grid h-11 w-11 place-items-center rounded-xl text-[#d7c28b] transition-colors hover:bg-[#18130d] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#080604]",
+        "grid h-11 w-11 place-items-center rounded-full text-[#d7c28b] transition-colors hover:bg-[#18130d] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#080604]",
         className,
       )}
       {...props}
@@ -106,8 +106,8 @@ export function Avatar({
       alt={alt}
       style={{ width: size, height: size }}
       className={cn(
-        "shrink-0 rounded-full bg-slate-100 object-cover",
-        ring && "ring-2 ring-white",
+        "shrink-0 rounded-full bg-[#18130d] object-cover",
+        ring && "ring-2 ring-brand-300",
       )}
     />
   );
@@ -123,8 +123,8 @@ export function Badge({
   className?: string;
 }) {
   const tones = {
-    slate: "bg-slate-100 text-slate-700",
-    indigo: "bg-indigo-50 text-indigo-800",
+    slate: "bg-[#1a140d] text-[#d7c28b]",
+    indigo: "bg-brand-50/15 text-brand-200",
     emerald: "bg-emerald-50 text-emerald-800",
     amber: "bg-amber-50 text-amber-800",
   };
@@ -152,7 +152,7 @@ export function MatchRing({
   const stroke = 5;
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
-  const tone = score >= 90 ? "#047857" : score >= 80 ? "#4338ca" : "#b45309";
+  const tone = score >= 90 ? "#d6a92f" : score >= 80 ? "#c4961c" : "#b45309";
 
   return (
     <div
@@ -166,7 +166,7 @@ export function MatchRing({
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke="#e7ecf3"
+          stroke="#2b2012"
           strokeWidth={stroke}
           fill="none"
         />
@@ -186,10 +186,10 @@ export function MatchRing({
         aria-hidden="true"
         className="absolute inset-0 flex flex-col items-center justify-center"
       >
-        <span className="text-sm font-bold leading-none text-slate-900">
+        <span className="text-sm font-bold leading-none text-[#f7ebcb]">
           {score}
         </span>
-        <span className="text-[9px] font-bold uppercase tracking-wide text-slate-500">
+        <span className="text-[9px] font-bold uppercase tracking-wide text-[#b89d5c]">
           match
         </span>
       </div>

@@ -170,22 +170,22 @@ export function JobsPage() {
   if (hydrated && !user) {
     return (
       <div className="ui-fade-up space-y-6 xl:space-y-8">
-        <section className="rounded-[2rem] border border-slate-200/90 bg-white/95 p-7 shadow-[0_18px_45px_rgba(15,23,42,0.05)] sm:p-9">
+        <section className="rounded-[2rem] border border-[#3a2c17]/90 bg-[#0f0b07]/95 p-7 shadow-[0_18px_45px_rgba(0,0,0,0.24)] sm:p-9">
           <div className="mx-auto max-w-md text-center">
-            <p className="flex items-center justify-center gap-1 text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
+            <p className="flex items-center justify-center gap-1 text-xs font-bold uppercase tracking-[0.12em] text-brand-300">
               <SparklesIcon className="h-4 w-4" aria-hidden="true" />
               Talent jobs
             </p>
-            <h1 className="mt-2 font-display text-3xl font-bold tracking-tight text-slate-950">
+            <h1 className="mt-2 font-display text-3xl font-bold tracking-tight text-brand-50">
               Log in to unlock your job matches
             </h1>
-            <p className="mt-3 text-sm leading-7 text-slate-600">
+            <p className="mt-3 text-sm leading-7 text-brand-100/80">
               Stay signed out on the feed, then log in when you want your saved roles, match
               ranking, and application workspace to appear.
             </p>
             <Link
               href="/login"
-              className="mt-6 inline-flex min-h-11 items-center justify-center rounded-full bg-slate-950 px-5 text-sm font-bold text-white transition-colors hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
+              className="mt-6 inline-flex min-h-11 items-center justify-center rounded-full bg-brand-500 px-5 text-sm font-bold text-[#140f08] transition-colors hover:bg-brand-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
             >
               Log in
             </Link>
@@ -199,25 +199,25 @@ export function JobsPage() {
     <div className="ui-fade-up space-y-8 xl:space-y-10">
       <section
         aria-labelledby="matches-title"
-        className="rounded-[2rem] border border-slate-200/90 bg-white/95 p-7 shadow-[0_18px_45px_rgba(15,23,42,0.05)] sm:p-9"
+        className="rounded-[2rem] border border-[#3a2c17]/90 bg-[#0f0b07]/95 p-7 shadow-[0_18px_45px_rgba(0,0,0,0.24)] sm:p-9"
       >
         <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
           <div>
-            <p className="flex items-center gap-1 text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
+            <p className="flex items-center gap-1 text-xs font-bold uppercase tracking-[0.12em] text-brand-300">
               <SparklesIcon className="h-4 w-4" aria-hidden="true" />
               Talent jobs
             </p>
             <h1
               id="matches-title"
-              className="mt-1 font-display text-2xl font-bold tracking-tight text-slate-950"
+              className="mt-1 font-display text-2xl font-bold tracking-tight text-brand-50"
             >
               Jobs shaped around your current profile
             </h1>
-            <p className="mt-1 text-sm text-slate-600">
+            <p className="mt-1 text-sm text-brand-100/80">
               Same BEJELI role data, rebuilt into the new reference-style workspace.
             </p>
             {searchQuery ? (
-              <p className="mt-2 text-sm font-semibold text-indigo-700">
+              <p className="mt-2 text-sm font-semibold text-brand-300">
                 Showing results for &quot;{searchQueryValue.trim()}&quot;
               </p>
             ) : null}
@@ -228,11 +228,11 @@ export function JobsPage() {
               { label: "Applied", value: appliedIds.length },
               { label: "Visible", value: list.length },
             ].map((stat) => (
-              <div key={stat.label} className="rounded-2xl bg-slate-50 px-4 py-3">
-                <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">
+              <div key={stat.label} className="rounded-2xl border border-[#302312] bg-[#16110b] px-4 py-3">
+                <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand-200/60">
                   {stat.label}
                 </p>
-                <p className="mt-1 text-2xl font-display font-bold text-slate-950">
+                <p className="mt-1 text-2xl font-display font-bold text-brand-50">
                   {stat.value}
                 </p>
               </div>
@@ -240,13 +240,13 @@ export function JobsPage() {
           </div>
         </div>
         <div className="mt-5 flex flex-wrap gap-2">
-          <span className="inline-flex min-h-11 items-center rounded-full bg-indigo-600 px-4 text-sm font-semibold text-white">
+          <span className="inline-flex min-h-11 items-center rounded-full bg-brand-500 px-4 text-sm font-semibold text-[#140f08]">
             Best matches first
           </span>
-          <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
+          <span className="inline-flex min-h-11 items-center rounded-full border border-[#3a2c17] bg-[#16110b] px-4 text-sm font-semibold text-brand-100">
             Saved role tracking
           </span>
-          <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
+          <span className="inline-flex min-h-11 items-center rounded-full border border-[#3a2c17] bg-[#16110b] px-4 text-sm font-semibold text-brand-100">
             Employer directory links
           </span>
         </div>
@@ -255,8 +255,8 @@ export function JobsPage() {
       <div className="grid gap-7 2xl:grid-cols-[280px_minmax(0,1fr)]">
         <Card className="h-fit p-5">
           <div className="flex items-center gap-2">
-            <SlidersHorizontalIcon className="h-4 w-4 text-indigo-700" aria-hidden="true" />
-            <h2 className="font-bold text-slate-950">Filters</h2>
+            <SlidersHorizontalIcon className="h-4 w-4 text-brand-300" aria-hidden="true" />
+            <h2 className="font-bold text-brand-50">Filters</h2>
           </div>
           <div
             role="group"
@@ -270,21 +270,21 @@ export function JobsPage() {
                 aria-pressed={active === filter}
                 onClick={() => setActive(filter)}
                 className={cn(
-                  "min-h-11 rounded-full border px-4 text-left text-sm font-bold focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600",
+                  "min-h-11 rounded-full border px-4 text-left text-sm font-bold focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500",
                   active === filter
-                    ? "border-slate-900 bg-slate-900 text-white"
-                    : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50",
+                    ? "border-brand-400 bg-brand-500 text-[#140f08]"
+                    : "border-[#3a2c17] bg-[#16110b] text-brand-100 hover:bg-[#18110a]",
                 )}
               >
                 {filter}
               </button>
             ))}
           </div>
-          <div className="mt-6 rounded-[1.35rem] border border-indigo-100 bg-indigo-50/70 p-5">
-            <p className="text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
+          <div className="mt-6 rounded-[1.35rem] border border-[#4a381b] bg-[#171108] p-5">
+            <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand-300">
               Search strategy
             </p>
-            <p className="mt-3 text-sm leading-7 text-indigo-950">
+            <p className="mt-3 text-sm leading-7 text-brand-100/82">
               Roles are ranked from CV skills, geography, salary fit, and network
               proximity so you can work through the strongest options first.
             </p>

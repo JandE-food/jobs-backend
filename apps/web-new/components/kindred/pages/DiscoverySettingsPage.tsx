@@ -145,11 +145,11 @@ function SelectionSummary({
   emptyLabel: string;
 }) {
   if (!values.length) {
-    return <span className="text-sm text-slate-400">{emptyLabel}</span>;
+    return <span className="text-sm text-brand-200/55">{emptyLabel}</span>;
   }
 
   return (
-    <span className="line-clamp-2 text-right text-sm font-semibold text-slate-700">
+    <span className="line-clamp-2 text-right text-sm font-semibold text-brand-100">
       {values.join(", ")}
     </span>
   );
@@ -164,8 +164,8 @@ function SectionHeader({
 }) {
   return (
     <div className="px-1">
-      <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">{title}</p>
-      {description ? <p className="mt-1 text-sm leading-6 text-slate-500">{description}</p> : null}
+      <p className="text-xs font-bold uppercase tracking-[0.16em] text-brand-300">{title}</p>
+      {description ? <p className="mt-1 text-sm leading-6 text-brand-100/72">{description}</p> : null}
     </div>
   );
 }
@@ -186,8 +186,8 @@ function Chip({
       className={cn(
         "inline-flex min-h-11 items-center justify-center rounded-full border px-4 text-sm font-semibold transition-all duration-200",
         active
-          ? "border-slate-950 bg-slate-950 text-white shadow-[0_10px_24px_rgba(15,23,42,0.16)]"
-          : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50",
+          ? "border-brand-400 bg-brand-500 text-[#140f08] shadow-[0_10px_24px_rgba(196,150,28,0.2)]"
+          : "border-[#3a2c17] bg-[#120d08] text-brand-100 hover:border-brand-500/60 hover:bg-[#18110a]",
       )}
     >
       {children}
@@ -210,12 +210,12 @@ function Toggle({
       onClick={() => onChange(!checked)}
       className={cn(
         "relative inline-flex h-8 w-14 shrink-0 items-center rounded-full transition-colors duration-200",
-        checked ? "bg-slate-950" : "bg-slate-200",
+        checked ? "bg-brand-500" : "bg-[#2b2012]",
       )}
     >
       <span
         className={cn(
-          "inline-block h-6 w-6 rounded-full bg-white shadow-[0_8px_18px_rgba(15,23,42,0.14)] transition-transform duration-200",
+          "inline-block h-6 w-6 rounded-full bg-[#080604] shadow-[0_8px_18px_rgba(0,0,0,0.24)] transition-transform duration-200",
           checked ? "translate-x-7" : "translate-x-1",
         )}
       />
@@ -239,7 +239,7 @@ function FieldCard({
   fullWidth?: boolean;
 }) {
   return (
-    <Card className="overflow-hidden border-slate-200/90 bg-white/98 shadow-[0_18px_42px_rgba(15,23,42,0.06)]">
+    <Card className="overflow-hidden border-[#3a2c17]/90 bg-[#0f0b07]/98 shadow-[0_18px_42px_rgba(0,0,0,0.28)]">
       <div className="space-y-4 p-4 sm:p-5">
         <div
           className={cn(
@@ -249,12 +249,12 @@ function FieldCard({
         >
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <h3 className="text-[15px] font-semibold text-slate-950">{label}</h3>
-              <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-500">
+              <h3 className="text-[15px] font-semibold text-brand-50">{label}</h3>
+              <span className="rounded-full bg-brand-50/12 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-brand-300">
                 {fieldName}
               </span>
             </div>
-            {helper ? <p className="mt-2 text-sm leading-6 text-slate-500">{helper}</p> : null}
+            {helper ? <p className="mt-2 text-sm leading-6 text-brand-100/72">{helper}</p> : null}
           </div>
           {value ? <div className="min-w-[7rem] pt-0.5 text-right">{value}</div> : null}
         </div>
@@ -288,9 +288,9 @@ function PickerField({
       helper={helper}
       value={<SelectionSummary values={values} emptyLabel={placeholder} />}
     >
-      <div className="flex items-center justify-between rounded-[1.25rem] border border-slate-200 bg-slate-50/90 px-4 py-3">
-        <span className="text-sm font-medium text-slate-500">Multi-select picker</span>
-        <ArrowRightIcon className="h-4 w-4 text-slate-400" aria-hidden="true" />
+      <div className="flex items-center justify-between rounded-[1.25rem] border border-[#342715] bg-[#16110b] px-4 py-3">
+        <span className="text-sm font-medium text-brand-100/72">Multi-select picker</span>
+        <ArrowRightIcon className="h-4 w-4 text-brand-300" aria-hidden="true" />
       </div>
       <div className="flex flex-wrap gap-2">
         {options.map((option) => {
@@ -327,7 +327,7 @@ function SingleChipField({
       label={label}
       fieldName={fieldName}
       helper={helper}
-      value={<span className="text-sm font-semibold text-slate-700">{value}</span>}
+      value={<span className="text-sm font-semibold text-brand-100">{value}</span>}
     >
       <div className="flex flex-wrap gap-2">
         {options.map((option) => (
@@ -395,10 +395,10 @@ function ToggleField({
       label={label}
       fieldName={fieldName}
       helper={helper}
-      value={<span className="text-sm font-semibold text-slate-700">{checked ? "On" : "Off"}</span>}
+      value={<span className="text-sm font-semibold text-brand-100">{checked ? "On" : "Off"}</span>}
     >
-      <div className="flex items-center justify-between rounded-[1.25rem] border border-slate-200 bg-slate-50/90 px-4 py-3">
-        <p className="text-sm font-medium text-slate-500">Toggle control</p>
+      <div className="flex items-center justify-between rounded-[1.25rem] border border-[#342715] bg-[#16110b] px-4 py-3">
+        <p className="text-sm font-medium text-brand-100/72">Toggle control</p>
         <Toggle checked={checked} onChange={onChange} />
       </div>
     </FieldCard>
@@ -424,13 +424,13 @@ function TextField({
 }) {
   return (
     <FieldCard label={label} fieldName={fieldName} helper={helper} fullWidth>
-      <label className="flex min-h-12 items-center gap-3 rounded-[1.25rem] border border-slate-200 bg-slate-50/90 px-4">
+      <label className="flex min-h-12 items-center gap-3 rounded-[1.25rem] border border-[#342715] bg-[#16110b] px-4">
         {icon}
         <input
           value={value}
           onChange={(event) => onChange(event.target.value)}
           placeholder={placeholder}
-          className="w-full bg-transparent text-sm font-semibold text-slate-900 outline-none placeholder:text-slate-400"
+          className="w-full bg-transparent text-sm font-semibold text-brand-50 outline-none placeholder:text-brand-200/45"
         />
       </label>
     </FieldCard>
@@ -463,9 +463,9 @@ function SliderField({
       label={label}
       fieldName={fieldName}
       helper={helper}
-      value={<span className="text-sm font-semibold text-slate-700">{`${value}${suffix}`}</span>}
+      value={<span className="text-sm font-semibold text-brand-100">{`${value}${suffix}`}</span>}
     >
-      <div className="space-y-3 rounded-[1.25rem] border border-slate-200 bg-slate-50/90 px-4 py-4">
+      <div className="space-y-3 rounded-[1.25rem] border border-[#342715] bg-[#16110b] px-4 py-4">
         <input
           type="range"
           min={min}
@@ -473,9 +473,9 @@ function SliderField({
           step={step}
           value={value}
           onChange={(event) => onChange(Number(event.target.value))}
-          className="h-2 w-full accent-slate-950"
+          className="h-2 w-full accent-brand-500"
         />
-        <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">
+        <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.12em] text-brand-200/55">
           <span>{`${min}${suffix}`}</span>
           <span>{`${max}${suffix}`}</span>
         </div>
@@ -506,29 +506,29 @@ function CurrencyRangeField({
       label={label}
       fieldName={fieldName}
       helper={helper}
-      value={<span className="text-sm font-semibold text-slate-700">{`₦${minValue.toLocaleString()} - ₦${maxValue.toLocaleString()}`}</span>}
+      value={<span className="text-sm font-semibold text-brand-100">{`₦${minValue.toLocaleString()} - ₦${maxValue.toLocaleString()}`}</span>}
     >
       <div className="grid gap-3 sm:grid-cols-2">
-        <label className="rounded-[1.25rem] border border-slate-200 bg-slate-50/90 px-4 py-3">
-          <span className="text-xs font-bold uppercase tracking-[0.12em] text-slate-400">Minimum</span>
+        <label className="rounded-[1.25rem] border border-[#342715] bg-[#16110b] px-4 py-3">
+          <span className="text-xs font-bold uppercase tracking-[0.12em] text-brand-200/55">Minimum</span>
           <input
             type="number"
             min={0}
             step={5000}
             value={minValue}
             onChange={(event) => onMinChange(Number(event.target.value) || 0)}
-            className="mt-2 w-full bg-transparent text-sm font-semibold text-slate-900 outline-none"
+            className="mt-2 w-full bg-transparent text-sm font-semibold text-brand-50 outline-none"
           />
         </label>
-        <label className="rounded-[1.25rem] border border-slate-200 bg-slate-50/90 px-4 py-3">
-          <span className="text-xs font-bold uppercase tracking-[0.12em] text-slate-400">Maximum</span>
+        <label className="rounded-[1.25rem] border border-[#342715] bg-[#16110b] px-4 py-3">
+          <span className="text-xs font-bold uppercase tracking-[0.12em] text-brand-200/55">Maximum</span>
           <input
             type="number"
             min={0}
             step={5000}
             value={maxValue}
             onChange={(event) => onMaxChange(Number(event.target.value) || 0)}
-            className="mt-2 w-full bg-transparent text-sm font-semibold text-slate-900 outline-none"
+            className="mt-2 w-full bg-transparent text-sm font-semibold text-brand-50 outline-none"
           />
         </label>
       </div>
@@ -557,28 +557,28 @@ function SettingsScaffold({
 }) {
   return (
     <div className="mx-auto min-h-[calc(100vh-5rem)] max-w-4xl px-0 pb-28 sm:px-4 sm:py-5">
-      <section className="overflow-hidden border-y border-slate-200/80 bg-slate-100/95 shadow-[0_24px_60px_rgba(15,23,42,0.08)] sm:rounded-[2rem] sm:border">
-        <div className="sticky top-0 z-20 border-b border-slate-200/80 bg-slate-50/95 backdrop-blur">
+      <section className="overflow-hidden border-y border-[#3a2c17]/80 bg-[#0b0805]/95 shadow-[0_24px_60px_rgba(0,0,0,0.32)] sm:rounded-[2rem] sm:border">
+        <div className="sticky top-0 z-20 border-b border-[#3a2c17]/80 bg-[#120d08]/95 backdrop-blur">
           <div className="flex items-center justify-between gap-3 px-4 py-4 sm:px-6">
             <button
               type="button"
               onClick={onClose}
-              className="text-sm font-bold text-slate-500 transition-colors hover:text-slate-900"
+              className="text-sm font-bold text-brand-100/72 transition-colors hover:text-brand-50"
             >
               Close
             </button>
             <div className="text-center">
-              <h1 className="text-xl font-bold tracking-tight text-slate-950 sm:text-[1.9rem]">
+              <h1 className="text-xl font-bold tracking-tight text-brand-50 sm:text-[1.9rem]">
                 {title}
               </h1>
-              <p className="mt-1 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
+              <p className="mt-1 text-xs font-semibold uppercase tracking-[0.12em] text-brand-200/65">
                 Product-ready controls
               </p>
             </div>
             <button
               type="button"
               onClick={onDone}
-              className="text-sm font-bold text-indigo-700 transition-colors hover:text-indigo-800"
+              className="text-sm font-bold text-brand-300 transition-colors hover:text-brand-200"
             >
               Done
             </button>
@@ -586,17 +586,17 @@ function SettingsScaffold({
         </div>
 
         <div className="space-y-6 px-4 py-5 sm:px-6 sm:py-6">
-          <Card className="border-slate-200 bg-white/95 p-5">
+          <Card className="border-[#3a2c17] bg-[#120d08]/95 p-5">
             <div className="flex items-start gap-4">
-              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-[1.25rem] bg-slate-950 text-white">
+              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-[1.25rem] bg-brand-500 text-[#140f08]">
                 <SlidersHorizontalIcon className="h-5 w-5" aria-hidden="true" />
               </div>
               <div className="min-w-0">
-                <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Discovery</p>
-                <h2 className="mt-1 text-lg font-bold text-slate-950 sm:text-xl">{subtitle}</h2>
-                <p className="mt-2 text-sm leading-6 text-slate-500">
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-brand-300">Discovery</p>
+                <h2 className="mt-1 text-lg font-bold text-brand-50 sm:text-xl">{subtitle}</h2>
+                <p className="mt-2 text-sm leading-6 text-brand-100/72">
                   Your preferences improve ranking. Turn on{" "}
-                  <span className="font-semibold text-slate-700">Strict Filters</span> if you want
+                  <span className="font-semibold text-brand-100">Strict Filters</span> if you want
                   them to fully limit what appears in your feed.
                 </p>
               </div>
@@ -605,16 +605,16 @@ function SettingsScaffold({
 
           {children}
 
-          <Card className="border-slate-200 bg-white/95 p-5">
+          <Card className="border-[#3a2c17] bg-[#120d08]/95 p-5">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Actions</p>
-                <p className="mt-2 text-sm leading-6 text-slate-500">
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-brand-300">Actions</p>
+                <p className="mt-2 text-sm leading-6 text-brand-100/72">
                   Apply changes without leaving, reset to the recommended defaults, or save and
                   return to the feed.
                 </p>
               </div>
-              <Button variant="ghost" className="min-h-11 px-0 text-slate-500" onClick={onReset}>
+              <Button variant="ghost" className="min-h-11 px-0 text-brand-200" onClick={onReset}>
                 Reset to Default
               </Button>
             </div>
@@ -752,7 +752,7 @@ function TalentDiscoverySettingsForm() {
         value={settings.searchLocation}
         onChange={(next) => updateSettings({ searchLocation: next })}
         placeholder="Enter city, state, or country"
-        icon={<MapPinIcon className="h-4 w-4 text-slate-400" aria-hidden="true" />}
+        icon={<MapPinIcon className="h-4 w-4 text-brand-300" aria-hidden="true" />}
       />
       <SliderField
         label="Maximum Distance"
@@ -1090,7 +1090,7 @@ function RecruiterDiscoverySettingsForm() {
         value={settings.searchLocation}
         onChange={(next) => updateSettings({ searchLocation: next })}
         placeholder="Enter city, state, or country"
-        icon={<MapPinIcon className="h-4 w-4 text-slate-400" aria-hidden="true" />}
+        icon={<MapPinIcon className="h-4 w-4 text-brand-300" aria-hidden="true" />}
       />
       <SliderField
         label="Maximum Distance"
@@ -1271,19 +1271,19 @@ export function DiscoverySettingsPage({
   return (
     <div className="ui-fade-up">
       <div className="mx-auto max-w-4xl px-4 pt-4 sm:px-0">
-        <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold uppercase tracking-[0.14em] text-slate-500 shadow-[0_12px_24px_rgba(15,23,42,0.05)]">
+        <div className="inline-flex items-center gap-2 rounded-full border border-[#3a2c17] bg-[#120d08] px-3 py-1.5 text-xs font-bold uppercase tracking-[0.14em] text-brand-200 shadow-[0_12px_24px_rgba(0,0,0,0.22)]">
           {role === "recruiter" ? (
             <>
-              <ShieldCheckIcon className="h-3.5 w-3.5 text-slate-500" aria-hidden="true" />
+              <ShieldCheckIcon className="h-3.5 w-3.5 text-brand-300" aria-hidden="true" />
               Company discovery
             </>
           ) : (
             <>
-              <SlidersHorizontalIcon className="h-3.5 w-3.5 text-slate-500" aria-hidden="true" />
+              <SlidersHorizontalIcon className="h-3.5 w-3.5 text-brand-300" aria-hidden="true" />
               Talent discovery
             </>
           )}
-          {user?.fullName ? <span className="text-slate-300">·</span> : null}
+          {user?.fullName ? <span className="text-brand-300/45">·</span> : null}
           {user?.fullName ? <span className="normal-case tracking-normal">{user.fullName}</span> : null}
         </div>
       </div>
