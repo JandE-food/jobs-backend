@@ -2,14 +2,12 @@
 
 import { useState } from "react";
 
-import { adminToken, apiUrl, authedFetch, readJsonResponse } from "./api";
-import { useKindredAuth } from "./kindred/app/kindred-provider";
+import { apiUrl, authedFetch, readJsonResponse } from "./api";
 
 export function PrivacyActions() {
-  const { user } = useKindredAuth();
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const [busyAction, setBusyAction] = useState<"request" | "download" | "delete" | null>(null);
+  const [busyAction, setBusyAction] = useState<"request" | "download" | null>(null);
 
   async function requestDeletion() {
     setBusyAction("request");
@@ -71,47 +69,13 @@ export function PrivacyActions() {
     }
   }
 
-  async function runAdminDeletion() {
-    setBusyAction("delete");
-    setMessage("");
-    setError("");
-
-    if (!user?.id) {
-      setError("Sign in before running admin deletion.");
-      return;
-    }
-
-    try {
-      const response = await fetch(`${apiUrl}/admin/privacy/delete/${user.id}`, {
-        method: "POST",
-        headers: {
-          "x-admin-token": adminToken,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Unable to run admin deletion.");
-      }
-
-      setMessage("Admin deletion completed for the signed-in user.");
-    } catch (caughtError) {
-      setError(
-        caughtError instanceof Error
-          ? caughtError.message
-          : "Unable to run admin deletion.",
-      );
-    } finally {
-      setBusyAction(null);
-    }
-  }
-
   return (
     <div className="stack-gap">
       <div className="content-card">
         <h2>GDPR controls</h2>
         <p className="muted-copy">
-          These controls use your signed-in session. The admin action still
-          requires the configured admin token.
+          These controls use your signed-in session. Admin deletion is no longer
+          exposed in the public web.
         </p>
         <div className="button-row">
           <button
@@ -129,14 +93,6 @@ export function PrivacyActions() {
             disabled={busyAction !== null}
           >
             {busyAction === "download" ? "Preparing..." : "Download my data"}
-          </button>
-          <button
-            className="secondary-button"
-            type="button"
-            onClick={runAdminDeletion}
-            disabled={busyAction !== null}
-          >
-            {busyAction === "delete" ? "Deleting..." : "Run admin delete"}
           </button>
         </div>
       </div>

@@ -31,15 +31,15 @@ export default async function Profile({
 
     return (
       <div className="creator-profile-enter space-y-6 pb-8 pt-4">
-        <Card className="overflow-hidden border-slate-200/90 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.18),_rgba(15,23,42,0.96)_48%,_rgba(2,6,23,1))] p-6 text-white shadow-[0_28px_70px_rgba(15,23,42,0.22)]">
+        <Card className="overflow-hidden border-[#3a2c17]/90 bg-[radial-gradient(circle_at_top,_rgba(196,150,28,0.18),_rgba(15,11,7,0.98)_48%,_rgba(8,6,4,1))] p-6 text-brand-50 shadow-[0_28px_70px_rgba(0,0,0,0.3)]">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <Link
               href="/"
-              className="inline-flex min-h-11 items-center justify-center rounded-full bg-white/12 px-4 text-sm font-bold text-white transition-colors hover:bg-white/18"
+              className="inline-flex min-h-11 items-center justify-center rounded-full border border-brand-50/15 bg-brand-50/10 px-4 text-sm font-bold text-brand-50 transition-colors hover:bg-brand-50/16"
             >
               Back to feed
             </Link>
-            <Badge tone="indigo" className="border border-white/15 bg-white/10 text-white">
+            <Badge tone="indigo" className="border border-brand-50/15 bg-brand-50/10 text-brand-50">
               Creator profile
             </Badge>
           </div>
@@ -50,15 +50,15 @@ export default async function Profile({
             </span>
             <div className="min-w-0">
               <h1
-                className="truncate text-[2rem] font-bold tracking-tight text-white"
+                className="truncate text-[2rem] font-bold tracking-tight text-brand-50"
                 style={{ viewTransitionName: `creator-name-${profile.id}` }}
               >
                 {profile.name}
               </h1>
-              <p className="mt-2 text-lg text-white/86">
+              <p className="mt-2 text-lg text-brand-100/86">
                 {profile.title} · {profile.company}
               </p>
-              <div className="mt-3 flex items-center gap-2 text-sm text-white/72">
+              <div className="mt-3 flex items-center gap-2 text-sm text-brand-100/72">
                 <MapPinIcon className="h-4 w-4" aria-hidden="true" />
                 <span>{profile.location}</span>
                 <span>·</span>
@@ -67,7 +67,7 @@ export default async function Profile({
             </div>
           </div>
 
-          <p className="mt-6 max-w-2xl text-sm leading-7 text-white/82">
+          <p className="mt-6 max-w-2xl text-sm leading-7 text-brand-100/82">
             Discover recent creator posts, focus areas, and short-form updates from {profile.name}.
           </p>
 
@@ -76,13 +76,13 @@ export default async function Profile({
               creatorHighlights.map((highlight) => (
                 <span
                   key={highlight}
-                  className="rounded-full border border-white/12 bg-white/10 px-3 py-1 text-xs font-semibold text-white/88"
+                  className="rounded-full border border-brand-50/12 bg-brand-50/10 px-3 py-1 text-xs font-semibold text-brand-100/88"
                 >
                   #{highlight}
                 </span>
               ))
             ) : (
-              <span className="rounded-full border border-white/12 bg-white/10 px-3 py-1 text-xs font-semibold text-white/88">
+              <span className="rounded-full border border-brand-50/12 bg-brand-50/10 px-3 py-1 text-xs font-semibold text-brand-100/88">
                 #OpenToCollaborate
               </span>
             )}
@@ -93,14 +93,14 @@ export default async function Profile({
           <Card className="p-5">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-700">
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-brand-300">
                   Recent posts
                 </p>
-                <h2 className="mt-2 text-2xl font-bold text-slate-950">From the feed</h2>
+                <h2 className="mt-2 text-2xl font-bold text-brand-50">From the feed</h2>
               </div>
               <Link
                 href="/"
-                className="inline-flex min-h-11 items-center justify-center rounded-full border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-800 transition-colors hover:bg-slate-50"
+                className="inline-flex min-h-11 items-center justify-center rounded-full border border-[#4d3a1d] bg-[#14100c] px-4 text-sm font-semibold text-brand-100 transition-colors hover:bg-[#18130d]"
               >
                 Open feed
               </Link>
@@ -111,33 +111,33 @@ export default async function Profile({
                 creatorPosts.map((post) => (
                   <article
                     key={post.id}
-                    className="rounded-[1.5rem] border border-slate-200 bg-slate-50/90 p-4"
+                    className="rounded-[1.5rem] border border-[#302312] bg-[#16110b] p-4"
                   >
                     <div className="flex items-center justify-between gap-3">
-                      <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+                      <p className="text-xs font-bold uppercase tracking-[0.16em] text-brand-200/60">
                         {post.channel}
                       </p>
-                      <p className="text-xs font-semibold text-slate-400">{post.time}</p>
+                      <p className="text-xs font-semibold text-brand-200/55">{post.time}</p>
                     </div>
-                    <p className="mt-3 text-sm leading-7 text-slate-700">{post.body}</p>
+                    <p className="mt-3 text-sm leading-7 text-brand-100/80">{post.body}</p>
                     <div className="mt-4 flex flex-wrap gap-2">
                       {post.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="rounded-full bg-white px-3 py-1 text-xs font-bold text-indigo-700 shadow-sm"
+                          className="rounded-full border border-[#3a2c17] bg-[#16110b] px-3 py-1 text-xs font-bold text-brand-200 shadow-sm"
                         >
                           #{tag}
                         </span>
                       ))}
                     </div>
-                    <div className="mt-4 flex gap-5 text-xs font-semibold text-slate-500">
+                    <div className="mt-4 flex gap-5 text-xs font-semibold text-brand-200/60">
                       <span>{post.likes} likes</span>
                       <span>{post.comments} comments</span>
                     </div>
                   </article>
                 ))
               ) : (
-                <div className="rounded-[1.5rem] border border-dashed border-slate-200 bg-slate-50/80 p-5 text-sm text-slate-500">
+                <div className="rounded-[1.5rem] border border-dashed border-[#3a2c17] bg-[#14100c] p-5 text-sm text-brand-200/60">
                   No public posts are available for this creator yet.
                 </div>
               )}
@@ -146,23 +146,23 @@ export default async function Profile({
 
           <div className="grid gap-5">
             <Card className="p-5">
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-700">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-brand-300">
                 Quick stats
               </p>
               <div className="mt-4 grid grid-cols-2 gap-3 text-center">
-                <div className="rounded-2xl bg-slate-50 p-4">
-                  <p className="text-2xl font-bold text-slate-950">{creatorPosts.length}</p>
-                  <p className="mt-1 text-xs font-semibold text-slate-500">Posts</p>
+                <div className="rounded-2xl border border-[#302312] bg-[#16110b] p-4">
+                  <p className="text-2xl font-bold text-brand-50">{creatorPosts.length}</p>
+                  <p className="mt-1 text-xs font-semibold text-brand-200/60">Posts</p>
                 </div>
-                <div className="rounded-2xl bg-slate-50 p-4">
-                  <p className="text-2xl font-bold text-slate-950">{creatorMediaPosts.length}</p>
-                  <p className="mt-1 text-xs font-semibold text-slate-500">Media posts</p>
+                <div className="rounded-2xl border border-[#302312] bg-[#16110b] p-4">
+                  <p className="text-2xl font-bold text-brand-50">{creatorMediaPosts.length}</p>
+                  <p className="mt-1 text-xs font-semibold text-brand-200/60">Media posts</p>
                 </div>
               </div>
             </Card>
 
             <Card className="p-5">
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-700">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-brand-300">
                 Creator focus
               </p>
               <div className="mt-4 flex flex-wrap gap-2">

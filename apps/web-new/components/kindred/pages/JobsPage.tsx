@@ -45,7 +45,7 @@ function JobCard({
       <Card className="p-5 sm:p-6">
         <div className="flex items-start gap-4">
           <div
-            className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl font-display text-xs font-bold text-slate-700"
+            className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl font-display text-xs font-bold text-[#140f08]"
             style={{ background: job.logoBg }}
           >
             {job.logoText}
@@ -53,14 +53,14 @@ function JobCard({
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <h2 className="text-lg font-bold text-slate-950">{job.role}</h2>
-                <p className="mt-1 text-sm text-slate-600">
+                <h2 className="text-lg font-bold text-brand-50">{job.role}</h2>
+                <p className="mt-1 text-sm text-brand-100/75">
                   {job.company} · {job.posted}
                 </p>
               </div>
               <MatchRing score={job.score} size={50} />
             </div>
-            <div className="mt-3 space-y-2 text-sm text-slate-600">
+            <div className="mt-3 space-y-2 text-sm text-brand-100/75">
               <p className="flex items-center gap-1.5">
                 <MapPinIcon className="h-4 w-4" aria-hidden="true" />
                 {job.location}
@@ -294,30 +294,30 @@ export function JobsPage() {
         <div className="space-y-7">
           {selectedJob ? (
             <section ref={selectedRoleRef} className="scroll-mt-24">
-              <Card className="overflow-hidden rounded-[2rem] p-0 shadow-[0_20px_55px_rgba(15,23,42,0.07)]">
-              <div className="border-b border-slate-200 bg-[linear-gradient(135deg,rgba(238,242,255,0.9),rgba(255,255,255,0.96))] px-6 py-6 sm:px-7">
+              <Card className="overflow-hidden rounded-[2rem] p-0 shadow-[0_20px_55px_rgba(0,0,0,0.26)]">
+              <div className="border-b border-[#302312] bg-[linear-gradient(135deg,rgba(35,25,13,0.96),rgba(15,11,7,0.98))] px-6 py-6 sm:px-7">
                 <div className="space-y-6">
                   <div className="min-w-0 space-y-3">
-                    <p className="text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
+                    <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand-300">
                       Selected role
                     </p>
-                    <h2 className="max-w-3xl font-display text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
+                    <h2 className="max-w-3xl font-display text-3xl font-bold tracking-tight text-brand-50 sm:text-4xl">
                       {selectedJob.role}
                     </h2>
-                    <p className="text-base font-medium text-slate-700">
+                    <p className="text-base font-medium text-brand-100">
                       {selectedJob.company}
                     </p>
-                    <p className="max-w-3xl text-sm leading-7 text-slate-600 sm:text-[15px]">
+                    <p className="max-w-3xl text-sm leading-7 text-brand-100/78 sm:text-[15px]">
                       Review the strongest fit signals first, then act on the role from a cleaner workspace.
                     </p>
                   </div>
-                  <div className="rounded-[1.5rem] border border-indigo-100 bg-white/90 px-5 py-4 shadow-[0_12px_35px_rgba(79,70,229,0.08)]">
+                  <div className="rounded-[1.5rem] border border-[#4a381b] bg-[#171108] px-5 py-4 shadow-[0_12px_35px_rgba(0,0,0,0.22)]">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                       <div className="min-w-0">
-                        <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">
+                        <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand-200/65">
                           Role match
                         </p>
-                        <p className="mt-1 text-sm leading-6 text-slate-600">
+                        <p className="mt-1 text-sm leading-6 text-brand-100/75">
                           Ranked for your current profile
                         </p>
                       </div>
@@ -329,30 +329,30 @@ export function JobsPage() {
 
               <div className="px-6 py-6 sm:px-7">
                 <div className="grid gap-3 xl:grid-cols-3">
-                  <div className="rounded-[1.35rem] border border-slate-200 bg-slate-50 p-4">
-                    <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">
+                  <div className="rounded-[1.35rem] border border-[#302312] bg-[#16110b] p-4">
+                    <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand-200/65">
                       Location
                     </p>
-                    <p className="mt-2 flex items-center gap-2 text-sm font-semibold text-slate-800 leading-7">
-                      <MapPinIcon className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                    <p className="mt-2 flex items-center gap-2 text-sm font-semibold leading-7 text-brand-100">
+                      <MapPinIcon className="h-4 w-4 text-brand-200/70" aria-hidden="true" />
                       {selectedJob.location}
                     </p>
                   </div>
-                  <div className="rounded-[1.35rem] border border-slate-200 bg-slate-50 p-4">
-                    <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">
+                  <div className="rounded-[1.35rem] border border-[#302312] bg-[#16110b] p-4">
+                    <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand-200/65">
                       Compensation
                     </p>
-                    <p className="mt-2 flex items-center gap-2 text-sm font-semibold text-slate-800 leading-7">
-                      <BanknoteIcon className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                    <p className="mt-2 flex items-center gap-2 text-sm font-semibold leading-7 text-brand-100">
+                      <BanknoteIcon className="h-4 w-4 text-brand-200/70" aria-hidden="true" />
                       {selectedJob.salary}
                     </p>
                   </div>
-                  <div className="rounded-[1.35rem] border border-slate-200 bg-slate-50 p-4">
-                    <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">
+                  <div className="rounded-[1.35rem] border border-[#302312] bg-[#16110b] p-4">
+                    <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand-200/65">
                       Schedule
                     </p>
-                    <p className="mt-2 flex items-center gap-2 text-sm font-semibold text-slate-800 leading-7">
-                      <BriefcaseBusinessIcon className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                    <p className="mt-2 flex items-center gap-2 text-sm font-semibold leading-7 text-brand-100">
+                      <BriefcaseBusinessIcon className="h-4 w-4 text-brand-200/70" aria-hidden="true" />
                       {selectedJob.type} · Posted {selectedJob.posted}
                     </p>
                   </div>
@@ -360,17 +360,17 @@ export function JobsPage() {
 
                 <div className="mt-7 space-y-6">
                   <div className="min-w-0">
-                    <p className="text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
+                    <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand-300">
                       Fit summary
                     </p>
-                    <h3 className="mt-2 text-lg font-bold text-slate-950">
+                    <h3 className="mt-2 text-lg font-bold text-brand-50">
                       Why this role is ranking highly
                     </h3>
                     <div className="mt-5 grid gap-3 xl:grid-cols-2">
                       {selectedJob.reasons.map((reason) => (
                         <div
                           key={reason}
-                          className="flex items-start gap-3 rounded-[1.35rem] border border-slate-200 bg-slate-50 p-4 text-sm leading-7 text-slate-700 shadow-[0_6px_18px_rgba(15,23,42,0.03)]"
+                          className="flex items-start gap-3 rounded-[1.35rem] border border-[#302312] bg-[#16110b] p-4 text-sm leading-7 text-brand-100/80 shadow-[0_6px_18px_rgba(0,0,0,0.18)]"
                         >
                           <CheckCircle2Icon
                             className="mt-0.5 h-4 w-4 shrink-0 text-emerald-700"
@@ -381,11 +381,11 @@ export function JobsPage() {
                       ))}
                     </div>
                   </div>
-                  <div className="rounded-[1.6rem] border border-indigo-100 bg-[linear-gradient(180deg,rgba(255,255,255,1),rgba(248,250,255,1))] p-5 shadow-[0_18px_45px_rgba(79,70,229,0.08)]">
-                    <p className="text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
+                  <div className="rounded-[1.6rem] border border-[#4a381b] bg-[linear-gradient(180deg,rgba(24,17,11,1),rgba(15,11,7,1))] p-5 shadow-[0_18px_45px_rgba(0,0,0,0.24)]">
+                    <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand-300">
                       Take action
                     </p>
-                    <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-600">
+                    <p className="mt-2 max-w-2xl text-sm leading-7 text-brand-100/78">
                       Keep this role moving with a direct apply action, a saved reminder, or a company review.
                     </p>
                     <div className="mt-5 flex flex-col gap-3 lg:flex-row lg:flex-wrap">
@@ -414,7 +414,7 @@ export function JobsPage() {
                       </Button>
                       <Link
                         href="/companies"
-                        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-indigo-200 bg-white px-4 text-sm font-semibold text-indigo-800 hover:bg-indigo-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 lg:min-w-[240px]"
+                        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[#4d3a1d] bg-[#14100c] px-4 text-sm font-semibold text-brand-100 hover:bg-[#18130d] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 lg:min-w-[240px]"
                       >
                         Explore employer directory
                         <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
@@ -427,7 +427,7 @@ export function JobsPage() {
             </section>
           ) : (
             <Card className="p-5">
-              <p className="text-sm text-slate-600">Choose a job to see the full fit summary.</p>
+              <p className="text-sm text-brand-100/75">Choose a job to see the full fit summary.</p>
             </Card>
           )}
           <section aria-live="polite" aria-label={`${active} roles`} className="space-y-3">
@@ -440,7 +440,7 @@ export function JobsPage() {
                 onClick={() => handleSelectJob(job.id)}
                 className={cn(
                   "block w-full cursor-pointer rounded-2xl text-left",
-                  selectedJob?.id === job.id && "ring-2 ring-indigo-600 ring-offset-2",
+                  selectedJob?.id === job.id && "ring-2 ring-brand-400 ring-offset-2 ring-offset-[#080604]",
                 )}
               >
                 <div
@@ -453,7 +453,7 @@ export function JobsPage() {
                       handleSelectJob(job.id);
                     }
                   }}
-                  className="rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
+                  className="rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400"
                 >
                   <JobCard
                     job={job}
@@ -477,7 +477,7 @@ export function JobsPage() {
               </motion.div>
             ))}
             {list.length === 0 ? (
-              <Card className="p-5 text-center text-sm text-slate-600">
+              <Card className="p-5 text-center text-sm text-brand-100/75">
                 No roles match this filter right now.
               </Card>
             ) : null}

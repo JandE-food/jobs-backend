@@ -1,8 +1,5 @@
 export const apiUrl = "/api";
 
-export const adminToken =
-  process.env.NEXT_PUBLIC_ADMIN_TOKEN ?? "dev-admin-token";
-
 export const authStorageKey = "kindred-auth";
 
 export type SessionUser = {

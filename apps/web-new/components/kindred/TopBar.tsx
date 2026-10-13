@@ -284,7 +284,7 @@ export function TopBar() {
       <div className="mx-auto flex h-14 max-w-[1440px] items-center gap-3 px-4">
         <Link href={homeHref} className="flex items-center gap-2" aria-label="BEJELI home">
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600">
-            <BriefcaseBusinessIcon className="h-4 w-4 text-white" strokeWidth={2.4} />
+            <BriefcaseBusinessIcon className="h-4 w-4 text-[#140f08]" strokeWidth={2.4} />
           </span>
           <span className="hidden text-lg font-extrabold tracking-tight text-ink sm:inline">BEJELI</span>
         </Link>
@@ -418,7 +418,7 @@ export function TopBar() {
 
           <TransitionLink
             href={postHref}
-            className="inline-flex h-9 items-center gap-1.5 rounded-full bg-brand-600 px-3.5 text-sm font-bold text-white transition-colors duration-150 hover:bg-brand-700"
+            className="inline-flex h-9 items-center gap-1.5 rounded-full bg-brand-600 px-3.5 text-sm font-bold text-[#140f08] transition-colors duration-150 hover:bg-brand-700"
           >
             <PlusIcon className="h-4 w-4" strokeWidth={2.6} />
             <span className="hidden sm:inline">Post</span>

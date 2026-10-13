@@ -529,13 +529,13 @@ export function RecruiterDashboardPage() {
         </Card>
       ) : null}
 
-      <section className="rounded-[2rem] border border-slate-200/90 bg-white/95 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.06)]">
+      <section className="rounded-[2rem] border border-[#3a2c17]/90 bg-[#0f0b07]/95 p-5 shadow-[0_24px_60px_rgba(0,0,0,0.26)]">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-indigo-700">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-300">
               FOR YOUR NEXT HIRE
             </p>
-            <h1 className="mt-2 font-display text-[2.35rem] font-bold tracking-tight text-slate-950">
+            <h1 className="mt-2 font-display text-[2.35rem] font-bold tracking-tight text-brand-50">
               Feed
             </h1>
           </div>
@@ -568,7 +568,7 @@ export function RecruiterDashboardPage() {
                 <button
                   type="button"
                   onClick={() => move(-1)}
-                  className="grid h-12 w-12 place-items-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm"
+                  className="grid h-12 w-12 place-items-center rounded-full border border-[#3a2c17] bg-[#14100c] text-brand-100 shadow-sm"
                   aria-label="Move up to previous profile"
                   disabled={!recruiterShorts.length}
                 >
@@ -650,11 +650,11 @@ export function RecruiterDashboardPage() {
                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/15 via-black/10 to-black/75" />
                     {activeShort.media.type === "video" && playbackIndicator ? (
                       <div className="pointer-events-none absolute inset-0 z-20 grid place-items-center">
-                        <div className="flex min-w-[8.5rem] flex-col items-center gap-2 rounded-[1.75rem] bg-black/52 px-5 py-4 text-white shadow-[0_20px_45px_rgba(15,23,42,0.28)] backdrop-blur-md">
+                        <div className="flex min-w-[8.5rem] flex-col items-center gap-2 rounded-[1.75rem] border border-brand-50/15 bg-black/52 px-5 py-4 text-brand-50 shadow-[0_20px_45px_rgba(15,23,42,0.28)] backdrop-blur-md">
                           <span className="text-3xl font-bold leading-none">
                             {playbackIndicator === "pause" ? "❚❚" : "▶"}
                           </span>
-                          <span className="text-sm font-semibold tracking-[0.08em] text-white/90">
+                          <span className="text-sm font-semibold tracking-[0.08em] text-brand-100/88">
                             {playbackIndicator === "pause" ? "Paused" : "Playing"}
                           </span>
                         </div>
@@ -685,7 +685,7 @@ export function RecruiterDashboardPage() {
                           }));
                         }}
                         className={cn(
-                          "grid h-12 w-12 place-items-center rounded-full bg-black/45 text-white transition-transform duration-200 hover:scale-105 active:scale-95",
+                          "grid h-12 w-12 place-items-center rounded-full border border-brand-50/15 bg-black/45 text-brand-50 transition-transform duration-200 hover:scale-105 active:scale-95",
                           activeShort.endorsed && "text-sky-300",
                           animatedAction === "endorse" && "reel-action-pop",
                         )}
@@ -695,7 +695,7 @@ export function RecruiterDashboardPage() {
                       </button>
                       <span
                         className={cn(
-                          "text-sm font-bold text-white",
+                          "text-sm font-bold text-brand-50",
                           animatedCount === "endorse" && "reel-count-pop",
                         )}
                       >
@@ -712,7 +712,7 @@ export function RecruiterDashboardPage() {
                           })
                         }
                         className={cn(
-                          "grid h-12 w-12 place-items-center rounded-full bg-black/45 text-white transition-transform duration-200 hover:scale-105 active:scale-95",
+                          "grid h-12 w-12 place-items-center rounded-full border border-brand-50/15 bg-black/45 text-brand-50 transition-transform duration-200 hover:scale-105 active:scale-95",
                           animatedAction === "comments" && "reel-action-pop",
                         )}
                         aria-label="Open comments"
@@ -721,7 +721,7 @@ export function RecruiterDashboardPage() {
                       </button>
                       <span
                         className={cn(
-                          "text-sm font-bold text-white",
+                          "text-sm font-bold text-brand-50",
                           animatedCount === "comments" && "reel-count-pop",
                         )}
                       >
@@ -734,7 +734,7 @@ export function RecruiterDashboardPage() {
                           void handleShare(activeShort.id);
                         }}
                         className={cn(
-                          "grid h-12 w-12 place-items-center rounded-full bg-black/45 text-white transition-transform duration-200 hover:scale-105 active:scale-95",
+                          "grid h-12 w-12 place-items-center rounded-full border border-brand-50/15 bg-black/45 text-brand-50 transition-transform duration-200 hover:scale-105 active:scale-95",
                           animatedAction === "share" && "reel-action-pop",
                         )}
                         aria-label="Share profile"
@@ -743,7 +743,7 @@ export function RecruiterDashboardPage() {
                       </button>
                       <span
                         className={cn(
-                          "text-sm font-bold text-white",
+                          "text-sm font-bold text-brand-50",
                           animatedCount === "share" && "reel-count-pop",
                         )}
                       >
@@ -752,7 +752,7 @@ export function RecruiterDashboardPage() {
                       <button
                         type="button"
                         onClick={() => setIsMuted((current) => !current)}
-                        className="grid h-12 w-12 place-items-center rounded-full bg-black/45 text-white"
+                        className="grid h-12 w-12 place-items-center rounded-full border border-brand-50/15 bg-black/45 text-brand-50"
                         aria-label={isMuted ? "Unmute reel" : "Mute reel"}
                       >
                         <span className="text-lg">{isMuted ? "🔇" : "🔊"}</span>
@@ -768,40 +768,40 @@ export function RecruiterDashboardPage() {
                       <div className="flex items-center gap-3">
                         <Avatar src={activeShort.authorAvatar} alt={activeShort.authorName} size={44} />
                         <div className="min-w-0">
-                          <p className="truncate text-[1.15rem] font-bold text-white">
+                          <p className="truncate text-[1.15rem] font-bold text-brand-50">
                             {activeShort.authorName}
                           </p>
-                          <p className="truncate text-sm text-white/75">
+                          <p className="truncate text-sm text-brand-100/75">
                             {activeShort.authorMeta}
                             {activeShort.locationLabel ? ` · ${activeShort.locationLabel}` : ""}
                           </p>
                         </div>
                       </div>
-                      <p className="mt-3 max-w-[15rem] text-[0.84rem] font-semibold leading-6 text-white/95">
+                      <p className="mt-3 max-w-[15rem] text-[0.84rem] font-semibold leading-6 text-brand-50">
                         {activeShort.caption}
                       </p>
                       <div className="mt-4 flex flex-wrap gap-2">
-                        <span className="rounded-full bg-white px-3 py-1 text-sm font-bold text-indigo-700">
+                        <span className="rounded-full bg-brand-50 px-3 py-1 text-sm font-bold text-brand-700">
                           {activeShort.matchPercent}% match
                         </span>
-                        <span className="rounded-full bg-white/12 px-3 py-1 text-sm font-semibold text-white">
+                        <span className="rounded-full bg-brand-50/12 px-3 py-1 text-sm font-semibold text-brand-50">
                           {activeShort.recommendationNote}
                         </span>
                       </div>
-                      <p className="mt-3 flex items-center gap-2 text-sm font-semibold text-white/85">
+                      <p className="mt-3 flex items-center gap-2 text-sm font-semibold text-brand-100/85">
                         <MapPinIcon className="h-4 w-4" aria-hidden="true" />
                         {activeShort.expectedSalary}
                       </p>
                       <div className="mt-4 flex flex-wrap gap-3">
                         <Link
                           href={activeShort ? `/recruiter/candidates/${activeShort.id}` : "/recruiter/candidates"}
-                          className="inline-flex min-h-11 items-center justify-center rounded-full bg-white px-5 text-sm font-bold text-slate-950"
+                          className="inline-flex min-h-11 items-center justify-center rounded-full bg-brand-500 px-5 text-sm font-bold text-[#140f08]"
                         >
                           View full profile
                         </Link>
                         <Link
                           href={activeShortlist ? `/recruiter/shortlists/${activeShortlist.id}` : "/recruiter/shortlists"}
-                          className="inline-flex min-h-11 items-center justify-center rounded-full bg-white/10 px-5 text-sm font-bold text-white ring-1 ring-white/20"
+                          className="inline-flex min-h-11 items-center justify-center rounded-full bg-brand-50/10 px-5 text-sm font-bold text-brand-50 ring-1 ring-brand-50/20"
                         >
                           Shortlist
                         </Link>
@@ -810,34 +810,34 @@ export function RecruiterDashboardPage() {
 
                     {commentsOpen ? (
                       <div
-                        className="ui-fade-up absolute inset-x-4 bottom-4 z-40 rounded-[1.5rem] bg-white p-4 shadow-[0_22px_55px_rgba(15,23,42,0.2)]"
+                        className="ui-fade-up absolute inset-x-4 bottom-4 z-40 rounded-[1.5rem] border border-[#4a381b] bg-[#0f0b07] p-4 shadow-[0_22px_55px_rgba(0,0,0,0.34)]"
                         data-reel-interactive="true"
                         onPointerDown={(event) => event.stopPropagation()}
                         onClick={(event) => event.stopPropagation()}
                       >
                         <div className="flex items-center justify-between gap-3">
                           <div>
-                            <p className="text-sm font-bold text-slate-950">Comments</p>
-                            <p className="text-xs text-slate-500">
+                            <p className="text-sm font-bold text-brand-50">Comments</p>
+                            <p className="text-xs text-brand-200/60">
                               {activeShort.commentItems.length} replies
                             </p>
                           </div>
                           <button
                             type="button"
                             onClick={() => setCommentsOpen(false)}
-                            className="text-xs font-bold text-slate-500"
+                            className="text-xs font-bold text-brand-200/72"
                           >
                             Close
                           </button>
                         </div>
                         <div className="mt-3 grid max-h-44 gap-2 overflow-y-auto">
                           {activeShort.commentItems.map((comment) => (
-                            <div key={comment.id} className="rounded-2xl bg-slate-50 p-3">
+                            <div key={comment.id} className="rounded-2xl border border-[#302312] bg-[#16110b] p-3">
                               <div className="flex items-center gap-2">
-                                <p className="text-xs font-bold text-slate-900">{comment.author}</p>
-                                <span className="text-[11px] text-slate-500">{comment.time}</span>
+                                <p className="text-xs font-bold text-brand-50">{comment.author}</p>
+                                <span className="text-[11px] text-brand-200/55">{comment.time}</span>
                               </div>
-                              <p className="mt-2 text-sm leading-6 text-slate-700">{comment.text}</p>
+                              <p className="mt-2 text-sm leading-6 text-brand-100/80">{comment.text}</p>
                             </div>
                           ))}
                         </div>
@@ -855,13 +855,13 @@ export function RecruiterDashboardPage() {
                                 }
                               }}
                               placeholder="Add a thoughtful reply..."
-                              className="w-full rounded-[1.25rem] border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none focus:border-slate-300 focus:bg-white"
+                              className="w-full rounded-[1.25rem] border border-[#3a2c17] bg-[#16110b] px-4 py-3 text-sm text-brand-100 outline-none focus:border-brand-500/60 focus:bg-[#1a140d]"
                             />
                             <div className="mt-3 flex justify-end">
                               <button
                                 type="button"
                                 onClick={submitComment}
-                                className="rounded-full bg-slate-950 px-4 py-2 text-sm font-bold text-white"
+                                className="rounded-full bg-brand-500 px-4 py-2 text-sm font-bold text-[#140f08]"
                               >
                                 Send
                               </button>
@@ -873,11 +873,11 @@ export function RecruiterDashboardPage() {
                   </div>
                 </article>
               ) : (
-                <Card className="mx-auto max-w-[calc(22rem+2cm)] border-slate-200/90 bg-white/95 p-8 text-center">
-                  <h2 className="font-display text-xl font-bold text-slate-950">
+                <Card className="mx-auto max-w-[calc(22rem+2cm)] border-[#3a2c17]/90 bg-[#0f0b07]/95 p-8 text-center">
+                  <h2 className="font-display text-xl font-bold text-brand-50">
                     No talent reels yet
                   </h2>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
+                  <p className="mt-2 text-sm leading-6 text-brand-100/75">
                     Talent videos and worker showcases will appear here once candidates are available.
                   </p>
                 </Card>
@@ -886,24 +886,24 @@ export function RecruiterDashboardPage() {
                 <button
                   type="button"
                   onClick={() => move(1)}
-                  className="grid h-12 w-12 place-items-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm"
+                  className="grid h-12 w-12 place-items-center rounded-full border border-[#3a2c17] bg-[#14100c] text-brand-100 shadow-sm"
                   aria-label="Move down to next profile"
                   disabled={!recruiterShorts.length}
                 >
                   <ChevronDownIcon className="h-4 w-4" aria-hidden="true" />
                 </button>
-                <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">
+                <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-brand-200/55">
                   Down
                 </span>
               </div>
             </div>
 
             {recruiterShorts.length ? (
-              <div className="flex flex-col items-center justify-center gap-3 text-sm text-slate-500">
+              <div className="flex flex-col items-center justify-center gap-3 text-sm text-brand-200/60">
                 <button
                   type="button"
                   onClick={() => move(-1)}
-                  className="grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-white md:hidden"
+                  className="grid h-10 w-10 place-items-center rounded-full border border-[#3a2c17] bg-[#14100c] text-brand-100 md:hidden"
                   aria-label="Previous profile above"
                 >
                   <ChevronDownIcon className="h-4 w-4 rotate-180" aria-hidden="true" />
@@ -920,7 +920,7 @@ export function RecruiterDashboardPage() {
                       }}
                       className={cn(
                         "h-2.5 rounded-full transition-all",
-                        index === safeActiveIndex ? "w-8 bg-indigo-600" : "w-2.5 bg-slate-300",
+                        index === safeActiveIndex ? "w-8 bg-brand-500" : "w-2.5 bg-[#5a4822]",
                       )}
                       aria-label={`Open reel ${index + 1}`}
                     />
@@ -932,7 +932,7 @@ export function RecruiterDashboardPage() {
                 <button
                   type="button"
                   onClick={() => move(1)}
-                  className="grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-white md:hidden"
+                  className="grid h-10 w-10 place-items-center rounded-full border border-[#3a2c17] bg-[#14100c] text-brand-100 md:hidden"
                   aria-label="Next profile below"
                 >
                   <ChevronDownIcon className="h-4 w-4" aria-hidden="true" />
@@ -942,19 +942,19 @@ export function RecruiterDashboardPage() {
           </div>
 
           <div className="space-y-4">
-            <Card className="border-slate-200/90 bg-white/95 p-5 shadow-[0_14px_35px_rgba(15,23,42,0.04)]">
+            <Card className="border-[#3a2c17]/90 bg-[#0f0b07]/95 p-5 shadow-[0_14px_35px_rgba(0,0,0,0.22)]">
               <div className="flex items-center justify-between gap-3">
-                <p className="text-xl font-bold text-slate-950">Shortlist</p>
-                <span className="text-sm font-semibold text-slate-500">
+                <p className="text-xl font-bold text-brand-50">Shortlist</p>
+                <span className="text-sm font-semibold text-brand-200/60">
                   {activeShortlist?.candidate_count ?? 0} candidates
                 </span>
               </div>
               {activeShort ? (
-                <div className="mt-4 flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                <div className="mt-4 flex items-center gap-3 rounded-2xl border border-[#302312] bg-[#16110b] p-3">
                   <Avatar src={activeShort.authorAvatar} alt={activeShort.authorName} size={42} />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-bold text-slate-950">{activeShort.authorName}</p>
-                    <p className="truncate text-xs text-slate-600">
+                    <p className="truncate text-sm font-bold text-brand-50">{activeShort.authorName}</p>
+                    <p className="truncate text-xs text-brand-100/70">
                       {activeShort.authorMeta} · {activeShort.matchPercent}% match
                     </p>
                   </div>
@@ -962,40 +962,40 @@ export function RecruiterDashboardPage() {
               ) : null}
               <div className="mt-4 grid grid-cols-2 gap-3 text-center">
                 <div>
-                  <p className="text-3xl font-display font-bold text-slate-950">
+                  <p className="text-3xl font-display font-bold text-brand-50">
                     {activeShort?.endorsements ?? 0}
                   </p>
-                  <p className="text-sm text-slate-500">Endorsed</p>
+                  <p className="text-sm text-brand-200/60">Endorsed</p>
                 </div>
                 <div>
-                  <p className="text-3xl font-display font-bold text-slate-950">
+                  <p className="text-3xl font-display font-bold text-brand-50">
                     {recruiterShorts.length}
                   </p>
-                  <p className="text-sm text-slate-500">Reels today</p>
+                  <p className="text-sm text-brand-200/60">Reels today</p>
                 </div>
               </div>
               <Link
                 href={activeShortlist ? `/recruiter/shortlists/${activeShortlist.id}` : "/recruiter/shortlists"}
-                className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-indigo-600 px-4 text-sm font-bold text-white hover:bg-indigo-700"
+                className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-brand-500 px-4 text-sm font-bold text-[#140f08] hover:bg-brand-400"
               >
                 Open shortlist
               </Link>
             </Card>
 
-            <Card className="border-slate-200/90 bg-white/95 p-5 shadow-[0_14px_35px_rgba(15,23,42,0.04)]">
+            <Card className="border-[#3a2c17]/90 bg-[#0f0b07]/95 p-5 shadow-[0_14px_35px_rgba(0,0,0,0.22)]">
               <div className="flex items-center justify-between gap-3">
-                <p className="text-xl font-bold text-slate-950">Matched to your profile</p>
-                <Link href="/jobs" className="text-sm font-bold text-indigo-700">
+                <p className="text-xl font-bold text-brand-50">Matched to your profile</p>
+                <Link href="/jobs" className="text-sm font-bold text-brand-200">
                   All jobs
                 </Link>
               </div>
               <div className="mt-4 space-y-3">
                 {(dashboard?.recentJobs ?? []).slice(0, 3).map((job, index) => (
-                  <div key={job.id} className="rounded-2xl bg-slate-50 px-4 py-3">
+                  <div key={job.id} className="rounded-2xl border border-[#302312] bg-[#16110b] px-4 py-3">
                     <div className="flex items-start gap-3">
                       <div
                         className={cn(
-                          "grid h-11 w-11 shrink-0 place-items-center rounded-full text-sm font-bold text-white",
+                          "grid h-11 w-11 shrink-0 place-items-center rounded-full text-sm font-bold text-[#140f08]",
                           index === 0
                             ? "bg-emerald-500"
                             : index === 1
@@ -1007,12 +1007,12 @@ export function RecruiterDashboardPage() {
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-3">
-                          <p className="truncate font-bold text-slate-950">{job.title}</p>
-                          <span className="text-sm font-bold text-indigo-700">
+                          <p className="truncate font-bold text-brand-50">{job.title}</p>
+                          <span className="text-sm font-bold text-brand-300">
                             {94 - index * 9}%
                           </span>
                         </div>
-                        <p className="mt-1 text-sm text-slate-600">
+                        <p className="mt-1 text-sm text-brand-100/75">
                           {job.company_name} · {job.location}
                         </p>
                       </div>
@@ -1022,12 +1022,12 @@ export function RecruiterDashboardPage() {
               </div>
             </Card>
 
-            <div className="space-y-2 px-1 text-sm text-slate-500">
-              <p className="flex items-center gap-2 font-semibold text-emerald-700">
+            <div className="space-y-2 px-1 text-sm text-brand-200/60">
+              <p className="flex items-center gap-2 font-semibold text-emerald-400">
                 <ShieldCheckIcon className="h-4 w-4" aria-hidden="true" />
                 Data stored in UK data zones
               </p>
-              <div className="flex flex-wrap gap-3 text-xs">
+              <div className="flex flex-wrap gap-3 text-xs text-brand-200/60">
                 <span>About</span>
                 <span>Help centre</span>
                 <span>Privacy</span>
@@ -1069,12 +1069,12 @@ export function RecruiterDashboardPage() {
           ].map(({ label, value, icon: Icon, tone }) => (
             <Card
               key={label}
-              className="border-slate-200/90 bg-white/95 p-5 shadow-[0_14px_35px_rgba(15,23,42,0.04)]"
+              className="border-[#3a2c17]/90 bg-[#0f0b07]/95 p-5 shadow-[0_14px_35px_rgba(0,0,0,0.22)]"
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-sm font-semibold text-slate-500">{label}</p>
-                  <p className="mt-2 font-display text-4xl font-bold tracking-tight text-slate-950">
+                  <p className="text-sm font-semibold text-brand-200/60">{label}</p>
+                  <p className="mt-2 font-display text-4xl font-bold tracking-tight text-brand-50">
                     {value}
                   </p>
                 </div>
@@ -1089,14 +1089,14 @@ export function RecruiterDashboardPage() {
 
         <section className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_20rem]">
           <div className="space-y-4">
-            <Card className="overflow-hidden border-slate-200/90 bg-white/95 p-5 shadow-[0_22px_55px_rgba(15,23,42,0.05)]">
+            <Card className="overflow-hidden border-[#3a2c17]/90 bg-[#0f0b07]/95 p-5 shadow-[0_22px_55px_rgba(0,0,0,0.24)]">
               <div id="recruiter-posting-queue" />
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <h2 className="font-display text-xl font-bold text-slate-950">
+                  <h2 className="font-display text-xl font-bold text-brand-50">
                     Posting queue
                   </h2>
-                  <p className="mt-1 text-sm text-slate-600">
+                  <p className="mt-1 text-sm text-brand-100/75">
                     Featured roles and recruiter-owned role inventory.
                   </p>
                 </div>
@@ -1109,12 +1109,12 @@ export function RecruiterDashboardPage() {
                 {dashboard?.recentJobs?.map((job) => (
                   <div
                     key={job.id}
-                    className="rounded-[1.5rem] border border-slate-200 bg-slate-50/80 p-4"
+                    className="rounded-[1.5rem] border border-[#302312] bg-[#16110b] p-4"
                   >
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <div>
-                        <h3 className="font-bold text-slate-950">{job.title}</h3>
-                        <p className="text-sm text-slate-600">
+                        <h3 className="font-bold text-brand-50">{job.title}</h3>
+                        <p className="text-sm text-brand-100/75">
                           {job.company_name} · {job.location}
                         </p>
                       </div>
@@ -1125,23 +1125,23 @@ export function RecruiterDashboardPage() {
                         </Badge>
                       </div>
                     </div>
-                    <p className="mt-2 text-sm text-slate-600">{job.salary_range}</p>
+                    <p className="mt-2 text-sm text-brand-100/75">{job.salary_range}</p>
                   </div>
                 ))}
               </div>
             </Card>
 
-            <Card className="border-slate-200/90 bg-white/95 p-5 shadow-[0_22px_55px_rgba(15,23,42,0.05)]">
+            <Card className="border-[#3a2c17]/90 bg-[#0f0b07]/95 p-5 shadow-[0_22px_55px_rgba(0,0,0,0.24)]">
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <h2 className="font-display text-xl font-bold text-slate-950">
+                  <h2 className="font-display text-xl font-bold text-brand-50">
                     Company queue
                   </h2>
-                  <p className="mt-1 text-sm text-slate-600">
+                  <p className="mt-1 text-sm text-brand-100/75">
                     Company validation and SaaS directory management.
                   </p>
                 </div>
-                <Link href="/recruiter/companies" className="text-sm font-bold text-indigo-800">
+                <Link href="/recruiter/companies" className="text-sm font-bold text-brand-200">
                   Company workflows
                 </Link>
               </div>
@@ -1149,12 +1149,12 @@ export function RecruiterDashboardPage() {
                 {adHubPreview.map((company) => (
                   <div
                     key={company.id}
-                    className="rounded-[1.5rem] border border-slate-200 bg-slate-50/80 p-4"
+                    className="rounded-[1.5rem] border border-[#302312] bg-[#16110b] p-4"
                   >
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <div>
-                        <h3 className="font-bold text-slate-950">{company.name}</h3>
-                        <p className="text-sm text-slate-600">
+                        <h3 className="font-bold text-brand-50">{company.name}</h3>
+                        <p className="text-sm text-brand-100/75">
                           {company.industry} · {company.location}
                         </p>
                       </div>
@@ -1164,10 +1164,10 @@ export function RecruiterDashboardPage() {
                         {company.verification_status}
                       </Badge>
                     </div>
-                    <p className="mt-3 text-sm font-semibold text-slate-900">
+                    <p className="mt-3 text-sm font-semibold text-brand-50">
                       {company.ad_headline}
                     </p>
-                    <p className="mt-1 text-sm text-slate-600">{company.ad_copy}</p>
+                    <p className="mt-1 text-sm text-brand-100/75">{company.ad_copy}</p>
                   </div>
                 ))}
               </div>
@@ -1175,8 +1175,8 @@ export function RecruiterDashboardPage() {
           </div>
 
           <div className="space-y-4">
-            <Card className="border-slate-200/90 bg-white/95 p-5 shadow-[0_14px_35px_rgba(15,23,42,0.04)]">
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
+            <Card className="border-[#3a2c17]/90 bg-[#0f0b07]/95 p-5 shadow-[0_14px_35px_rgba(0,0,0,0.22)]">
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand-300">
                 Shortlists
               </p>
               <div className="mt-4 grid gap-2">
@@ -1184,19 +1184,19 @@ export function RecruiterDashboardPage() {
                   <Link
                     key={shortlist.id}
                     href={`/recruiter/shortlists/${shortlist.id}`}
-                    className="rounded-2xl border border-slate-200 px-3 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                    className="rounded-2xl border border-[#3a2c17] px-3 py-3 text-sm font-semibold text-brand-100 hover:bg-[#18130d]"
                   >
                     {shortlist.name}
                   </Link>
                 ))}
               </div>
             </Card>
-            <Card className="border-slate-200/90 bg-white/95 p-5 shadow-[0_14px_35px_rgba(15,23,42,0.04)]">
+            <Card className="border-[#3a2c17]/90 bg-[#0f0b07]/95 p-5 shadow-[0_14px_35px_rgba(0,0,0,0.22)]">
               <div className="flex items-center gap-2">
                 <ShieldCheckIcon className="h-4 w-4 text-emerald-700" aria-hidden="true" />
-                <h2 className="font-bold text-slate-950">Compliance and trust</h2>
+                <h2 className="font-bold text-brand-50">Compliance and trust</h2>
               </div>
-              <p className="mt-3 text-sm leading-7 text-slate-600">
+              <p className="mt-3 text-sm leading-7 text-brand-100/75">
                 Verified company pages, recruiter-owned role control, and OVH-backed
                 availability stay visible below the feed.
               </p>

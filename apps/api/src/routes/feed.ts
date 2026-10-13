@@ -1,7 +1,12 @@
 import { FastifyInstance } from "fastify";
 
+import { recordAdminAudit } from "../lib/admin.js";
 import { pool } from "../lib/db.js";
-import { requireUser } from "../lib/request-context.js";
+import {
+  getAuthenticatedUserFromRequest,
+  requireAdmin,
+  requireUser,
+} from "../lib/request-context.js";
 
 type SharedFeedMedia = {
   kind: "image" | "video";
@@ -23,6 +28,16 @@ type SharedFeedPost = {
   authorLocation: string;
   authorAvatarUri?: string;
   media: SharedFeedMedia[];
+};
+
+type AdminFeedPostRecord = {
+  id: string;
+  userId: number;
+  userEmail: string;
+  userRole: string;
+  userFullName: string;
+  post: SharedFeedPost;
+  updatedAt: string;
 };
 
 function isSharedFeedMedia(value: unknown): value is SharedFeedMedia {
@@ -176,4 +191,94 @@ export async function registerFeedRoutes(app: FastifyInstance) {
 
     reply.code(204).send();
   });
+
+  app.get(
+    "/admin/feed/posts",
+    {
+      preHandler: requireAdmin,
+    },
+    async (_request, reply) => {
+      const result = await pool.query<{
+        id: string;
+        user_id: number;
+        updated_at: string;
+        payload: SharedFeedPost;
+        email: string;
+        role: string;
+        full_name: string | null;
+      }>(
+        `SELECT social_posts.id,
+                social_posts.user_id,
+                social_posts.updated_at,
+                social_posts.payload,
+                users.email,
+                users.role,
+                users.full_name
+         FROM social_posts
+         JOIN users ON users.id = social_posts.user_id
+         WHERE users.deleted_at IS NULL
+         ORDER BY social_posts.updated_at DESC`,
+      );
+
+      const posts: AdminFeedPostRecord[] = result.rows.map((row) => ({
+        id: row.id,
+        userId: row.user_id,
+        userEmail: row.email,
+        userRole: row.role,
+        userFullName: row.full_name ?? row.email,
+        post: row.payload,
+        updatedAt: row.updated_at,
+      }));
+
+      reply.send({ posts });
+    },
+  );
+
+  app.delete(
+    "/admin/feed/posts/:postId",
+    {
+      preHandler: requireAdmin,
+    },
+    async (request, reply) => {
+      const admin = await getAuthenticatedUserFromRequest(request);
+
+      const params = request.params as { postId?: string };
+
+      if (!params.postId) {
+        reply.code(400).send({
+          error: "Bad Request",
+          message: "A post id is required.",
+        });
+        return;
+      }
+
+      const result = await pool.query(
+        `DELETE FROM social_posts
+         WHERE id = $1`,
+        [params.postId],
+      );
+
+      if (!result.rowCount) {
+        reply.code(404).send({
+          error: "Not Found",
+          message: "Post not found.",
+        });
+        return;
+      }
+
+      await recordAdminAudit({
+        actorId: admin ? Number(admin.id) : null,
+        actorLabel: admin?.full_name ?? admin?.email ?? "Admin token",
+        actionType: "content.post.deleted",
+        entityType: "social_post",
+        entityId: params.postId,
+        reason: "Post removed from the shared feed by admin.",
+        severity: "elevated",
+      });
+
+      reply.send({
+        message: "Post removed from the shared feed.",
+      });
+    },
+  );
 }

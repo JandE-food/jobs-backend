@@ -217,20 +217,20 @@ export function SignupPage() {
 
   return (
     <AuthLayout>
-      <Card className="w-full max-w-xl p-5 shadow-[0_18px_45px_rgba(15,23,42,0.06)] sm:p-7">
-        <p className="text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
+      <Card className="w-full max-w-xl p-5 shadow-[0_18px_45px_rgba(0,0,0,0.24)] sm:p-7">
+        <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand-300">
           {enableExistingAccount ? "Add another account view" : "Build your professional signal"}
         </p>
-        <h1 className="mt-2 font-display text-3xl font-bold tracking-tight text-slate-950">
+        <h1 className="mt-2 font-display text-3xl font-bold tracking-tight text-brand-50">
           {enableExistingAccount ? `Create your ${roleLabel} view` : "Create your account"}
         </h1>
-        <p className="mt-2 text-sm leading-relaxed text-slate-600">
+        <p className="mt-2 text-sm leading-relaxed text-brand-100/78">
           {enableExistingAccount
             ? "Use the same email and core identity, then optionally add a switch PIN for moving between talent and recruiter views."
             : "Join the same connected ecosystem used by the mobile app, with separate flows for talent and recruiters."}
         </p>
 
-        <ul className="mt-5 space-y-2 rounded-xl bg-slate-50 p-3 text-sm text-slate-700">
+        <ul className="mt-5 space-y-2 rounded-xl border border-[#302312] bg-[#16110b] p-3 text-sm text-brand-100/80">
           <li className="flex gap-2">
             <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-emerald-700" aria-hidden="true" />
             No recruiter spam
@@ -245,21 +245,21 @@ export function SignupPage() {
           {error ? (
             <p
               role="alert"
-              className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm font-medium text-rose-800"
+            className="rounded-xl border border-rose-500/35 bg-rose-950/30 p-3 text-sm font-medium text-rose-200"
             >
               {error}
             </p>
           ) : null}
 
           <div>
-            <p className="mb-1.5 block text-sm font-bold text-slate-800">Account type</p>
+            <p className="mb-1.5 block text-sm font-bold text-brand-100">Account type</p>
             <div className="grid gap-2 sm:grid-cols-2">
               <button
                 type="button"
                 className={`min-h-12 rounded-xl border px-4 text-left text-sm font-semibold ${
                   form.role === "professional"
-                    ? "border-indigo-600 bg-indigo-50 text-indigo-900"
-                    : "border-slate-300 bg-white text-slate-700"
+                    ? "border-brand-500 bg-brand-50/15 text-brand-50"
+                    : "border-[#4d3a1d] bg-[#14100c] text-brand-100"
                 }`}
                 onClick={() => setForm({ ...form, role: "professional" })}
               >
@@ -269,8 +269,8 @@ export function SignupPage() {
                 type="button"
                 className={`min-h-12 rounded-xl border px-4 text-left text-sm font-semibold ${
                   form.role === "recruiter"
-                    ? "border-indigo-600 bg-indigo-50 text-indigo-900"
-                    : "border-slate-300 bg-white text-slate-700"
+                    ? "border-brand-500 bg-brand-50/15 text-brand-50"
+                    : "border-[#4d3a1d] bg-[#14100c] text-brand-100"
                 }`}
                 onClick={() => setForm({ ...form, role: "recruiter" })}
               >
@@ -280,12 +280,12 @@ export function SignupPage() {
           </div>
 
           <div>
-            <label htmlFor="signup-name" className="mb-1.5 block text-sm font-bold text-slate-800">
+            <label htmlFor="signup-name" className="mb-1.5 block text-sm font-bold text-brand-100">
               Full name
             </label>
             <div className="relative">
               <UserRoundIcon
-                className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500"
+                className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-brand-200/55"
                 aria-hidden="true"
               />
               <input
@@ -295,7 +295,7 @@ export function SignupPage() {
                 value={form.name}
                 onChange={(event) => setForm({ ...form, name: event.target.value })}
                 disabled={enableExistingAccount}
-                className="min-h-12 w-full rounded-xl border border-slate-300 bg-white py-3 pl-10 pr-3 text-base text-slate-900 placeholder:text-slate-500 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+                className="min-h-12 w-full rounded-xl border border-[#4d3a1d] bg-[#14100c] py-3 pl-10 pr-3 text-base text-brand-50 placeholder:text-brand-200/45 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
                 placeholder="Your name"
                 required
               />
@@ -305,13 +305,13 @@ export function SignupPage() {
           <div>
             <label
               htmlFor="signup-email"
-              className="mb-1.5 block text-sm font-bold text-slate-800"
+              className="mb-1.5 block text-sm font-bold text-brand-100"
             >
               Email address
             </label>
             <div className="relative">
               <MailIcon
-                className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500"
+                className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-brand-200/55"
                 aria-hidden="true"
               />
               <input
@@ -321,7 +321,7 @@ export function SignupPage() {
                 value={form.email}
                 onChange={(event) => setForm({ ...form, email: event.target.value })}
                 disabled={enableExistingAccount}
-                className="min-h-12 w-full rounded-xl border border-slate-300 bg-white py-3 pl-10 pr-3 text-base text-slate-900 placeholder:text-slate-500 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+                className="min-h-12 w-full rounded-xl border border-[#4d3a1d] bg-[#14100c] py-3 pl-10 pr-3 text-base text-brand-50 placeholder:text-brand-200/45 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
                 placeholder="you@example.com"
                 required
               />
@@ -329,14 +329,14 @@ export function SignupPage() {
           </div>
 
           {enableExistingAccount ? (
-            <div className="space-y-4 rounded-2xl border border-indigo-100 bg-indigo-50/70 p-4">
+            <div className="space-y-4 rounded-2xl border border-[#4a381b] bg-[#171108] p-4">
               <div>
-                <label htmlFor="signup-switch-pin" className="mb-1.5 block text-sm font-bold text-slate-800">
+                <label htmlFor="signup-switch-pin" className="mb-1.5 block text-sm font-bold text-brand-100">
                   Switch PIN (optional)
                 </label>
                 <div className="relative">
                   <LockKeyholeIcon
-                    className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500"
+                    className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-brand-200/55"
                     aria-hidden="true"
                   />
                   <input
@@ -345,18 +345,18 @@ export function SignupPage() {
                     autoComplete="off"
                     value={form.switchPin}
                     onChange={(event) => setForm({ ...form, switchPin: event.target.value })}
-                    className="min-h-12 w-full rounded-xl border border-slate-300 bg-white py-3 pl-10 pr-3 text-base text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+                    className="min-h-12 w-full rounded-xl border border-[#4d3a1d] bg-[#14100c] py-3 pl-10 pr-3 text-base text-brand-50 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
                     placeholder="4 to 8 digits"
                   />
                 </div>
               </div>
               <div>
-                <label htmlFor="signup-switch-pin-confirm" className="mb-1.5 block text-sm font-bold text-slate-800">
+                <label htmlFor="signup-switch-pin-confirm" className="mb-1.5 block text-sm font-bold text-brand-100">
                   Confirm switch PIN
                 </label>
                 <div className="relative">
                   <LockKeyholeIcon
-                    className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500"
+                    className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-brand-200/55"
                     aria-hidden="true"
                   />
                   <input
@@ -365,11 +365,11 @@ export function SignupPage() {
                     autoComplete="off"
                     value={form.confirmSwitchPin}
                     onChange={(event) => setForm({ ...form, confirmSwitchPin: event.target.value })}
-                    className="min-h-12 w-full rounded-xl border border-slate-300 bg-white py-3 pl-10 pr-3 text-base text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+                    className="min-h-12 w-full rounded-xl border border-[#4d3a1d] bg-[#14100c] py-3 pl-10 pr-3 text-base text-brand-50 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
                     placeholder="Repeat your PIN"
                   />
                 </div>
-                <p className="mt-1.5 text-xs text-slate-600">
+                <p className="mt-1.5 text-xs text-brand-200/65">
                   Leave both PIN fields empty if you want instant switching without a PIN prompt.
                 </p>
               </div>
@@ -377,7 +377,7 @@ export function SignupPage() {
           ) : (
             <>
               <div>
-                <label htmlFor="signup-dob" className="mb-1.5 block text-sm font-bold text-slate-800">
+                <label htmlFor="signup-dob" className="mb-1.5 block text-sm font-bold text-brand-100">
                   DOB
                 </label>
                 <input
@@ -386,23 +386,23 @@ export function SignupPage() {
                   value={form.dateOfBirth}
                   onChange={(event) => setForm({ ...form, dateOfBirth: event.target.value })}
                   max={getAdultDateLimit()}
-                  className="min-h-12 w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-base text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+                  className="min-h-12 w-full rounded-xl border border-[#4d3a1d] bg-[#14100c] px-3 py-3 text-base text-brand-50 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
                   required
                 />
-                <p className="mt-1.5 text-xs text-slate-600">
+                <p className="mt-1.5 text-xs text-brand-200/65">
                   You must be at least 18 years old to create an account.
                 </p>
               </div>
               <div>
                 <label
                   htmlFor="signup-password"
-                  className="mb-1.5 block text-sm font-bold text-slate-800"
+                  className="mb-1.5 block text-sm font-bold text-brand-100"
                 >
                   Create password
                 </label>
                 <div className="relative">
                   <LockKeyholeIcon
-                    className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500"
+                    className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-brand-200/55"
                     aria-hidden="true"
                   />
                   <input
@@ -412,7 +412,7 @@ export function SignupPage() {
                     value={form.password}
                     onChange={(event) => setForm({ ...form, password: event.target.value })}
                     aria-describedby="password-help"
-                    className="min-h-12 w-full rounded-xl border border-slate-300 bg-white py-3 pl-10 pr-12 text-base text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+                    className="min-h-12 w-full rounded-xl border border-[#4d3a1d] bg-[#14100c] py-3 pl-10 pr-12 text-base text-brand-50 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
                     required
                   />
                   <IconButton
@@ -427,28 +427,28 @@ export function SignupPage() {
                     )}
                   </IconButton>
                 </div>
-                <p id="password-help" className="mt-1.5 text-xs text-slate-600">
+                <p id="password-help" className="mt-1.5 text-xs text-brand-200/65">
                   At least 8 characters.
                 </p>
               </div>
             </>
           )}
 
-          <div className="flex min-h-11 items-start gap-3 rounded-xl p-1 text-sm leading-relaxed text-slate-700 focus-within:ring-2 focus-within:ring-indigo-600">
+          <div className="flex min-h-11 items-start gap-3 rounded-xl p-1 text-sm leading-relaxed text-brand-100/80 focus-within:ring-2 focus-within:ring-brand-400">
             <input
               id="signup-agreement"
               type="checkbox"
               checked={form.agreed}
               onChange={(event) => setForm({ ...form, agreed: event.target.checked })}
-              className="mt-0.5 h-5 w-5 rounded border-slate-400 text-indigo-700 focus:ring-indigo-600"
+              className="mt-0.5 h-5 w-5 rounded border-[#5a4822] bg-[#14100c] text-brand-500 focus:ring-brand-400"
             />
             <label htmlFor="signup-agreement">
               I agree to the{" "}
-              <Link href="/signup" className="font-bold text-indigo-800 underline underline-offset-2">
+              <Link href="/signup" className="font-bold text-brand-200 underline underline-offset-2">
                 Terms
               </Link>{" "}
               and{" "}
-              <Link href="/signup" className="font-bold text-indigo-800 underline underline-offset-2">
+              <Link href="/signup" className="font-bold text-brand-200 underline underline-offset-2">
                 Privacy Notice
               </Link>
               .
@@ -466,11 +466,11 @@ export function SignupPage() {
           </Button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-slate-600">
+        <p className="mt-6 text-center text-sm text-brand-100/72">
           Already have an account?{" "}
           <TransitionLink
             href="/login"
-            className="font-bold text-indigo-800 underline decoration-indigo-300 underline-offset-4 hover:text-indigo-950 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
+            className="font-bold text-brand-200 underline decoration-brand-500/45 underline-offset-4 hover:text-brand-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400"
           >
             Sign in
           </TransitionLink>

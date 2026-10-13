@@ -203,28 +203,28 @@ export function PlatformOperationsPage() {
   return (
     <div className="ui-fade-up space-y-8 xl:space-y-10">
       <section aria-labelledby="operations-title">
-        <Card className="p-6 shadow-[0_18px_45px_rgba(15,23,42,0.05)] sm:p-8">
-          <p className="text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
+        <Card className="p-6 shadow-[0_18px_45px_rgba(0,0,0,0.24)] sm:p-8">
+          <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand-300">
             Admin dashboard
           </p>
           <h1
             id="operations-title"
-            className="mt-2 font-display text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl"
+            className="mt-2 font-display text-3xl font-bold tracking-tight text-brand-50 sm:text-4xl"
           >
             Escrow, compliance, rewards, and revenue in one control plane
           </h1>
-          <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">
+          <p className="mt-3 max-w-3xl text-sm leading-7 text-brand-100/80 sm:text-base">
             Review dispute holds, companies-house style verification state, subscription mix,
             token velocity, and payout readiness from a single recruiter/admin workspace.
           </p>
           <div className="mt-5 flex flex-wrap gap-2">
-            <span className="inline-flex min-h-11 items-center rounded-full bg-indigo-600 px-4 text-sm font-semibold text-white">
+            <span className="inline-flex min-h-11 items-center rounded-full bg-brand-500 px-4 text-sm font-semibold text-[#140f08]">
               Escrow control
             </span>
-            <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
+            <span className="inline-flex min-h-11 items-center rounded-full border border-[#3a2c17] bg-[#16110b] px-4 text-sm font-semibold text-brand-100">
               Verification review
             </span>
-            <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
+            <span className="inline-flex min-h-11 items-center rounded-full border border-[#3a2c17] bg-[#16110b] px-4 text-sm font-semibold text-brand-100">
               Revenue visibility
             </span>
           </div>
@@ -252,10 +252,10 @@ export function PlatformOperationsPage() {
           { label: "Reviews due", value: overview?.stats.verificationReviews ?? 0 },
         ].map((stat) => (
           <Card key={stat.label} className="p-4">
-            <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">
+            <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand-200/60">
               {stat.label}
             </p>
-            <p className="mt-2 font-display text-3xl font-bold text-slate-950">{stat.value}</p>
+            <p className="mt-2 font-display text-3xl font-bold text-brand-50">{stat.value}</p>
           </Card>
         ))}
       </section>
@@ -263,24 +263,24 @@ export function PlatformOperationsPage() {
       <section className="grid gap-6 xl:grid-cols-[minmax(0,1.4fr)_minmax(280px,0.8fr)]">
         <Card className="p-5">
           <div className="flex items-center justify-between gap-3">
-            <h2 className="font-bold text-slate-950">Escrow queue</h2>
+            <h2 className="font-bold text-brand-50">Escrow queue</h2>
             <Badge tone="amber">Stripe Connect ready architecture</Badge>
           </div>
           <div className="mt-4 space-y-3">
             {(overview?.bookings ?? []).map((booking) => (
-              <div key={booking.id} className="rounded-[1.5rem] border border-slate-200 p-4">
+              <div key={booking.id} className="rounded-[1.5rem] border border-[#302312] bg-[#14100c] p-4">
                 <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                   <div>
                     <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="font-semibold text-slate-950">{booking.title}</h3>
+                      <h3 className="font-semibold text-brand-50">{booking.title}</h3>
                       <Badge tone={booking.status === "disputed" ? "amber" : "indigo"}>
                         {booking.status}
                       </Badge>
                     </div>
-                    <p className="mt-1 text-sm text-slate-600">
+                    <p className="mt-1 text-sm text-brand-100/75">
                       {booking.worker_name} · {booking.company_name ?? "Direct booking"} · {booking.location}
                     </p>
-                    <p className="mt-2 text-sm leading-6 text-slate-600">
+                    <p className="mt-2 text-sm leading-6 text-brand-100/78">
                       {booking.milestone_note || "Milestone-based release flow active."}
                     </p>
                     {booking.dispute_reason ? (
@@ -289,7 +289,7 @@ export function PlatformOperationsPage() {
                       </p>
                     ) : null}
                   </div>
-                  <div className="text-sm text-slate-700">
+                  <div className="text-sm text-brand-100/80">
                     <p>Total: £{(booking.amount_minor / 100).toFixed(2)}</p>
                     <p>Worker: £{(booking.worker_amount_minor / 100).toFixed(2)}</p>
                     <p>Platform: £{(booking.platform_fee_minor / 100).toFixed(2)}</p>
@@ -326,11 +326,11 @@ export function PlatformOperationsPage() {
         </Card>
 
         <Card className="p-5">
-          <h2 className="font-bold text-slate-950">Subscription mix</h2>
+          <h2 className="font-bold text-brand-50">Subscription mix</h2>
           <div className="mt-4 space-y-3">
             {(overview?.subscriptionMix ?? []).map((item) => (
-              <div key={item.plan} className="flex items-center justify-between rounded-2xl bg-slate-50 p-3">
-                <span className="text-sm font-semibold capitalize text-slate-700">{item.plan}</span>
+              <div key={item.plan} className="flex items-center justify-between rounded-2xl border border-[#302312] bg-[#14100c] p-3">
+                <span className="text-sm font-semibold capitalize text-brand-100">{item.plan}</span>
                 <Badge tone="indigo">{item.total}</Badge>
               </div>
             ))}
@@ -341,22 +341,22 @@ export function PlatformOperationsPage() {
       <section className="grid gap-6 xl:grid-cols-2">
         <Card className="p-5">
           <div className="flex items-center justify-between gap-3">
-            <h2 className="font-bold text-slate-950">Dispute mediation portal</h2>
+            <h2 className="font-bold text-brand-50">Dispute mediation portal</h2>
             <Badge tone="amber">Internal review</Badge>
           </div>
           <div className="mt-4 space-y-3">
             {(overview?.cases ?? []).map((item) => (
-              <div key={item.id} className="rounded-[1.5rem] border border-slate-200 p-4">
+              <div key={item.id} className="rounded-[1.5rem] border border-[#302312] bg-[#14100c] p-4">
                 <div className="flex flex-wrap items-center gap-2">
-                  <h3 className="font-semibold text-slate-950">
+                  <h3 className="font-semibold text-brand-50">
                     {item.booking_title ?? "Escrow case"} · {item.company_name ?? "Direct"}
                   </h3>
                   <Badge tone={item.status === "resolved" ? "emerald" : "amber"}>
                     {item.status}
                   </Badge>
                 </div>
-                <p className="mt-2 text-sm leading-6 text-slate-600">{item.reason}</p>
-                <p className="mt-2 text-sm text-slate-500">
+                <p className="mt-2 text-sm leading-6 text-brand-100/78">{item.reason}</p>
+                <p className="mt-2 text-sm text-brand-200/60">
                   {item.resolution_notes || "Awaiting admin action."}
                 </p>
                 <div className="mt-4">
@@ -375,14 +375,14 @@ export function PlatformOperationsPage() {
 
         <Card className="p-5">
           <div className="flex items-center justify-between gap-3">
-            <h2 className="font-bold text-slate-950">Compliance & trust automation</h2>
+            <h2 className="font-bold text-brand-50">Compliance & trust automation</h2>
             <Badge tone="indigo">UK-only routing</Badge>
           </div>
           <div className="mt-4 space-y-3">
             {(overview?.verifications ?? []).map((item) => (
-              <div key={item.company_id} className="rounded-[1.5rem] border border-slate-200 p-4">
+              <div key={item.company_id} className="rounded-[1.5rem] border border-[#302312] bg-[#14100c] p-4">
                 <div className="flex flex-wrap items-center gap-2">
-                  <h3 className="font-semibold text-slate-950">{item.name}</h3>
+                  <h3 className="font-semibold text-brand-50">{item.name}</h3>
                   <Badge tone={item.companies_house_status === "verified" ? "emerald" : "amber"}>
                     {item.companies_house_status ?? "pending"}
                   </Badge>
@@ -390,12 +390,12 @@ export function PlatformOperationsPage() {
                     HMRC {item.hmrc_status ?? "pending"}
                   </Badge>
                 </div>
-                <p className="mt-2 text-sm text-slate-600">
+                <p className="mt-2 text-sm text-brand-100/75">
                   Company no: {item.company_number || "Awaiting"} · Residency:{" "}
                   {item.data_residency_region ?? "UK"} · Right to work:{" "}
                   {item.right_to_work_required ? "Required" : "Optional"}
                 </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
+                <p className="mt-2 text-sm leading-6 text-brand-100/78">
                   {item.risk_notes || "No additional risk notes."}
                 </p>
                 <div className="mt-4">

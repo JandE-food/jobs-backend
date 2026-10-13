@@ -86,33 +86,33 @@ export function RecruiterShortlistsPage() {
 
   return (
     <div className="space-y-6 py-5">
-      <section className="rounded-[2rem] border border-slate-200/90 bg-white/95 p-6 shadow-[0_18px_45px_rgba(15,23,42,0.05)]">
+      <section className="rounded-[2rem] border border-[#3a2c17]/90 bg-[#0f0b07]/95 p-6 shadow-[0_18px_45px_rgba(0,0,0,0.24)]">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
           <div className="max-w-2xl">
             <div className="flex items-center gap-2">
-              <UsersIcon className="h-5 w-5 text-indigo-700" aria-hidden="true" />
-              <h1 className="font-display text-4xl font-bold tracking-tight text-slate-950">
+              <UsersIcon className="h-5 w-5 text-brand-300" aria-hidden="true" />
+              <h1 className="font-display text-4xl font-bold tracking-tight text-brand-50">
                 Candidate shortlist pipelines
               </h1>
             </div>
-            <p className="mt-3 text-sm leading-7 text-slate-600">
+            <p className="mt-3 text-sm leading-7 text-brand-100/78">
               Structure multi-tenant talent funnels for enterprise customers, regional launches, or premium campaign delivery.
             </p>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
-            <div className="rounded-[1.35rem] bg-slate-50 px-4 py-3">
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">
+            <div className="rounded-[1.35rem] border border-[#302312] bg-[#16110b] px-4 py-3">
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand-200/60">
                 Shortlists
               </p>
-              <p className="mt-1 font-display text-2xl font-bold text-slate-950">
+              <p className="mt-1 font-display text-2xl font-bold text-brand-50">
                 {shortlists.length}
               </p>
             </div>
-            <div className="rounded-[1.35rem] bg-slate-50 px-4 py-3">
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">
+            <div className="rounded-[1.35rem] border border-[#302312] bg-[#16110b] px-4 py-3">
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand-200/60">
                 Candidates
               </p>
-              <p className="mt-1 font-display text-2xl font-bold text-slate-950">
+              <p className="mt-1 font-display text-2xl font-bold text-brand-50">
                 {shortlists.reduce((sum, shortlist) => sum + shortlist.candidate_count, 0)}
               </p>
             </div>
@@ -122,7 +122,7 @@ export function RecruiterShortlistsPage() {
           <input
             value={name}
             onChange={(event) => setName(event.target.value)}
-            className="min-h-12 flex-1 rounded-2xl border border-slate-300 bg-slate-50 px-4 text-sm outline-none"
+            className="min-h-12 flex-1 rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 text-sm text-brand-50 outline-none"
             placeholder="Create a shortlist, e.g. UK healthcare product leaders"
           />
           <Button onClick={() => void createShortlist()}>Create shortlist</Button>
@@ -147,17 +147,17 @@ export function RecruiterShortlistsPage() {
         {shortlists.map((shortlist) => (
           <Card key={shortlist.id} className="p-5">
             <div className="flex items-center justify-between gap-3">
-              <h2 className="font-display text-2xl font-bold tracking-tight text-slate-950">
+              <h2 className="font-display text-2xl font-bold tracking-tight text-brand-50">
                 {shortlist.name}
               </h2>
               <Badge tone="indigo">{shortlist.candidate_count} candidates</Badge>
             </div>
-            <p className="mt-3 text-sm leading-7 text-slate-600">
+            <p className="mt-3 text-sm leading-7 text-brand-100/75">
               Use this shortlist to drive outreach, client review, and recruiter handoff inside the enterprise workflow.
             </p>
             <Link
               href={`/recruiter/shortlists/${shortlist.id}`}
-              className="mt-4 inline-flex min-h-11 items-center justify-center rounded-full border border-slate-300 bg-slate-50 px-4 text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-100"
+              className="mt-4 inline-flex min-h-11 items-center justify-center rounded-full border border-[#3a2c17] bg-[#16110b] px-4 text-sm font-semibold text-brand-100 transition-colors hover:bg-[#18130d]"
             >
               View shortlist
             </Link>

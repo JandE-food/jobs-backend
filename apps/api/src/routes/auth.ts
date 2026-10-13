@@ -132,10 +132,10 @@ export async function registerAuthRoutes(app: FastifyInstance) {
       return;
     }
 
-    if (!isAppUserRole(role)) {
+    if (!isAppUserRole(role) || role === "admin") {
       reply.code(400).send({
         error: "Invalid role.",
-        message: "Use professional, recruiter, or admin.",
+        message: "Use professional or recruiter. Admin accounts are invite-only.",
       });
       return;
     }

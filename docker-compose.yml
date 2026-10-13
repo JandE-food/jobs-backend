@@ -4,9 +4,18 @@ services:
       context: ./apps/web
     environment:
       NEXT_PUBLIC_API_URL: http://localhost:3001
-      NEXT_PUBLIC_ADMIN_TOKEN: dev-admin-token
     ports:
       - "3000:3000"
+    depends_on:
+      - api
+
+  admin-web:
+    build:
+      context: ./apps/admin-web
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3001
+    ports:
+      - "3004:3000"
     depends_on:
       - api
 

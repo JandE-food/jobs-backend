@@ -17,6 +17,7 @@ import {
   updateEscrowBooking,
   type AvailabilitySlotInput,
 } from "../lib/operations.js";
+import { listAdminAuditLogs, recordAdminAudit } from "../lib/admin.js";
 import { requireRole, requireUser } from "../lib/request-context.js";
 import { getSubscriptionEntitlements } from "../lib/subscriptions.js";
 
@@ -86,6 +87,18 @@ type CaseBody = {
 };
 
 export async function registerOperationsRoutes(app: FastifyInstance) {
+  app.get("/admin/audit/logs", async (request, reply) => {
+    const admin = await requireRole(request, reply, ["admin"]);
+
+    if (!admin) {
+      return;
+    }
+
+    return {
+      logs: await listAdminAuditLogs(),
+    };
+  });
+
   app.get("/workspace/availability", async (request, reply) => {
     const user = await requireUser(request, reply);
 
@@ -310,13 +323,33 @@ export async function registerOperationsRoutes(app: FastifyInstance) {
         return;
       }
 
+      const booking = await updateEscrowBooking({
+        bookingId,
+        status,
+        disputeReason: request.body?.disputeReason,
+        milestoneNote: request.body?.milestoneNote,
+      });
+
+      if (user.role === "admin") {
+        await recordAdminAudit({
+          actorId: Number(user.id),
+          actorLabel: user.full_name ?? user.email,
+          actionType: "booking.status.updated",
+          entityType: "escrow_booking",
+          entityId: `${bookingId}`,
+          reason:
+            request.body?.disputeReason?.trim() ||
+            request.body?.milestoneNote?.trim() ||
+            `Booking moved to ${status}.`,
+          severity: status === "disputed" ? "elevated" : "normal",
+          metadata: {
+            status,
+          },
+        });
+      }
+
       return {
-        booking: await updateEscrowBooking({
-          bookingId,
-          status,
-          disputeReason: request.body?.disputeReason,
-          milestoneNote: request.body?.milestoneNote,
-        }),
+        booking,
       };
     },
   );
@@ -349,18 +382,40 @@ export async function registerOperationsRoutes(app: FastifyInstance) {
       return;
     }
 
+    const record = await upsertCompanyVerification({
+      companyId,
+      companyNumber: request.body?.companyNumber?.trim() || "",
+      directors: request.body?.directors ?? [],
+      companiesHouseStatus: request.body?.companiesHouseStatus?.trim() || "pending",
+      hmrcStatus: request.body?.hmrcStatus?.trim() || "pending",
+      dataResidencyRegion: request.body?.dataResidencyRegion?.trim() || "UK",
+      rightToWorkRequired: Boolean(request.body?.rightToWorkRequired),
+      retentionPolicyDays: Number(request.body?.retentionPolicyDays ?? 365),
+      riskNotes: request.body?.riskNotes?.trim() || "",
+    });
+
+    if (user.role === "admin") {
+      await recordAdminAudit({
+        actorId: Number(user.id),
+        actorLabel: user.full_name ?? user.email,
+        actionType: "verification.updated",
+        entityType: "company_verification",
+        entityId: `${companyId}`,
+        reason: request.body?.riskNotes?.trim() || "Verification record updated from admin workspace.",
+        severity:
+          request.body?.companiesHouseStatus?.trim() === "verified" &&
+          request.body?.hmrcStatus?.trim() === "verified"
+            ? "normal"
+            : "elevated",
+        metadata: {
+          companiesHouseStatus: request.body?.companiesHouseStatus?.trim() || "pending",
+          hmrcStatus: request.body?.hmrcStatus?.trim() || "pending",
+        },
+      });
+    }
+
     return {
-      record: await upsertCompanyVerification({
-        companyId,
-        companyNumber: request.body?.companyNumber?.trim() || "",
-        directors: request.body?.directors ?? [],
-        companiesHouseStatus: request.body?.companiesHouseStatus?.trim() || "pending",
-        hmrcStatus: request.body?.hmrcStatus?.trim() || "pending",
-        dataResidencyRegion: request.body?.dataResidencyRegion?.trim() || "UK",
-        rightToWorkRequired: Boolean(request.body?.rightToWorkRequired),
-        retentionPolicyDays: Number(request.body?.retentionPolicyDays ?? 365),
-        riskNotes: request.body?.riskNotes?.trim() || "",
-      }),
+      record,
     };
   });
 
@@ -391,12 +446,29 @@ export async function registerOperationsRoutes(app: FastifyInstance) {
       return;
     }
 
+    const resolvedCase = await resolveAdminCase({
+      caseId,
+      status,
+      resolutionNotes: request.body?.resolutionNotes?.trim() || "",
+    });
+
+    if (user.role === "admin") {
+      await recordAdminAudit({
+        actorId: Number(user.id),
+        actorLabel: user.full_name ?? user.email,
+        actionType: "case.status.updated",
+        entityType: "admin_case",
+        entityId: `${caseId}`,
+        reason: request.body?.resolutionNotes?.trim() || `Case moved to ${status}.`,
+        severity: status === "resolved" ? "normal" : "elevated",
+        metadata: {
+          status,
+        },
+      });
+    }
+
     return {
-      case: await resolveAdminCase({
-        caseId,
-        status,
-        resolutionNotes: request.body?.resolutionNotes?.trim() || "",
-      }),
+      case: resolvedCase,
     };
   });
 }

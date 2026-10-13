@@ -80,13 +80,13 @@ function NavItemRow({ item }: { item: NavItem }) {
       href={item.href}
       className={cn(
         "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] font-semibold transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-600",
-        isActive ? "bg-brand-50 text-brand-700" : "text-ink-soft hover:bg-white hover:text-ink",
+        isActive ? "bg-brand-50 text-brand-700" : "text-ink-soft hover:bg-[#15100a] hover:text-ink",
       )}
     >
       <Icon className={cn("h-5 w-5 shrink-0", isActive ? "text-brand-600" : "text-ink-mute")} strokeWidth={2.2} />
       <span className="truncate">{item.label}</span>
       {item.badge ? (
-        <span className="ml-auto rounded-full bg-brand-600 px-1.5 py-0.5 text-[11px] font-bold leading-none text-white">
+        <span className="ml-auto rounded-full bg-brand-600 px-1.5 py-0.5 text-[11px] font-bold leading-none text-[#140f08]">
           {item.badge}
         </span>
       ) : null}
@@ -114,7 +114,7 @@ export function SideNav() {
         <NavItemRow key={`${item.href}-${item.label}`} item={item} />
       ))}
 
-      <div className="mt-6 rounded-2xl border border-line bg-white p-4 shadow-card">
+      <div className="mt-6 rounded-2xl border border-line bg-[#120d08] p-4 shadow-card">
         <div className="flex items-center gap-3">
           <Avatar src={me.avatar} alt={displayName} size={40} />
           <div className="min-w-0">

@@ -181,30 +181,30 @@ export function NetworkPage() {
     <div className="ui-fade-up space-y-8 xl:space-y-10">
       <section
         aria-labelledby="network-title"
-        className="rounded-[2rem] border border-slate-200/90 bg-white/95 p-7 shadow-[0_18px_45px_rgba(15,23,42,0.05)] sm:p-9"
+        className="rounded-[2rem] border border-[#3a2c17]/90 bg-[#0f0b07]/95 p-7 shadow-[0_18px_45px_rgba(0,0,0,0.24)] sm:p-9"
       >
-        <p className="flex items-center gap-1 text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
+        <p className="flex items-center gap-1 text-xs font-bold uppercase tracking-[0.12em] text-brand-300">
           <SparklesIcon className="h-4 w-4" aria-hidden="true" />
           Discovery engine
         </p>
         <h1
           id="network-title"
-          className="mt-2 font-display text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl"
+          className="mt-2 font-display text-3xl font-bold tracking-tight text-brand-50 sm:text-4xl"
         >
           Match skilled professionals and worker-ready talent in one discovery workspace
         </h1>
-        <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">
+        <p className="mt-3 max-w-3xl text-sm leading-7 text-brand-100/80 sm:text-base">
           Filter by location, sector, and rating, then endorse strong profiles or dispatch
           instant-book shifts from the same discovery flow.
         </p>
         <div className="mt-5 flex flex-wrap gap-2">
-          <span className="inline-flex min-h-11 items-center rounded-full bg-indigo-600 px-4 text-sm font-semibold text-white">
+          <span className="inline-flex min-h-11 items-center rounded-full bg-brand-500 px-4 text-sm font-semibold text-[#140f08]">
             Talent discovery
           </span>
-          <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
+          <span className="inline-flex min-h-11 items-center rounded-full border border-[#3a2c17] bg-[#16110b] px-4 text-sm font-semibold text-brand-100">
             Recruiter actions
           </span>
-          <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
+          <span className="inline-flex min-h-11 items-center rounded-full border border-[#3a2c17] bg-[#16110b] px-4 text-sm font-semibold text-brand-100">
             Instant booking
           </span>
         </div>
@@ -213,10 +213,10 @@ export function NetworkPage() {
       <dl className="grid gap-4 md:grid-cols-3" aria-label="Network summary">
         {summaryStats.map((stat) => (
           <Card key={stat.label} className="p-4">
-            <dt className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">
+            <dt className="text-xs font-bold uppercase tracking-[0.12em] text-brand-200/65">
               {stat.label}
             </dt>
-            <dd className="mt-2 font-display text-3xl font-bold text-slate-950">
+            <dd className="mt-2 font-display text-3xl font-bold text-brand-50">
               {stat.value}
             </dd>
           </Card>
@@ -226,7 +226,7 @@ export function NetworkPage() {
       <div className="space-y-7">
         <section aria-labelledby="filters-title">
           <div className="flex items-center justify-between gap-3">
-            <h2 id="filters-title" className="text-xl font-bold text-slate-950">
+            <h2 id="filters-title" className="text-xl font-bold text-brand-50">
               Discovery filters
             </h2>
             <Badge tone="indigo">Persona-aware results</Badge>
@@ -241,8 +241,8 @@ export function NetworkPage() {
                     onClick={() => setPersona(value)}
                     className={`inline-flex min-h-11 items-center rounded-full px-4 text-sm font-semibold ${
                       persona === value
-                        ? "bg-slate-950 text-white"
-                        : "bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50"
+                        ? "bg-brand-500 text-[#140f08]"
+                        : "border border-[#3a2c17] bg-[#16110b] text-brand-100 hover:bg-[#18110a]"
                     }`}
                   >
                     {value === "professional" ? "Skilled professionals" : "Worker / gig talent"}
@@ -253,18 +253,18 @@ export function NetworkPage() {
                 value={location}
                 onChange={(event) => setLocation(event.target.value)}
                 placeholder="Filter by location"
-                className="min-h-11 rounded-2xl border border-slate-300 bg-slate-50 px-4 text-sm outline-none"
+                className="min-h-11 rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 text-sm text-brand-50 outline-none placeholder:text-brand-200/45 focus:border-brand-400"
               />
               <input
                 value={sector}
                 onChange={(event) => setSector(event.target.value)}
                 placeholder="Filter by sector"
-                className="min-h-11 rounded-2xl border border-slate-300 bg-slate-50 px-4 text-sm outline-none"
+                className="min-h-11 rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 text-sm text-brand-50 outline-none placeholder:text-brand-200/45 focus:border-brand-400"
               />
               <select
                 value={minRating}
                 onChange={(event) => setMinRating(event.target.value)}
-                className="min-h-11 rounded-2xl border border-slate-300 bg-slate-50 px-4 text-sm outline-none"
+                className="min-h-11 rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 text-sm text-brand-50 outline-none focus:border-brand-400"
               >
                 <option value="0">All ratings</option>
                 <option value="3.5">3.5+</option>
@@ -288,7 +288,7 @@ export function NetworkPage() {
 
         <section aria-labelledby="suggestions-title">
           <div className="flex items-center justify-between gap-3">
-            <h2 id="suggestions-title" className="text-xl font-bold text-slate-950">
+            <h2 id="suggestions-title" className="text-xl font-bold text-brand-50">
               Recommended talent
             </h2>
             <Badge tone="indigo">{persona === "professional" ? "Role fit" : "Instant dispatch"}</Badge>
@@ -307,15 +307,15 @@ export function NetworkPage() {
                     />
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="truncate font-bold text-slate-950">{person.full_name}</h3>
+                        <h3 className="truncate font-bold text-brand-50">{person.full_name}</h3>
                         <Badge tone={person.instant_bookable ? "emerald" : "slate"}>
                           {person.instant_bookable ? "Instant book" : "Needs scheduling"}
                         </Badge>
                       </div>
-                      <p className="truncate text-sm text-slate-600">
+                      <p className="truncate text-sm text-brand-100/75">
                         {person.headline} · {person.sector}
                       </p>
-                      <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-600">
+                      <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-brand-100/70">
                         <span className="flex items-center gap-1">
                           <MapPinIcon className="h-3.5 w-3.5" aria-hidden="true" />
                           {person.location}
@@ -328,7 +328,7 @@ export function NetworkPage() {
                       </div>
                     </div>
                   </div>
-                  <p className="mt-4 text-sm leading-7 text-slate-600">{person.summary}</p>
+                  <p className="mt-4 text-sm leading-7 text-brand-100/75">{person.summary}</p>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {person.skills.slice(0, 5).map((skill) => (
                       <Badge key={skill} tone="slate">
@@ -338,7 +338,7 @@ export function NetworkPage() {
                     <Badge tone="indigo">{person.endorsement_points} points earned</Badge>
                   </div>
                   <div className="mt-5 flex flex-wrap items-start justify-between gap-4">
-                    <div className="text-sm leading-7 text-slate-600">
+                    <div className="text-sm leading-7 text-brand-100/75">
                       {person.persona_mode === "worker"
                         ? "Shift-ready talent surfaced with structured availability and fast dispatch signals."
                         : "Skilled profile surfaced with professional endorsement and discovery scoring signals."}
@@ -372,8 +372,8 @@ export function NetworkPage() {
         <section className="grid gap-4 lg:grid-cols-2">
           <Card className="p-5">
             <div className="flex items-center gap-2">
-              <UsersIcon className="h-5 w-5 text-indigo-700" aria-hidden="true" />
-              <h2 className="font-bold text-slate-950">Networking prompts</h2>
+              <UsersIcon className="h-5 w-5 text-brand-300" aria-hidden="true" />
+              <h2 className="font-bold text-brand-50">Networking prompts</h2>
             </div>
             <div className="mt-4 space-y-3">
               {[
@@ -381,27 +381,27 @@ export function NetworkPage() {
                 "Professional mode emphasizes endorsements, sector fit, and long-form skill credibility.",
                 "Use endorsements to feed the loyalty ledger and reward higher-trust participation.",
               ].map((note) => (
-                <div key={note} className="rounded-2xl bg-slate-50 p-4 text-sm leading-6 text-slate-700">
+                <div key={note} className="rounded-2xl border border-[#302312] bg-[#16110b] p-4 text-sm leading-6 text-brand-100/80">
                   {note}
                 </div>
               ))}
             </div>
           </Card>
           <Card className="p-5">
-            <h2 className="font-bold text-slate-950">Explore recruiter demand</h2>
-            <p className="mt-2 text-sm leading-6 text-slate-600">
+            <h2 className="font-bold text-brand-50">Explore recruiter demand</h2>
+            <p className="mt-2 text-sm leading-6 text-brand-100/78">
               Move from discovery into company verification, escrow-backed bookings, and platform operations.
             </p>
             <div className="mt-4 flex flex-wrap gap-3">
               <Link
                 href="/companies"
-                className="inline-flex min-h-11 items-center gap-2 rounded-full text-sm font-semibold text-indigo-800 hover:bg-indigo-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
+                className="inline-flex min-h-11 items-center gap-2 rounded-full px-1 text-sm font-semibold text-brand-100 hover:bg-[#18130d] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400"
               >
                 Open company directory <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
               </Link>
               <Link
                 href="/recruiter/operations"
-                className="inline-flex min-h-11 items-center gap-2 rounded-full text-sm font-semibold text-indigo-800 hover:bg-indigo-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
+                className="inline-flex min-h-11 items-center gap-2 rounded-full px-1 text-sm font-semibold text-brand-100 hover:bg-[#18130d] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400"
               >
                 Open dashboard <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
               </Link>

@@ -22,7 +22,7 @@ export function CookieBanner() {
 
   return (
     <aside
-      className="fixed bottom-20 right-4 z-40 w-[320px] rounded-2xl border border-line bg-white p-4 shadow-pop lg:bottom-4"
+      className="fixed bottom-20 right-4 z-40 w-[320px] rounded-2xl border border-line bg-surface p-4 shadow-pop lg:bottom-4"
       role="dialog"
       aria-label="Cookie notice"
     >
@@ -46,7 +46,7 @@ export function CookieBanner() {
           window.localStorage.setItem(storageKey, "accepted");
           setVisible(false);
         }}
-        className="mt-3 h-9 w-full rounded-full bg-brand-600 text-sm font-bold text-white transition-colors duration-150 hover:bg-brand-700"
+        className="mt-3 h-9 w-full rounded-full bg-brand-600 text-sm font-bold text-[#140f08] transition-colors duration-150 hover:bg-brand-700"
       >
         Accept cookies
       </button>

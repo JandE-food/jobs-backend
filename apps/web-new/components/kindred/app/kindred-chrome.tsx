@@ -151,7 +151,7 @@ export function KindredChrome({ children }: { children: ReactNode }) {
       <div className="min-h-full w-full bg-canvas">
         <a
           href="#main-content"
-          className="sr-only z-50 rounded-lg bg-brand-600 px-4 py-3 font-semibold text-white focus:not-sr-only focus:absolute focus:left-4 focus:top-4"
+          className="sr-only z-50 rounded-lg bg-brand-600 px-4 py-3 font-semibold text-[#140f08] focus:not-sr-only focus:absolute focus:left-4 focus:top-4"
         >
           Skip to main content
         </a>
@@ -183,7 +183,7 @@ export function KindredChrome({ children }: { children: ReactNode }) {
         <BottomNav />
         {guestPromptOpen ? (
           <div
-            className="fixed inset-0 z-50 grid place-items-center bg-slate-950/45 px-4 backdrop-blur-[2px]"
+            className="fixed inset-0 z-50 grid place-items-center bg-[#080604]/70 px-4 backdrop-blur-[2px]"
             onClick={dismissGuestPrompt}
           >
             <div

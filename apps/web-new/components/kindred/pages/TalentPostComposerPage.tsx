@@ -212,29 +212,29 @@ export function TalentPostComposerPage() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 py-5">
-      <section className="rounded-[2rem] border border-slate-200/90 bg-white/95 p-6 shadow-[0_18px_45px_rgba(15,23,42,0.05)]">
+      <section className="rounded-[2rem] border border-[#3a2c17]/90 bg-[#0f0b07]/95 p-6 shadow-[0_18px_45px_rgba(0,0,0,0.24)]">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-700">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-brand-300">
               Create a post
             </p>
-            <h1 className="mt-2 font-display text-4xl font-bold tracking-tight text-slate-950">
+            <h1 className="mt-2 font-display text-4xl font-bold tracking-tight text-brand-50">
               Publish to your feed from a dedicated page
             </h1>
-            <p className="mt-3 text-sm leading-7 text-slate-600">
+            <p className="mt-3 text-sm leading-7 text-brand-100/78">
               Draft a work update, upload media, and post straight back into the shared talent feed.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
             <Link
               href="/"
-              className="inline-flex min-h-11 items-center justify-center rounded-full border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-50"
+              className="inline-flex min-h-11 items-center justify-center rounded-full border border-[#4d3a1d] bg-[#14100c] px-4 text-sm font-semibold text-brand-100 transition-colors hover:bg-[#18130d]"
             >
               Back to feed
             </Link>
             <Link
               href="/profile"
-              className="inline-flex min-h-11 items-center justify-center rounded-full border border-slate-300 bg-slate-50 px-4 text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-100"
+              className="inline-flex min-h-11 items-center justify-center rounded-full border border-[#4d3a1d] bg-[#16110b] px-4 text-sm font-semibold text-brand-100 transition-colors hover:bg-[#18130d]"
             >
               Profile
             </Link>
@@ -249,8 +249,8 @@ export function TalentPostComposerPage() {
             <div className="min-w-0 flex-1">
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <p className="text-sm font-semibold text-slate-900">{author.name}</p>
-                  <p className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">
+                  <p className="text-sm font-semibold text-brand-50">{author.name}</p>
+                  <p className="text-xs font-medium uppercase tracking-[0.14em] text-brand-200/60">
                     Post to your feed
                   </p>
                 </div>
@@ -261,12 +261,12 @@ export function TalentPostComposerPage() {
                 onChange={(event) => setBody(event.target.value)}
                 rows={5}
                 placeholder="Share an update, a role, or a win..."
-                className="mt-3 min-h-32 w-full resize-none rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-7 text-slate-700 outline-none transition-colors placeholder:text-slate-500 focus:border-slate-300 focus:bg-white"
+                className="mt-3 min-h-32 w-full resize-none rounded-[1.5rem] border border-[#4d3a1d] bg-[#14100c] px-4 py-3 text-sm leading-7 text-brand-100 outline-none transition-colors placeholder:text-brand-200/45 focus:border-brand-400 focus:bg-[#18130d]"
               />
             </div>
           </div>
 
-          <div className="mt-4 flex flex-wrap gap-2 border-t border-slate-100 pt-4">
+          <div className="mt-4 flex flex-wrap gap-2 border-t border-[#241b10] pt-4">
             {(["Work", "Showcase", "Local"] as FeedMode[]).map((value) => (
               <button
                 key={value}
@@ -275,8 +275,8 @@ export function TalentPostComposerPage() {
                 className={cn(
                   "inline-flex min-h-11 items-center justify-center rounded-xl border px-4 text-sm font-semibold transition-colors",
                   channel === value
-                    ? "border-indigo-200 bg-indigo-50 text-indigo-800"
-                    : "border-slate-200 text-slate-700 hover:bg-slate-50",
+                    ? "border-brand-500 bg-brand-50/12 text-brand-50"
+                    : "border-[#3a2c17] text-brand-100 hover:bg-[#18130d]",
                 )}
               >
                 {value}
@@ -285,7 +285,7 @@ export function TalentPostComposerPage() {
             <button
               type="button"
               onClick={() => imageInputRef.current?.click()}
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#3a2c17] px-4 text-sm font-semibold text-brand-100 hover:bg-[#18130d]"
             >
               <ImageIcon className="h-4 w-4 text-emerald-700" aria-hidden="true" />
               Photos
@@ -293,9 +293,9 @@ export function TalentPostComposerPage() {
             <button
               type="button"
               onClick={() => videoInputRef.current?.click()}
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#3a2c17] px-4 text-sm font-semibold text-brand-100 hover:bg-[#18130d]"
             >
-              <VideoIcon className="h-4 w-4 text-indigo-700" aria-hidden="true" />
+              <VideoIcon className="h-4 w-4 text-brand-300" aria-hidden="true" />
               Videos
             </button>
             <button
@@ -304,7 +304,7 @@ export function TalentPostComposerPage() {
                 setBody(buildAiDraft(channel, profile, resume));
                 setStatusMessage(`AI draft prepared for the ${channel.toLowerCase()} channel.`);
               }}
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 text-sm font-semibold text-indigo-800 hover:bg-indigo-50"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#3a2c17] px-4 text-sm font-semibold text-brand-100 hover:bg-[#18130d]"
             >
               <SparklesIcon className="h-4 w-4" aria-hidden="true" />
               AI draft
@@ -331,14 +331,14 @@ export function TalentPostComposerPage() {
           {media.length ? (
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               {media.map((item) => (
-                <div key={item.id} className="overflow-hidden rounded-[1.4rem] border border-slate-200 bg-slate-50">
+                <div key={item.id} className="overflow-hidden rounded-[1.4rem] border border-[#302312] bg-[#16110b]">
                   {item.type === "image" ? (
                     <img src={item.src} alt={item.alt} className="h-48 w-full object-cover" />
                   ) : (
                     <video src={item.src} controls className="h-48 w-full object-cover" />
                   )}
                   <div className="flex items-center justify-between gap-3 px-4 py-3">
-                    <p className="min-w-0 truncate text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
+                    <p className="min-w-0 truncate text-xs font-semibold uppercase tracking-[0.12em] text-brand-200/60">
                       {item.name}
                     </p>
                     <button
@@ -362,26 +362,26 @@ export function TalentPostComposerPage() {
           </div>
 
           {statusMessage ? (
-            <p className="mt-4 text-sm font-semibold text-indigo-800">{statusMessage}</p>
+            <p className="mt-4 text-sm font-semibold text-brand-200">{statusMessage}</p>
           ) : null}
         </Card>
 
         <Card className="p-6">
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-indigo-700">
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-brand-300">
             Preview
           </p>
-          <h2 className="mt-2 font-display text-2xl font-bold tracking-tight text-slate-950">
+          <h2 className="mt-2 font-display text-2xl font-bold tracking-tight text-brand-50">
             Your feed post
           </h2>
-          <div className="mt-5 rounded-[1.75rem] border border-slate-200 bg-slate-50 p-5">
+          <div className="mt-5 rounded-[1.75rem] border border-[#302312] bg-[#16110b] p-5">
             <div className="flex items-center gap-3">
               <Avatar src={author.avatar} alt={author.name} size={44} />
               <div>
-                <p className="font-bold text-slate-950">{author.name}</p>
-                <p className="text-sm text-slate-600">{author.title}</p>
+                <p className="font-bold text-brand-50">{author.name}</p>
+                <p className="text-sm text-brand-100/75">{author.title}</p>
               </div>
             </div>
-            <p className="mt-4 text-sm leading-7 text-slate-700">
+            <p className="mt-4 text-sm leading-7 text-brand-100/80">
               {body.trim() || "Your post preview appears here as you type."}
             </p>
             {media.length ? (

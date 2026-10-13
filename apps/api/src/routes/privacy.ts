@@ -1,7 +1,12 @@
 import { FastifyInstance } from "fastify";
 
+import { recordAdminAudit } from "../lib/admin.js";
 import { completeDeletion, exportUserData, requestDeletion } from "../lib/privacy.js";
-import { getUserIdFromRequest, requireAdmin } from "../lib/request-context.js";
+import {
+  getAuthenticatedUserFromRequest,
+  getUserIdFromRequest,
+  requireAdmin,
+} from "../lib/request-context.js";
 
 export async function registerPrivacyRoutes(app: FastifyInstance) {
   app.post("/privacy/request-deletion", async (request) => {
@@ -26,6 +31,8 @@ export async function registerPrivacyRoutes(app: FastifyInstance) {
       preHandler: requireAdmin,
     },
     async (request, reply) => {
+      const admin = await getAuthenticatedUserFromRequest(request);
+
       const userId = Number(
         (request.params as { user_id?: string }).user_id ?? "0",
       );
@@ -38,6 +45,16 @@ export async function registerPrivacyRoutes(app: FastifyInstance) {
       }
 
       const result = await completeDeletion(userId);
+
+      await recordAdminAudit({
+        actorId: admin ? Number(admin.id) : null,
+        actorLabel: admin?.full_name ?? admin?.email ?? "Admin token",
+        actionType: "privacy.deletion.completed",
+        entityType: "user",
+        entityId: `${userId}`,
+        reason: "User data anonymized and subscription access canceled.",
+        severity: "critical",
+      });
 
       return {
         message: "User data anonymized and subscription access canceled.",

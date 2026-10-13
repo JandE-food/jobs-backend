@@ -1,0 +1,54 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand-50: #fdf8e8;
+  --brand-100: #f6ebc0;
+  --brand-200: #edd683;
+  --brand-300: #e1be48;
+  --brand-400: #d6a92f;
+  --brand-500: #c4961c;
+  --brand-900: #412f08;
+  --line: #2b2012;
+  --surface: #0f0b07;
+  --canvas: #080604;
+  --ink: #f7ebcb;
+  --ink-soft: #e6d6a0;
+  --ink-mute: #baa36a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: "Manrope", "Inter", system-ui, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top, rgba(196, 150, 28, 0.14), transparent 28%),
+    linear-gradient(180deg, #080604 0%, #0d0905 50%, #120d07 100%);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}

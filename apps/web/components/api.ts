@@ -2,9 +2,6 @@ const defaultApiUrl = "https://135.125.184.123.sslip.io/api";
 
 export const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? defaultApiUrl;
 
-export const adminToken =
-  process.env.NEXT_PUBLIC_ADMIN_TOKEN ?? "dev-admin-token";
-
 export const authStorageKey = "kindred-auth";
 
 export type SessionUser = {

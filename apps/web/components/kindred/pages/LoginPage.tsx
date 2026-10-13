@@ -64,15 +64,15 @@ export function LoginPage() {
         throw new Error(payload.message ?? "Unable to sign in.");
       }
 
+      if (payload.user.role === "admin") {
+        throw new Error("Admin accounts sign in through the separate admin dashboard at /admin/login.");
+      }
+
       signIn({
         token: payload.token,
         user: payload.user,
       });
-      router.push(
-        payload.user.role === "recruiter" || payload.user.role === "admin"
-          ? "/recruiter"
-          : "/",
-      );
+      router.push(payload.user.role === "recruiter" ? "/recruiter" : "/");
     } catch (caughtError) {
       setError(
         caughtError instanceof Error

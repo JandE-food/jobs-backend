@@ -13,6 +13,14 @@
     reverse_proxy api:3001
   }
 
+  handle /admin {
+    reverse_proxy admin-web:3000
+  }
+
+  handle /admin/* {
+    reverse_proxy admin-web:3000
+  }
+
   handle {
     reverse_proxy web:3000
   }
