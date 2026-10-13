@@ -27,7 +27,7 @@ import {
   UsersIcon,
 } from "lucide-react";
 
-const apiUrl = "/api";
+const apiUrl = "/admin/api";
 const authStorageKey = "bejeli-admin-auth";
 
 type SessionUser = {
