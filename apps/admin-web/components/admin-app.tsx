@@ -467,7 +467,7 @@ function buildModerationItems(overview: AdminOverviewPayload | null): AdminModer
     return [];
   }
 
-  const bookings = overview.bookings.map((booking, index) => ({
+  const bookings: AdminModerationItem[] = overview.bookings.map((booking, index) => ({
     id: `booking-${booking.id}`,
     sourceType: "booking" as const,
     sourceId: booking.id,
@@ -482,7 +482,7 @@ function buildModerationItems(overview: AdminOverviewPayload | null): AdminModer
     actionLabel: booking.dispute_reason ? "Resolve dispute" : "Complete booking",
   }));
 
-  const cases = overview.cases.map((item, index) => ({
+  const cases: AdminModerationItem[] = overview.cases.map((item, index) => ({
     id: `case-${item.id}`,
     sourceType: "case" as const,
     sourceId: item.id,
@@ -497,7 +497,7 @@ function buildModerationItems(overview: AdminOverviewPayload | null): AdminModer
     actionLabel: item.status === "resolved" ? "Reviewed" : "Resolve case",
   }));
 
-  const verifications = overview.verifications.map((item, index) => ({
+  const verifications: AdminModerationItem[] = overview.verifications.map((item, index) => ({
     id: `verification-${item.company_id}`,
     sourceType: "verification" as const,
     sourceId: item.company_id,
