@@ -525,7 +525,7 @@ function buildSubscriptionRecords(
   users: AdminUserRecord[],
   companies: AdminCompany[],
 ): AdminSubscriptionRecord[] {
-  const userRecords = users.map((user, index) => ({
+  const userRecords: AdminSubscriptionRecord[] = users.map((user, index) => ({
     id: `user-${user.id}`,
     accountType: "user" as const,
     accountId: user.id,
@@ -542,7 +542,7 @@ function buildSubscriptionRecords(
     notes: user.accountStatus === "review" ? "Watchlist account." : "Healthy recurring entitlement.",
   }));
 
-  const companyRecords = companies.map((company, index) => {
+  const companyRecords: AdminSubscriptionRecord[] = companies.map((company, index) => {
     const premium = company.job_count >= 2 || company.verification_status === "verified";
     const limit = premium ? 200 : 10;
     const used = premium ? 52 + ((company.id + index) % 80) : 1 + ((company.id + index) % 7);
