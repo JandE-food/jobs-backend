@@ -74,16 +74,16 @@ export function CompanyDirectoryPage() {
 
   return (
     <div className="ui-fade-up space-y-8 py-5 xl:space-y-10">
-      <section className="rounded-[2rem] border border-[#3a2c17]/90 bg-[#0f0b07]/95 p-6 shadow-[0_18px_45px_rgba(0,0,0,0.24)] sm:p-8">
+      <section className="rounded-[2rem] border border-slate-200/90 bg-white/95 p-6 shadow-[0_18px_45px_rgba(15,23,42,0.06)] sm:p-8">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
           <div className="max-w-3xl">
-            <span className="text-xs font-bold uppercase tracking-[0.16em] text-brand-300">
+            <span className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-700">
               Corporate directory
             </span>
-            <h1 className="mt-3 font-display text-4xl font-bold tracking-tight text-brand-50">
+            <h1 className="mt-3 font-display text-4xl font-bold tracking-tight text-slate-950">
               Verified company pages, campaigns, and hiring queues
             </h1>
-            <p className="mt-3 text-sm leading-7 text-brand-100/80">
+            <p className="mt-3 text-sm leading-7 text-slate-600">
               Explore the same employer network used across the shared BEJELI ecosystem. Every page stays connected to live roles, trust signals, and the same API used by mobile and recruiter workflows.
             </p>
           </div>
@@ -96,11 +96,11 @@ export function CompanyDirectoryPage() {
                 value: companies.reduce((total, company) => total + company.job_count, 0),
               },
             ].map((stat) => (
-              <div key={stat.label} className="rounded-[1.4rem] border border-[#302312] bg-[#16110b] px-4 py-3">
-                <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand-200/65">
+              <div key={stat.label} className="rounded-[1.4rem] bg-slate-50 px-4 py-3">
+                <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">
                   {stat.label}
                 </p>
-                <p className="mt-1 font-display text-2xl font-bold text-brand-50">
+                <p className="mt-1 font-display text-2xl font-bold text-slate-950">
                   {stat.value}
                 </p>
               </div>
@@ -109,13 +109,13 @@ export function CompanyDirectoryPage() {
         </div>
 
         <div className="mt-5 flex flex-wrap gap-2">
-          <span className="inline-flex min-h-11 items-center rounded-full bg-brand-500 px-4 text-sm font-semibold text-[#140f08]">
+          <span className="inline-flex min-h-11 items-center rounded-full bg-indigo-600 px-4 text-sm font-semibold text-white">
             Verified employers
           </span>
-          <span className="inline-flex min-h-11 items-center rounded-full border border-[#3a2c17] bg-[#16110b] px-4 text-sm font-semibold text-brand-100">
+          <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
             Sponsored campaigns
           </span>
-          <span className="inline-flex min-h-11 items-center rounded-full border border-[#3a2c17] bg-[#16110b] px-4 text-sm font-semibold text-brand-100">
+          <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
             Hiring queues
           </span>
         </div>
@@ -134,12 +134,12 @@ export function CompanyDirectoryPage() {
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <div className="flex items-center gap-2">
-                    <BriefcaseBusinessIcon className="h-5 w-5 text-brand-300" aria-hidden="true" />
-                    <h2 className="font-display text-2xl font-bold tracking-tight text-brand-50">
+                    <BriefcaseBusinessIcon className="h-5 w-5 text-indigo-700" aria-hidden="true" />
+                    <h2 className="font-display text-2xl font-bold tracking-tight text-slate-950">
                       {company.name}
                     </h2>
                   </div>
-                  <p className="mt-2 flex items-center gap-1.5 text-sm text-brand-100/75">
+                  <p className="mt-2 flex items-center gap-1.5 text-sm text-slate-600">
                     <MapPinIcon className="h-4 w-4" aria-hidden="true" />
                     {company.location} · {company.industry} · {company.size}
                   </p>
@@ -155,11 +155,11 @@ export function CompanyDirectoryPage() {
                 </div>
               </div>
 
-              <p className="mt-4 text-sm leading-7 text-brand-100/78">{company.description}</p>
+              <p className="mt-4 text-sm leading-7 text-slate-600">{company.description}</p>
 
-              <div className="mt-5 rounded-[1.4rem] border border-[#4a381b] bg-[#171108] p-5">
-                <p className="text-sm font-bold text-brand-50">{company.ad_headline}</p>
-                <p className="mt-2 text-sm leading-7 text-brand-100/80">{company.ad_copy}</p>
+              <div className="mt-5 rounded-[1.4rem] border border-indigo-100 bg-indigo-50/70 p-5">
+                <p className="text-sm font-bold text-indigo-950">{company.ad_headline}</p>
+                <p className="mt-2 text-sm leading-7 text-indigo-900/80">{company.ad_copy}</p>
               </div>
 
               <div className="mt-4 flex flex-wrap gap-2">
@@ -187,7 +187,7 @@ export function CompanyDirectoryPage() {
                     href={company.website}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex min-h-11 items-center gap-2 rounded-full px-3 text-sm font-bold text-brand-100 hover:bg-[#18130d]"
+                    className="inline-flex min-h-11 items-center gap-2 rounded-full px-3 text-sm font-bold text-slate-700 hover:bg-slate-100"
                   >
                     Visit site
                     <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
@@ -200,13 +200,13 @@ export function CompanyDirectoryPage() {
 
         <div className="space-y-4">
           <Card className="p-5">
-            <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand-300">
+            <p className="text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
               Directory status
             </p>
-            <h2 className="mt-2 font-display text-xl font-bold text-brand-50">
+            <h2 className="mt-2 font-display text-xl font-bold text-slate-950">
               Trusted employer network
             </h2>
-            <p className="mt-3 text-sm leading-7 text-brand-100/80">
+            <p className="mt-3 text-sm leading-7 text-slate-600">
               Company pages, job inventory, and employer branding stay in one consistent experience across talent and recruiter views.
             </p>
           </Card>
@@ -215,13 +215,13 @@ export function CompanyDirectoryPage() {
               Compliance
             </p>
             <div className="mt-4 space-y-3">
-              <div className="rounded-[1.25rem] border border-[#302312] bg-[#16110b] p-4">
-                <p className="text-sm font-bold text-brand-50">UK data zones</p>
-                <p className="mt-1 text-sm text-brand-100/75">Shared with the same live BEJELI backend.</p>
+              <div className="rounded-[1.25rem] bg-slate-50 p-4">
+                <p className="text-sm font-bold text-slate-950">UK data zones</p>
+                <p className="mt-1 text-sm text-slate-600">Shared with the same live BEJELI backend.</p>
               </div>
-              <div className="rounded-[1.25rem] border border-[#302312] bg-[#16110b] p-4">
-                <p className="text-sm font-bold text-brand-50">Verification ready</p>
-                <p className="mt-1 text-sm text-brand-100/75">Companies House and HMRC status remain visible in the new UI.</p>
+              <div className="rounded-[1.25rem] bg-slate-50 p-4">
+                <p className="text-sm font-bold text-slate-950">Verification ready</p>
+                <p className="mt-1 text-sm text-slate-600">Companies House and HMRC status remain visible in the new UI.</p>
               </div>
             </div>
           </Card>

@@ -175,8 +175,8 @@ export function PricingClient() {
             style={
               plan.isHighlighted
                 ? {
-                    borderColor: "rgba(196,150,28,0.55)",
-                    boxShadow: "0 18px 40px rgba(196,150,28,0.22)",
+                    borderColor: "rgba(79,70,229,0.45)",
+                    boxShadow: "0 18px 40px rgba(79,70,229,0.18)",
                   }
                 : undefined
             }

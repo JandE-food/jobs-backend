@@ -89,7 +89,7 @@ export function CompanyDetailPage({ slug }: { slug: string }) {
   if (!company) {
     return (
       <div className="py-5">
-        <Card className="p-5 text-sm font-semibold text-brand-100/75">
+        <Card className="p-5 text-sm font-semibold text-slate-600">
           Loading company page...
         </Card>
       </div>
@@ -98,12 +98,12 @@ export function CompanyDetailPage({ slug }: { slug: string }) {
 
   return (
     <div className="space-y-6 py-5">
-      <section className="rounded-[2rem] border border-[#3a2c17]/90 bg-[#0f0b07]/95 p-6 shadow-[0_18px_45px_rgba(0,0,0,0.24)]">
+      <section className="rounded-[2rem] border border-slate-200/90 bg-white/95 p-6 shadow-[0_18px_45px_rgba(15,23,42,0.05)]">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
           <div className="max-w-3xl">
             <div className="flex flex-wrap items-center gap-3">
-              <BriefcaseBusinessIcon className="h-5 w-5 text-brand-300" aria-hidden="true" />
-              <h1 className="font-display text-4xl font-bold tracking-tight text-brand-50">
+              <BriefcaseBusinessIcon className="h-5 w-5 text-indigo-700" aria-hidden="true" />
+              <h1 className="font-display text-4xl font-bold tracking-tight text-slate-950">
                 {company.name}
               </h1>
               <Badge tone={company.verification_status === "verified" ? "emerald" : "amber"}>
@@ -111,35 +111,35 @@ export function CompanyDetailPage({ slug }: { slug: string }) {
                 {company.verification_status}
               </Badge>
             </div>
-            <p className="mt-3 flex items-center gap-1.5 text-sm text-brand-100/78">
+            <p className="mt-3 flex items-center gap-1.5 text-sm text-slate-600">
               <MapPinIcon className="h-4 w-4" aria-hidden="true" />
               {company.location} · {company.industry} · {company.size}
             </p>
-            <p className="mt-4 text-sm leading-7 text-brand-100/80">{company.description}</p>
+            <p className="mt-4 text-sm leading-7 text-slate-600">{company.description}</p>
           </div>
           <div className="grid gap-3 sm:grid-cols-3">
-            <div className="rounded-[1.4rem] border border-[#302312] bg-[#16110b] px-4 py-3">
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand-200/65">Open jobs</p>
-              <p className="mt-1 font-display text-2xl font-bold text-brand-50">{company.jobs.length}</p>
+            <div className="rounded-[1.4rem] bg-slate-50 px-4 py-3">
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">Open jobs</p>
+              <p className="mt-1 font-display text-2xl font-bold text-slate-950">{company.jobs.length}</p>
             </div>
-            <div className="rounded-[1.4rem] border border-[#302312] bg-[#16110b] px-4 py-3">
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand-200/65">Region</p>
-              <p className="mt-1 font-display text-xl font-bold text-brand-50">
+            <div className="rounded-[1.4rem] bg-slate-50 px-4 py-3">
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">Region</p>
+              <p className="mt-1 font-display text-xl font-bold text-slate-950">
                 {company.data_residency_region ?? "UK"}
               </p>
             </div>
-            <div className="rounded-[1.4rem] border border-[#302312] bg-[#16110b] px-4 py-3">
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand-200/65">Status</p>
-              <p className="mt-1 font-display text-xl font-bold text-brand-50">
+            <div className="rounded-[1.4rem] bg-slate-50 px-4 py-3">
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">Status</p>
+              <p className="mt-1 font-display text-xl font-bold text-slate-950">
                 {company.verification_status}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="mt-5 rounded-[1.5rem] border border-[#4a381b] bg-[#171108] p-5">
-          <p className="text-sm font-bold text-brand-50">{company.ad_headline}</p>
-          <p className="mt-2 text-sm leading-7 text-brand-100/80">{company.ad_copy}</p>
+        <div className="mt-5 rounded-[1.5rem] border border-indigo-100 bg-indigo-50 p-5">
+          <p className="text-sm font-bold text-indigo-950">{company.ad_headline}</p>
+          <p className="mt-2 text-sm leading-7 text-indigo-900/80">{company.ad_copy}</p>
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
           <Badge tone={company.companies_house_status === "verified" ? "emerald" : "amber"}>
@@ -154,7 +154,7 @@ export function CompanyDetailPage({ slug }: { slug: string }) {
           ) : null}
         </div>
         {company.risk_notes ? (
-          <p className="mt-4 text-sm leading-7 text-brand-100/75">{company.risk_notes}</p>
+          <p className="mt-4 text-sm leading-7 text-slate-600">{company.risk_notes}</p>
         ) : null}
       </section>
 
@@ -164,10 +164,10 @@ export function CompanyDetailPage({ slug }: { slug: string }) {
             <Card key={job.id} className="p-5">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <h2 className="font-display text-2xl font-bold tracking-tight text-brand-50">
+                  <h2 className="font-display text-2xl font-bold tracking-tight text-slate-950">
                     {job.title}
                   </h2>
-                  <p className="mt-2 text-sm text-brand-100/75">
+                  <p className="mt-2 text-sm text-slate-600">
                     {job.location} · {job.salary_range}
                   </p>
                 </div>
@@ -178,10 +178,10 @@ export function CompanyDetailPage({ slug }: { slug: string }) {
                   </Badge>
                 </div>
               </div>
-              <p className="mt-4 text-sm leading-7 text-brand-100/75">{job.description}</p>
-              <p className="mt-3 text-sm font-semibold text-brand-100">
+              <p className="mt-4 text-sm leading-7 text-slate-600">{job.description}</p>
+              <p className="mt-3 text-sm font-semibold text-slate-800">
                 Requirements:{" "}
-                <span className="font-normal text-brand-100/75">{job.requirements}</span>
+                <span className="font-normal text-slate-600">{job.requirements}</span>
               </p>
             </Card>
           ))}
@@ -189,20 +189,20 @@ export function CompanyDetailPage({ slug }: { slug: string }) {
 
         <div className="space-y-4">
           <Card className="p-5">
-            <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand-300">
+            <p className="text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
               Company profile
             </p>
-            <div className="mt-4 space-y-3 text-sm text-brand-100/75">
+            <div className="mt-4 space-y-3 text-sm text-slate-600">
               <p>
-                <span className="font-semibold text-brand-50">Website:</span>{" "}
+                <span className="font-semibold text-slate-900">Website:</span>{" "}
                 {company.website || "Not provided"}
               </p>
               <p>
-                <span className="font-semibold text-brand-50">Company number:</span>{" "}
+                <span className="font-semibold text-slate-900">Company number:</span>{" "}
                 {company.company_number || "Pending"}
               </p>
               <p>
-                <span className="font-semibold text-brand-50">Retention policy:</span>{" "}
+                <span className="font-semibold text-slate-900">Retention policy:</span>{" "}
                 {company.retention_policy_days ? `${company.retention_policy_days} days` : "Standard"}
               </p>
             </div>
@@ -214,12 +214,12 @@ export function CompanyDetailPage({ slug }: { slug: string }) {
             <div className="mt-4 space-y-2">
               {(company.directors ?? []).length ? (
                 (company.directors ?? []).map((director) => (
-                  <div key={director} className="rounded-[1.2rem] border border-[#302312] bg-[#16110b] px-4 py-3 text-sm font-semibold text-brand-100">
+                  <div key={director} className="rounded-[1.2rem] bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700">
                     {director}
                   </div>
                 ))
               ) : (
-                <p className="text-sm text-brand-100/75">No director data attached yet.</p>
+                <p className="text-sm text-slate-600">No director data attached yet.</p>
               )}
             </div>
           </Card>

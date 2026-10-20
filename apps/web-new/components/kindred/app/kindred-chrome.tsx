@@ -151,7 +151,7 @@ export function KindredChrome({ children }: { children: ReactNode }) {
       <div className="min-h-full w-full bg-canvas">
         <a
           href="#main-content"
-          className="sr-only z-50 rounded-lg bg-brand-600 px-4 py-3 font-semibold text-[#140f08] focus:not-sr-only focus:absolute focus:left-4 focus:top-4"
+          className="sr-only z-50 rounded-lg bg-brand-600 px-4 py-3 font-semibold text-white focus:not-sr-only focus:absolute focus:left-4 focus:top-4"
         >
           Skip to main content
         </a>
@@ -183,37 +183,37 @@ export function KindredChrome({ children }: { children: ReactNode }) {
         <BottomNav />
         {guestPromptOpen ? (
           <div
-            className="fixed inset-0 z-50 grid place-items-center bg-[#080604]/70 px-4 backdrop-blur-[2px]"
+            className="fixed inset-0 z-50 grid place-items-center bg-slate-950/45 px-4 backdrop-blur-[2px]"
             onClick={dismissGuestPrompt}
           >
             <div
               role="dialog"
               aria-modal="true"
               aria-label="Login prompt"
-              className="w-full max-w-md rounded-[1.75rem] border border-[#4a381b] bg-[#0f0b07] p-6 shadow-[0_24px_60px_rgba(0,0,0,0.36)]"
+              className="w-full max-w-md rounded-[1.75rem] bg-white p-6 shadow-[0_24px_60px_rgba(15,23,42,0.22)]"
               onClick={(event) => event.stopPropagation()}
             >
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-brand-300">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-700">
                 Welcome to BEJELI
               </p>
-              <h2 className="mt-2 text-2xl font-bold text-brand-50">
+              <h2 className="mt-2 text-2xl font-bold text-slate-950">
                 Do you want to log in?
               </h2>
-              <p className="mt-3 text-sm leading-6 text-brand-100/80">
+              <p className="mt-3 text-sm leading-6 text-slate-600">
                 Start on the feed, then choose whether you want to log in or stay signed out
                 for now.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <TransitionLink
                   href="/login"
-                  className="inline-flex min-h-11 items-center justify-center rounded-full bg-brand-500 px-5 text-sm font-bold text-[#140f08]"
+                  className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-950 px-5 text-sm font-bold text-white"
                 >
                   Log in
                 </TransitionLink>
                 <button
                   type="button"
                   onClick={dismissGuestPrompt}
-                  className="inline-flex min-h-11 items-center justify-center rounded-full border border-[#3a2c17] bg-[#16110b] px-5 text-sm font-bold text-brand-100"
+                  className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-100 px-5 text-sm font-bold text-slate-700"
                 >
                   Stay signed out
                 </button>

@@ -1,5 +1,3 @@
-import { Suspense } from "react";
-
 import Link from "next/link";
 
 import { PricingClient } from "@/components/pricing-client";
@@ -19,9 +17,7 @@ export default function PricingPage() {
           Back home
         </Link>
       </section>
-      <Suspense fallback={<p className="muted-copy">Loading pricing…</p>}>
-        <PricingClient />
-      </Suspense>
+      <PricingClient />
     </main>
   );
 }

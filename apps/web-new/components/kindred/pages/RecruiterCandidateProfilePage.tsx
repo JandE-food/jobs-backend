@@ -150,32 +150,32 @@ export function RecruiterCandidateProfilePage({
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 py-5">
-      <section className="rounded-[2rem] border border-[#3a2c17]/90 bg-[#0f0b07]/95 p-6 shadow-[0_18px_45px_rgba(0,0,0,0.24)]">
+      <section className="rounded-[2rem] border border-slate-200/90 bg-white/95 p-6 shadow-[0_18px_45px_rgba(15,23,42,0.05)]">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
             <div className="flex items-center gap-2">
-              <UsersIcon className="h-5 w-5 text-brand-300" aria-hidden="true" />
-              <span className="text-xs font-bold uppercase tracking-[0.16em] text-brand-300">
+              <UsersIcon className="h-5 w-5 text-indigo-700" aria-hidden="true" />
+              <span className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-700">
                 Candidate profile
               </span>
             </div>
-            <h1 className="mt-2 font-display text-4xl font-bold tracking-tight text-brand-50">
+            <h1 className="mt-2 font-display text-4xl font-bold tracking-tight text-slate-950">
               {candidate?.full_name ?? "Loading candidate"}
             </h1>
-            <p className="mt-3 text-sm leading-7 text-brand-100/78">
+            <p className="mt-3 text-sm leading-7 text-slate-600">
               Review the candidate&apos;s background, skill fit, and shortlist options from a single recruiter profile view.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
             <Link
               href="/recruiter/candidates"
-              className="inline-flex min-h-11 items-center justify-center rounded-full border border-[#4d3a1d] bg-[#14100c] px-4 text-sm font-semibold text-brand-100 transition-colors hover:bg-[#18130d]"
+              className="inline-flex min-h-11 items-center justify-center rounded-full border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-50"
             >
               Back to search
             </Link>
             <Link
               href="/recruiter/shortlists"
-              className="inline-flex min-h-11 items-center justify-center rounded-full border border-[#4d3a1d] bg-[#16110b] px-4 text-sm font-semibold text-brand-100 transition-colors hover:bg-[#18130d]"
+              className="inline-flex min-h-11 items-center justify-center rounded-full border border-slate-300 bg-slate-50 px-4 text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-100"
             >
               All shortlists
             </Link>
@@ -198,7 +198,7 @@ export function RecruiterCandidateProfilePage({
         <section className="grid gap-4 xl:grid-cols-[1.2fr,0.8fr]">
           <Card className="p-6">
             <div className="flex flex-wrap items-center gap-3">
-              <h2 className="font-display text-3xl font-bold tracking-tight text-brand-50">
+              <h2 className="font-display text-3xl font-bold tracking-tight text-slate-950">
                 {candidate.headline || candidate.role}
               </h2>
               <Badge tone="indigo">
@@ -211,7 +211,7 @@ export function RecruiterCandidateProfilePage({
               </Badge>
             </div>
 
-            <div className="mt-4 flex flex-wrap gap-4 text-sm text-brand-100/75">
+            <div className="mt-4 flex flex-wrap gap-4 text-sm text-slate-600">
               <span className="inline-flex items-center gap-2">
                 <MapPinIcon className="h-4 w-4" aria-hidden="true" />
                 {candidate.location}
@@ -222,10 +222,10 @@ export function RecruiterCandidateProfilePage({
               </span>
             </div>
 
-            <p className="mt-5 text-sm leading-7 text-brand-100/75">{candidate.summary}</p>
+            <p className="mt-5 text-sm leading-7 text-slate-600">{candidate.summary}</p>
 
             <div className="mt-6">
-              <p className="text-xs font-bold uppercase tracking-[0.14em] text-brand-200/60">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
                 Skills
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
@@ -237,7 +237,7 @@ export function RecruiterCandidateProfilePage({
 
             {candidate.education.length ? (
               <div className="mt-6">
-                <p className="text-xs font-bold uppercase tracking-[0.14em] text-brand-200/60">
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
                   Certifications
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
@@ -253,10 +253,10 @@ export function RecruiterCandidateProfilePage({
 
           <div className="space-y-4">
             <Card className="p-5">
-              <p className="text-xs font-bold uppercase tracking-[0.14em] text-brand-300">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-indigo-700">
                 Shortlist actions
               </p>
-              <p className="mt-2 text-sm leading-7 text-brand-100/78">
+              <p className="mt-2 text-sm leading-7 text-slate-600">
                 Send this candidate straight into a shortlist for follow-up and recruiter handoff.
               </p>
               <div className="mt-4 grid gap-2">
@@ -273,33 +273,33 @@ export function RecruiterCandidateProfilePage({
                     </Button>
                   ))
                 ) : (
-                  <p className="text-sm text-brand-200/60">Create a shortlist before saving candidates.</p>
+                  <p className="text-sm text-slate-500">Create a shortlist before saving candidates.</p>
                 )}
               </div>
               <Link
                 href="/recruiter/shortlists"
-                className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-sm font-semibold text-brand-100 transition-colors hover:bg-[#18130d]"
+                className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-sm font-semibold text-indigo-800 transition-colors hover:bg-indigo-50"
               >
                 Manage shortlists <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
               </Link>
             </Card>
 
             <Card className="p-5">
-              <p className="text-xs font-bold uppercase tracking-[0.14em] text-brand-300">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-indigo-700">
                 Profile summary
               </p>
               <dl className="mt-4 grid gap-3 text-sm">
-                <div className="rounded-2xl border border-[#302312] bg-[#16110b] p-4">
-                  <dt className="font-bold text-brand-50">Primary role</dt>
-                  <dd className="mt-1 text-brand-100/75">{candidate.role}</dd>
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <dt className="font-bold text-slate-900">Primary role</dt>
+                  <dd className="mt-1 text-slate-600">{candidate.role}</dd>
                 </div>
-                <div className="rounded-2xl border border-[#302312] bg-[#16110b] p-4">
-                  <dt className="font-bold text-brand-50">Experience</dt>
-                  <dd className="mt-1 text-brand-100/75">{candidate.experience_years} years of hands-on delivery</dd>
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <dt className="font-bold text-slate-900">Experience</dt>
+                  <dd className="mt-1 text-slate-600">{candidate.experience_years} years of hands-on delivery</dd>
                 </div>
-                <div className="rounded-2xl border border-[#302312] bg-[#16110b] p-4">
-                  <dt className="font-bold text-brand-50">Location</dt>
-                  <dd className="mt-1 text-brand-100/75">{candidate.location}</dd>
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <dt className="font-bold text-slate-900">Location</dt>
+                  <dd className="mt-1 text-slate-600">{candidate.location}</dd>
                 </div>
               </dl>
             </Card>

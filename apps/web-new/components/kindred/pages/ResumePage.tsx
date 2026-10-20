@@ -54,8 +54,8 @@ function EditableField({
   type?: "text" | "email";
 }) {
   return (
-    <label className="grid gap-2 rounded-2xl border border-[#302312] bg-[#120d08] p-4">
-      <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-brand-200/60">
+    <label className="grid gap-2 rounded-2xl border border-slate-200 p-4">
+      <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
         <Icon className="h-4 w-4" aria-hidden="true" />
         {label}
       </span>
@@ -63,7 +63,7 @@ function EditableField({
         type={type}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="rounded-xl border border-[#4d3a1d] bg-[#14100c] px-4 py-3 text-sm font-semibold text-brand-50 outline-none transition-colors focus:border-brand-400 focus:bg-[#18130d]"
+        className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-900 outline-none transition-colors focus:border-indigo-500 focus:bg-white"
       />
     </label>
   );
@@ -122,10 +122,10 @@ function ParsedResult({
         <Card className="p-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div>
-              <h2 id="contact-title" className="font-bold text-brand-50">
+              <h2 id="contact-title" className="font-bold text-slate-950">
                 Review extracted profile data
               </h2>
-              <p className="mt-1 text-sm leading-6 text-brand-100/75">
+              <p className="mt-1 text-sm leading-6 text-slate-600">
                 Edit any field before you sync it into your visible profile.
               </p>
             </div>
@@ -167,14 +167,14 @@ function ParsedResult({
             </div>
           </div>
           <label className="mt-4 grid gap-2">
-            <span className="text-xs font-semibold uppercase tracking-[0.12em] text-brand-200/60">
+            <span className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
               Availability note
             </span>
             <textarea
               value={resume.availabilityNote}
               onChange={(event) => onAvailabilityChange(event.target.value)}
               rows={3}
-              className="rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 py-3 text-sm text-brand-100 outline-none transition-colors focus:border-brand-400 focus:bg-[#18130d]"
+              className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition-colors focus:border-indigo-500 focus:bg-white"
             />
           </label>
         </Card>
@@ -184,10 +184,10 @@ function ParsedResult({
         <Card className="p-5">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h2 id="detected-skills-title" className="font-bold text-brand-50">
+              <h2 id="detected-skills-title" className="font-bold text-slate-950">
                 Detected skills
               </h2>
-              <p className="mt-1 text-sm text-brand-100/75">
+              <p className="mt-1 text-sm text-slate-600">
                 Keep the matching graph clean by removing noise and adding missing signals.
               </p>
             </div>
@@ -196,7 +196,7 @@ function ParsedResult({
                 value={skillInput}
                 onChange={(event) => onSkillInputChange(event.target.value)}
                 placeholder="Add a skill"
-                className="min-h-11 flex-1 rounded-xl border border-[#4d3a1d] bg-[#14100c] px-4 text-sm text-brand-50 outline-none transition-colors focus:border-brand-400 focus:bg-[#18130d]"
+                className="min-h-11 flex-1 rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-900 outline-none transition-colors focus:border-indigo-500 focus:bg-white"
               />
               <Button onClick={onAddSkill}>Add</Button>
             </div>
@@ -207,7 +207,7 @@ function ParsedResult({
                 key={skill}
                 type="button"
                 onClick={() => onRemoveSkill(skill)}
-                className="inline-flex min-h-10 items-center gap-2 rounded-full border border-[#4a381b] bg-[#171108] px-3.5 text-sm font-semibold text-brand-100 hover:bg-[#1b140c] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400"
+                className="inline-flex min-h-10 items-center gap-2 rounded-full bg-indigo-50 px-3.5 text-sm font-semibold text-indigo-800 hover:bg-indigo-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
               >
                 {skill}
                 <span aria-hidden="true">x</span>
@@ -221,25 +221,25 @@ function ParsedResult({
         <Card className="p-5">
           <h2
             id="parsed-experience-title"
-            className="flex items-center gap-2 font-bold text-brand-50"
+            className="flex items-center gap-2 font-bold text-slate-950"
           >
-            <BriefcaseIcon className="h-4 w-4 text-brand-200/65" aria-hidden="true" />
+            <BriefcaseIcon className="h-4 w-4 text-slate-600" aria-hidden="true" />
             Experience
           </h2>
-          <ol className="mt-4 space-y-4 border-l border-[#3a2c17] pl-4">
+          <ol className="mt-4 space-y-4 border-l border-slate-200 pl-4">
             {resume.experience.map((item) => (
               <li key={`${item.company}-${item.role}`} className="relative">
                 <span
                   aria-hidden="true"
-                  className="absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full bg-brand-500 ring-4 ring-[#080604]"
+                  className="absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full bg-indigo-700 ring-4 ring-white"
                 />
                 <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
-                  <h3 className="font-bold text-brand-50">
+                  <h3 className="font-bold text-slate-950">
                     {item.role} · {item.company}
                   </h3>
-                  <span className="shrink-0 text-xs text-brand-200/60">{item.period}</span>
+                  <span className="shrink-0 text-xs text-slate-600">{item.period}</span>
                 </div>
-                <p className="mt-1 text-sm text-brand-100/78">{item.impact}</p>
+                <p className="mt-1 text-sm text-slate-700">{item.impact}</p>
               </li>
             ))}
           </ol>
@@ -250,15 +250,15 @@ function ParsedResult({
         <Card className="p-5">
           <h2
             id="parsed-education-title"
-            className="flex items-center gap-2 font-bold text-brand-50"
+            className="flex items-center gap-2 font-bold text-slate-950"
           >
-            <GraduationCapIcon className="h-4 w-4 text-brand-200/65" aria-hidden="true" />
+            <GraduationCapIcon className="h-4 w-4 text-slate-600" aria-hidden="true" />
             Education
           </h2>
           {resume.education.map((item) => (
             <div key={`${item.school}-${item.degree}`} className="mt-3">
-              <h3 className="font-bold text-brand-50">{item.degree}</h3>
-              <p className="text-sm text-brand-100/75">
+              <h3 className="font-bold text-slate-950">{item.degree}</h3>
+              <p className="text-sm text-slate-600">
                 {item.school} · {item.period}
               </p>
             </div>
@@ -267,7 +267,7 @@ function ParsedResult({
       </section>
 
       {statusMessage ? (
-        <Card className="mt-4 border-[#4a381b] bg-[#171108] p-4 text-sm font-semibold text-brand-100">
+        <Card className="mt-4 border-indigo-200 bg-indigo-50 p-4 text-sm font-semibold text-indigo-900">
           {statusMessage}
         </Card>
       ) : null}
@@ -364,30 +364,30 @@ export function ResumePage() {
     <div className="ui-fade-up space-y-6 lg:space-y-8">
       <section
         aria-labelledby="resume-title"
-        className="rounded-[2rem] border border-[#3a2c17]/90 bg-[#0f0b07]/95 p-6 shadow-[0_18px_45px_rgba(0,0,0,0.24)] sm:p-8"
+        className="rounded-[2rem] border border-slate-200/90 bg-white/95 p-6 shadow-[0_18px_45px_rgba(15,23,42,0.05)] sm:p-8"
       >
-        <p className="flex items-center gap-1 text-xs font-bold uppercase tracking-[0.12em] text-brand-300">
+        <p className="flex items-center gap-1 text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
           <WandSparklesIcon className="h-4 w-4" aria-hidden="true" />
           Resume Studio
         </p>
         <h1
           id="resume-title"
-          className="mt-2 font-display text-3xl font-bold tracking-tight text-brand-50 sm:text-4xl"
+          className="mt-2 font-display text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl"
         >
           Turn your CV into a complete web profile
         </h1>
-        <p className="mt-3 max-w-3xl text-sm leading-7 text-brand-100/80 sm:text-base">
+        <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">
           Upload once, review the structured output, and move straight into job
           matching, recruiter visibility, and profile updates from a desktop workspace.
         </p>
         <div className="mt-5 flex flex-wrap gap-2">
-          <span className="inline-flex min-h-11 items-center rounded-full bg-brand-500 px-4 text-sm font-semibold text-[#140f08]">
+          <span className="inline-flex min-h-11 items-center rounded-full bg-indigo-600 px-4 text-sm font-semibold text-white">
             CV parsing
           </span>
-          <span className="inline-flex min-h-11 items-center rounded-full border border-[#3a2c17] bg-[#16110b] px-4 text-sm font-semibold text-brand-100">
+          <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
             Profile sync
           </span>
-          <span className="inline-flex min-h-11 items-center rounded-full border border-[#3a2c17] bg-[#16110b] px-4 text-sm font-semibold text-brand-100">
+          <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
             Same BEJELI server
           </span>
         </div>
@@ -407,13 +407,13 @@ export function ResumePage() {
                 exit={reduceMotion ? undefined : { opacity: 0 }}
               >
                 <Card className="p-6 text-center sm:p-8">
-                  <div className="mx-auto grid h-16 w-16 place-items-center rounded-3xl bg-brand-50/12 text-brand-300">
+                  <div className="mx-auto grid h-16 w-16 place-items-center rounded-3xl bg-indigo-50 text-indigo-700">
                     <UploadCloudIcon className="h-8 w-8" aria-hidden="true" />
                   </div>
-                  <h2 className="mt-5 font-display text-2xl font-bold text-brand-50">
+                  <h2 className="mt-5 font-display text-2xl font-bold text-slate-950">
                     Add your resume
                   </h2>
-                  <p id="file-help" className="mt-2 text-sm text-brand-100/75">
+                  <p id="file-help" className="mt-2 text-sm text-slate-600">
                     PDF, DOC or DOCX · up to 10MB
                   </p>
                   <input
@@ -442,7 +442,7 @@ export function ResumePage() {
                       Try a sample CV
                     </Button>
                   </div>
-                  <div className="mt-6 rounded-2xl border border-[#302312] bg-[#16110b] p-4 text-left text-sm leading-6 text-brand-100/80">
+                  <div className="mt-6 rounded-2xl bg-slate-50 p-4 text-left text-sm leading-6 text-slate-700">
                     Upload your current CV to hydrate contact data, structured skills,
                     experience history, and education blocks for the rest of the website.
                   </div>
@@ -459,12 +459,12 @@ export function ResumePage() {
               >
                 <Card className="p-6 sm:p-8">
                   <div className="flex items-center gap-3">
-                    <div className="grid h-11 w-11 place-items-center rounded-xl bg-brand-500 text-[#140f08]">
+                    <div className="grid h-11 w-11 place-items-center rounded-xl bg-indigo-700 text-white">
                       <SparklesIcon className="h-5 w-5" aria-hidden="true" />
                     </div>
                     <div>
-                      <h2 className="font-bold text-brand-50">Parsing your resume</h2>
-                      <p className="text-sm text-brand-100/75">{resumeDraft.fileName}</p>
+                      <h2 className="font-bold text-slate-950">Parsing your resume</h2>
+                      <p className="text-sm text-slate-600">{resumeDraft.fileName}</p>
                     </div>
                   </div>
                   <ol className="mt-6 space-y-3">
@@ -478,14 +478,14 @@ export function ResumePage() {
                             {state === "done" ? (
                               <CheckCircle2Icon className="h-5 w-5 text-emerald-700" />
                             ) : state === "active" ? (
-                              <Loader2Icon className="h-5 w-5 animate-spin text-brand-300" />
+                              <Loader2Icon className="h-5 w-5 animate-spin text-indigo-700" />
                             ) : (
-                              <span className="h-4 w-4 rounded-full border-2 border-[#5a4822]" />
+                              <span className="h-4 w-4 rounded-full border-2 border-slate-300" />
                             )}
                           </span>
                           <span
                             className={
-                              state === "todo" ? "text-brand-200/55" : "font-semibold text-brand-100"
+                              state === "todo" ? "text-slate-500" : "font-semibold text-slate-800"
                             }
                           >
                             {step}
@@ -565,26 +565,26 @@ export function ResumePage() {
           <Card className="p-5">
             <div className="flex items-center gap-2">
               <ShieldCheckIcon className="h-5 w-5 text-emerald-700" aria-hidden="true" />
-              <h2 className="font-bold text-brand-50">Trust and privacy</h2>
+              <h2 className="font-bold text-slate-950">Trust and privacy</h2>
             </div>
-            <p className="mt-3 text-sm leading-6 text-brand-100/78">
+            <p className="mt-3 text-sm leading-6 text-slate-600">
               Your data stays in UK zones. PII is encrypted at rest and can be deleted on
               request through the privacy controls.
             </p>
           </Card>
           <Card className="p-5">
-            <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand-300">
+            <p className="text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">
               Parser confidence
             </p>
-            <p className="mt-2 font-display text-3xl font-bold text-brand-50">
+            <p className="mt-2 font-display text-3xl font-bold text-slate-950">
               {resumeDraft.confidence}%
             </p>
-            <p className="mt-2 text-sm leading-6 text-brand-100/78">
+            <p className="mt-2 text-sm leading-6 text-slate-600">
               Last status: {resumeDraft.parsedAtLabel}
             </p>
           </Card>
           <Card className="p-5">
-            <h2 className="font-bold text-brand-50">Preferred roles</h2>
+            <h2 className="font-bold text-slate-950">Preferred roles</h2>
             <div className="mt-4 flex flex-wrap gap-2">
               {resumeDraft.preferredRoles.map((role) => (
                 <Badge key={role} tone="indigo">
@@ -594,7 +594,7 @@ export function ResumePage() {
             </div>
           </Card>
           <Card className="p-5">
-            <h2 className="font-bold text-brand-50">What gets extracted</h2>
+            <h2 className="font-bold text-slate-950">What gets extracted</h2>
             <div className="mt-4 space-y-3">
               {[
                 "Email, phone, and location",
@@ -604,7 +604,7 @@ export function ResumePage() {
               ].map((item) => (
                 <div
                   key={item}
-                  className="flex items-start gap-2 rounded-2xl border border-[#302312] bg-[#16110b] p-3 text-sm text-brand-100/80"
+                  className="flex items-start gap-2 rounded-2xl bg-slate-50 p-3 text-sm text-slate-700"
                 >
                   <CheckCircle2Icon
                     className="mt-0.5 h-4 w-4 shrink-0 text-emerald-700"

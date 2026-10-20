@@ -253,16 +253,16 @@ export function RecruiterCompaniesPage() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 py-5">
-      <section className="rounded-[2rem] border border-[#3a2c17]/90 bg-[#0f0b07]/95 p-6 shadow-[0_18px_45px_rgba(0,0,0,0.24)]">
+      <section className="rounded-[2rem] border border-slate-200/90 bg-white/95 p-6 shadow-[0_18px_45px_rgba(15,23,42,0.05)]">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
           <div className="max-w-3xl">
-            <span className="text-xs font-bold uppercase tracking-[0.16em] text-brand-300">
+            <span className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-700">
               Recruiter company workflows
             </span>
-            <h1 className="mt-3 font-display text-4xl font-bold tracking-tight text-brand-50">
+            <h1 className="mt-3 font-display text-4xl font-bold tracking-tight text-slate-950">
               Company pages, posting queues, and employer inventory
             </h1>
-            <p className="mt-3 text-sm leading-7 text-brand-100/78">
+            <p className="mt-3 text-sm leading-7 text-slate-600">
               Manage the same employer data powering the public company directory, recruiter feed, and mobile-connected hiring flows.
             </p>
           </div>
@@ -275,11 +275,11 @@ export function RecruiterCompaniesPage() {
                 value: jobs.filter((job) => job.featured).length,
               },
             ].map((stat) => (
-              <div key={stat.label} className="rounded-[1.4rem] border border-[#302312] bg-[#16110b] px-4 py-3">
-                <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand-200/60">
+              <div key={stat.label} className="rounded-[1.4rem] bg-slate-50 px-4 py-3">
+                <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">
                   {stat.label}
                 </p>
-                <p className="mt-1 font-display text-2xl font-bold text-brand-50">
+                <p className="mt-1 font-display text-2xl font-bold text-slate-950">
                   {stat.value}
                 </p>
               </div>
@@ -289,34 +289,34 @@ export function RecruiterCompaniesPage() {
       </section>
 
       <section className="grid gap-4 xl:grid-cols-[1.05fr,0.95fr]">
-        <Card className="border-[#3a2c17]/90 bg-[#0f0b07]/95 p-5 shadow-[0_18px_45px_rgba(0,0,0,0.24)]">
+        <Card className="border-slate-200/90 bg-white/95 p-5 shadow-[0_18px_45px_rgba(15,23,42,0.05)]">
           <div className="flex items-center gap-2">
-            <BriefcaseBusinessIcon className="h-5 w-5 text-brand-300" aria-hidden="true" />
-            <h1 className="font-display text-3xl font-bold tracking-tight text-brand-50">
+            <BriefcaseBusinessIcon className="h-5 w-5 text-indigo-700" aria-hidden="true" />
+            <h1 className="font-display text-3xl font-bold tracking-tight text-slate-950">
               Company validation and SaaS directory management
             </h1>
           </div>
-          <p className="mt-3 text-sm leading-7 text-brand-100/78">
+          <p className="mt-3 text-sm leading-7 text-slate-600">
             Stand up company pages, queue ad placements, and publish hiring inventory into the public corporate directory.
           </p>
           {primaryCompany ? (
-            <div className="mt-5 rounded-[1.6rem] border border-[#4a381b] bg-[#171108] p-4">
+            <div className="mt-5 rounded-[1.6rem] border border-indigo-200 bg-indigo-50/90 p-4">
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-brand-300">
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-indigo-700">
                     Edit company page
                   </p>
-                  <p className="mt-2 text-sm font-semibold text-brand-50">
+                  <p className="mt-2 text-sm font-semibold text-indigo-950">
                     {primaryCompany.name} is the active company for this recruiter account.
                   </p>
-                  <p className="mt-1 text-sm leading-6 text-brand-100/78">
+                  <p className="mt-1 text-sm leading-6 text-indigo-900/80">
                     One recruiter can only have one company page, but you can edit this company details panel at any time and still create multiple jobs.
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={openCompanyEditPanel}
-                  className="inline-flex min-h-11 items-center justify-center rounded-full bg-brand-500 px-5 text-sm font-bold text-[#140f08] shadow-sm transition hover:bg-brand-400"
+                  className="inline-flex min-h-11 items-center justify-center rounded-full bg-indigo-600 px-5 text-sm font-bold text-white shadow-sm transition hover:bg-indigo-700"
                 >
                   Edit company details
                 </button>
@@ -329,20 +329,20 @@ export function RecruiterCompaniesPage() {
             className={`mt-5 rounded-[1.8rem] border p-4 transition-all duration-300 sm:p-5 ${
               companyCreationLocked
                 ? editPanelHighlighted
-                  ? "border-brand-500 bg-brand-50/10 shadow-[0_0_0_4px_rgba(196,150,28,0.12)]"
-                  : "border-[#4a381b] bg-[#171108]"
-                : "border-[#3a2c17] bg-[#16110b]"
+                  ? "border-indigo-400 bg-indigo-50/80 shadow-[0_0_0_4px_rgba(99,102,241,0.12)]"
+                  : "border-indigo-200 bg-slate-50/70"
+                : "border-slate-200 bg-slate-50/70"
             }`}
           >
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.14em] text-brand-300">
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-indigo-700">
                   {companyCreationLocked ? "Edit panel" : "Create panel"}
                 </p>
-                <h2 className="mt-2 font-display text-2xl font-bold tracking-tight text-brand-50">
+                <h2 className="mt-2 font-display text-2xl font-bold tracking-tight text-slate-950">
                   {companyCreationLocked ? "Edit company details" : "Create your company page"}
                 </h2>
-                <p className="mt-2 text-sm leading-6 text-brand-100/78">
+                <p className="mt-2 text-sm leading-6 text-slate-600">
                   {companyCreationLocked
                     ? "Update the public company profile, ad copy, and directory fields used across the recruiter feed and company pages."
                     : "Fill in the company profile that powers the recruiter feed, public directory, and connected hiring surfaces."}
@@ -355,7 +355,7 @@ export function RecruiterCompaniesPage() {
 
             <fieldset className="mt-5">
             <div className="grid gap-3 md:grid-cols-2">
-              <label className="text-sm font-semibold text-brand-100">
+              <label className="text-sm font-semibold text-slate-800">
                 Company name
                 <input
                   ref={companyNameInputRef}
@@ -363,89 +363,89 @@ export function RecruiterCompaniesPage() {
                   onChange={(event) =>
                     setCompanyForm({ ...companyForm, name: event.target.value })
                   }
-                  className="mt-2 min-h-12 w-full rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 text-sm text-brand-50 outline-none"
+                  className="mt-2 min-h-12 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 text-sm outline-none"
                 />
               </label>
-              <label className="text-sm font-semibold text-brand-100">
+              <label className="text-sm font-semibold text-slate-800">
                 Slug
                 <input
                   value={companyForm.slug}
                   onChange={(event) =>
                     setCompanyForm({ ...companyForm, slug: event.target.value })
                   }
-                  className="mt-2 min-h-12 w-full rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 text-sm text-brand-50 outline-none"
+                  className="mt-2 min-h-12 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 text-sm outline-none"
                 />
               </label>
-              <label className="text-sm font-semibold text-brand-100">
+              <label className="text-sm font-semibold text-slate-800">
                 Website
                 <input
                   value={companyForm.website}
                   onChange={(event) =>
                     setCompanyForm({ ...companyForm, website: event.target.value })
                   }
-                  className="mt-2 min-h-12 w-full rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 text-sm text-brand-50 outline-none"
+                  className="mt-2 min-h-12 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 text-sm outline-none"
                 />
               </label>
-              <label className="text-sm font-semibold text-brand-100">
+              <label className="text-sm font-semibold text-slate-800">
                 Industry
                 <input
                   value={companyForm.industry}
                   onChange={(event) =>
                     setCompanyForm({ ...companyForm, industry: event.target.value })
                   }
-                  className="mt-2 min-h-12 w-full rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 text-sm text-brand-50 outline-none"
+                  className="mt-2 min-h-12 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 text-sm outline-none"
                 />
               </label>
-              <label className="text-sm font-semibold text-brand-100">
+              <label className="text-sm font-semibold text-slate-800">
                 Size
                 <input
                   value={companyForm.size}
                   onChange={(event) =>
                     setCompanyForm({ ...companyForm, size: event.target.value })
                   }
-                  className="mt-2 min-h-12 w-full rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 text-sm text-brand-50 outline-none"
+                  className="mt-2 min-h-12 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 text-sm outline-none"
                 />
               </label>
-              <label className="text-sm font-semibold text-brand-100">
+              <label className="text-sm font-semibold text-slate-800">
                 Location
                 <input
                   value={companyForm.location}
                   onChange={(event) =>
                     setCompanyForm({ ...companyForm, location: event.target.value })
                   }
-                  className="mt-2 min-h-12 w-full rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 text-sm text-brand-50 outline-none"
+                  className="mt-2 min-h-12 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 text-sm outline-none"
                 />
               </label>
             </div>
-            <label className="mt-3 block text-sm font-semibold text-brand-100">
+            <label className="mt-3 block text-sm font-semibold text-slate-800">
               Description
               <textarea
                 value={companyForm.description}
                 onChange={(event) =>
                   setCompanyForm({ ...companyForm, description: event.target.value })
                 }
-                className="mt-2 min-h-28 w-full rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 py-3 text-sm text-brand-50 outline-none"
+                className="mt-2 min-h-28 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm outline-none"
               />
             </label>
             <div className="mt-3 grid gap-3 md:grid-cols-2">
-              <label className="text-sm font-semibold text-brand-100">
+              <label className="text-sm font-semibold text-slate-800">
                 Ad headline
                 <input
                   value={companyForm.adHeadline}
                   onChange={(event) =>
                     setCompanyForm({ ...companyForm, adHeadline: event.target.value })
                   }
-                  className="mt-2 min-h-12 w-full rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 text-sm text-brand-50 outline-none"
+                  className="mt-2 min-h-12 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 text-sm outline-none"
                 />
               </label>
-              <label className="text-sm font-semibold text-brand-100">
+              <label className="text-sm font-semibold text-slate-800">
                 Ad copy
                 <input
                   value={companyForm.adCopy}
                   onChange={(event) =>
                     setCompanyForm({ ...companyForm, adCopy: event.target.value })
                   }
-                  className="mt-2 min-h-12 w-full rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 text-sm text-brand-50 outline-none"
+                  className="mt-2 min-h-12 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 text-sm outline-none"
                 />
               </label>
             </div>
@@ -460,26 +460,26 @@ export function RecruiterCompaniesPage() {
         </Card>
 
         <div id="posting-queue">
-          <Card className="border-[#3a2c17]/90 bg-[#0f0b07]/95 p-5 shadow-[0_18px_45px_rgba(0,0,0,0.24)]">
+          <Card className="border-slate-200/90 bg-white/95 p-5 shadow-[0_18px_45px_rgba(15,23,42,0.05)]">
             <div className="flex items-center gap-2">
-              <FileTextIcon className="h-5 w-5 text-brand-300" aria-hidden="true" />
-              <h2 className="font-display text-2xl font-bold tracking-tight text-brand-50">
+              <FileTextIcon className="h-5 w-5 text-indigo-700" aria-hidden="true" />
+              <h2 className="font-display text-2xl font-bold tracking-tight text-slate-950">
                 Posting queue and campaign inventory
               </h2>
             </div>
-            <p className="mt-3 text-sm leading-7 text-brand-100/78">
+            <p className="mt-3 text-sm leading-7 text-slate-600">
               Create jobs inside recruiter-owned companies and flag premium roles for ad visibility.
             </p>
 
             <div className="mt-5 grid gap-3">
-              <label className="text-sm font-semibold text-brand-100">
+              <label className="text-sm font-semibold text-slate-800">
                 Company
                 <select
                   value={jobForm.companyId}
                   onChange={(event) =>
                     setJobForm({ ...jobForm, companyId: event.target.value })
                   }
-                  className="mt-2 min-h-12 w-full rounded-xl border border-[#4d3a1d] bg-[#14100c] px-4 text-sm text-brand-50 outline-none"
+                  className="mt-2 min-h-12 w-full rounded-xl border border-slate-300 px-4 text-sm outline-none"
                 >
                   <option value="">Choose company</option>
                   {companies.map((company) => (
@@ -489,65 +489,65 @@ export function RecruiterCompaniesPage() {
                   ))}
                 </select>
               </label>
-              <label className="text-sm font-semibold text-brand-100">
+              <label className="text-sm font-semibold text-slate-800">
                 Job title
                 <input
                   value={jobForm.title}
                   onChange={(event) =>
                     setJobForm({ ...jobForm, title: event.target.value })
                   }
-                  className="mt-2 min-h-12 w-full rounded-xl border border-[#4d3a1d] bg-[#14100c] px-4 text-sm text-brand-50 outline-none"
+                  className="mt-2 min-h-12 w-full rounded-xl border border-slate-300 px-4 text-sm outline-none"
                 />
               </label>
-              <label className="text-sm font-semibold text-brand-100">
+              <label className="text-sm font-semibold text-slate-800">
                 Description
                 <textarea
                   value={jobForm.description}
                   onChange={(event) =>
                     setJobForm({ ...jobForm, description: event.target.value })
                   }
-                  className="mt-2 min-h-24 w-full rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 py-3 text-sm text-brand-50 outline-none"
+                  className="mt-2 min-h-24 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm outline-none"
                 />
               </label>
               <div className="grid gap-3 md:grid-cols-2">
-                <label className="text-sm font-semibold text-brand-100">
+                <label className="text-sm font-semibold text-slate-800">
                   Requirements
                   <input
                     value={jobForm.requirements}
                     onChange={(event) =>
                       setJobForm({ ...jobForm, requirements: event.target.value })
                     }
-                    className="mt-2 min-h-12 w-full rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 text-sm text-brand-50 outline-none"
+                    className="mt-2 min-h-12 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 text-sm outline-none"
                   />
                 </label>
-                <label className="text-sm font-semibold text-brand-100">
+                <label className="text-sm font-semibold text-slate-800">
                   Location
                   <input
                     value={jobForm.location}
                     onChange={(event) =>
                       setJobForm({ ...jobForm, location: event.target.value })
                     }
-                    className="mt-2 min-h-12 w-full rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 text-sm text-brand-50 outline-none"
+                    className="mt-2 min-h-12 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 text-sm outline-none"
                   />
                 </label>
-                <label className="text-sm font-semibold text-brand-100">
+                <label className="text-sm font-semibold text-slate-800">
                   Salary range
                   <input
                     value={jobForm.salaryRange}
                     onChange={(event) =>
                       setJobForm({ ...jobForm, salaryRange: event.target.value })
                     }
-                    className="mt-2 min-h-12 w-full rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 text-sm text-brand-50 outline-none"
+                    className="mt-2 min-h-12 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 text-sm outline-none"
                   />
                 </label>
-                <label className="text-sm font-semibold text-brand-100">
+                <label className="text-sm font-semibold text-slate-800">
                   Status
                   <select
                     value={jobForm.status}
                     onChange={(event) =>
                       setJobForm({ ...jobForm, status: event.target.value })
                     }
-                    className="mt-2 min-h-12 w-full rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 text-sm text-brand-50 outline-none"
+                    className="mt-2 min-h-12 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 text-sm outline-none"
                   >
                     <option value="queued">Queued</option>
                     <option value="published">Published</option>
@@ -555,14 +555,14 @@ export function RecruiterCompaniesPage() {
                   </select>
                 </label>
               </div>
-              <label className="flex items-center gap-3 rounded-2xl border border-[#3a2c17] bg-[#16110b] px-4 py-3 text-sm font-semibold text-brand-100">
+              <label className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700">
                 <input
                   type="checkbox"
                   checked={jobForm.featured}
                   onChange={(event) =>
                     setJobForm({ ...jobForm, featured: event.target.checked })
                   }
-                  className="h-4 w-4 rounded border-[#5a4822] bg-[#14100c] text-brand-500"
+                  className="h-4 w-4 rounded border-slate-400 text-indigo-700"
                 />
                 Featured placement for ad hub visibility
               </label>
@@ -584,20 +584,20 @@ export function RecruiterCompaniesPage() {
       ) : null}
 
       <section className="grid gap-4 xl:grid-cols-[1.1fr,0.9fr]">
-        <Card className="border-[#3a2c17]/90 bg-[#0f0b07]/95 p-5 shadow-[0_18px_45px_rgba(0,0,0,0.24)]">
+        <Card className="border-slate-200/90 bg-white/95 p-5 shadow-[0_18px_45px_rgba(15,23,42,0.05)]">
           <div className="flex items-center gap-2">
             <ShieldCheckIcon className="h-5 w-5 text-emerald-700" aria-hidden="true" />
-            <h2 className="font-display text-2xl font-bold tracking-tight text-brand-50">
+            <h2 className="font-display text-2xl font-bold tracking-tight text-slate-950">
               Corporate directory queue
             </h2>
           </div>
           <div className="mt-5 space-y-3">
             {companies.map((company) => (
-              <div key={company.id} className="rounded-2xl border border-[#302312] bg-[#16110b] p-4">
+              <div key={company.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <h3 className="font-bold text-brand-50">{company.name}</h3>
-                    <p className="text-sm text-brand-100/75">
+                    <h3 className="font-bold text-slate-950">{company.name}</h3>
+                    <p className="text-sm text-slate-600">
                       {company.industry} · {company.location} · {company.size}
                     </p>
                   </div>
@@ -608,8 +608,8 @@ export function RecruiterCompaniesPage() {
                     <Badge tone="indigo">{company.job_count} jobs</Badge>
                   </div>
                 </div>
-                <p className="mt-3 text-sm font-semibold text-brand-50">{company.ad_headline}</p>
-                <p className="mt-1 text-sm text-brand-100/75">{company.ad_copy}</p>
+                <p className="mt-3 text-sm font-semibold text-slate-900">{company.ad_headline}</p>
+                <p className="mt-1 text-sm text-slate-600">{company.ad_copy}</p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <Badge tone="slate">{company.queued_jobs} queued jobs</Badge>
                 </div>
@@ -618,20 +618,20 @@ export function RecruiterCompaniesPage() {
           </div>
         </Card>
 
-        <Card className="border-[#3a2c17]/90 bg-[#0f0b07]/95 p-5 shadow-[0_18px_45px_rgba(0,0,0,0.24)]">
+        <Card className="border-slate-200/90 bg-white/95 p-5 shadow-[0_18px_45px_rgba(15,23,42,0.05)]">
           <div className="flex items-center gap-2">
             <BanknoteIcon className="h-5 w-5 text-amber-700" aria-hidden="true" />
-            <h2 className="font-display text-2xl font-bold tracking-tight text-brand-50">
+            <h2 className="font-display text-2xl font-bold tracking-tight text-slate-950">
               Posting queue snapshot
             </h2>
           </div>
           <div className="mt-5 space-y-3">
             {jobs.slice(0, 6).map((job) => (
-              <div key={job.id} className="rounded-2xl border border-[#302312] bg-[#16110b] p-4">
+              <div key={job.id} className="rounded-2xl border border-slate-200 bg-white p-4">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <h3 className="font-bold text-brand-50">{job.title}</h3>
-                    <p className="text-sm text-brand-100/75">
+                    <h3 className="font-bold text-slate-950">{job.title}</h3>
+                    <p className="text-sm text-slate-600">
                       {job.company_name} · {job.location}
                     </p>
                   </div>
@@ -642,7 +642,7 @@ export function RecruiterCompaniesPage() {
                     </Badge>
                   </div>
                 </div>
-                <p className="mt-2 text-sm text-brand-100/75">{job.salary_range}</p>
+                <p className="mt-2 text-sm text-slate-600">{job.salary_range}</p>
               </div>
             ))}
           </div>

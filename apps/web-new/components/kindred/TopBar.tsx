@@ -280,11 +280,11 @@ export function TopBar() {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-[#080604]/92 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-line bg-white/90 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-[1440px] items-center gap-3 px-4">
         <Link href={homeHref} className="flex items-center gap-2" aria-label="BEJELI home">
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600">
-            <BriefcaseBusinessIcon className="h-4 w-4 text-[#140f08]" strokeWidth={2.4} />
+            <BriefcaseBusinessIcon className="h-4 w-4 text-white" strokeWidth={2.4} />
           </span>
           <span className="hidden text-lg font-extrabold tracking-tight text-ink sm:inline">BEJELI</span>
         </Link>
@@ -322,7 +322,7 @@ export function TopBar() {
                 }
               }}
               placeholder="Search people, roles, companies"
-              className="h-9 w-full rounded-full border border-line bg-canvas pl-9 pr-3 text-base text-ink placeholder:text-ink-faint focus:border-brand-300 focus:bg-[#120d08] focus:outline-none sm:text-sm"
+              className="h-9 w-full rounded-full border border-line bg-canvas pl-9 pr-3 text-base text-ink placeholder:text-ink-faint focus:border-brand-300 focus:bg-white focus:outline-none sm:text-sm"
               autoComplete="off"
               onKeyDown={handleSearchKeyDown}
               role="combobox"
@@ -360,7 +360,7 @@ export function TopBar() {
                         event.preventDefault();
                       }}
                       className={`nav-dropdown-link w-full text-left ${
-                        activeSuggestionIndex === index ? "bg-[#18130d] text-brand-50" : ""
+                        activeSuggestionIndex === index ? "bg-slate-100 text-slate-950" : ""
                       }`}
                     >
                       <strong>{suggestion.label}</strong>
@@ -411,14 +411,14 @@ export function TopBar() {
             </>
           ) : null}
 
-          <span className="mr-1 hidden items-center gap-1.5 rounded-full border border-[#3a2c17] bg-[#120d08] px-2.5 py-1 text-[11px] font-bold text-brand-200 lg:inline-flex">
-            <ShieldCheckIcon className="h-3.5 w-3.5 text-brand-300" />
+          <span className="mr-1 hidden items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-success lg:inline-flex">
+            <ShieldCheckIcon className="h-3.5 w-3.5" />
             UK data protected
           </span>
 
           <TransitionLink
             href={postHref}
-            className="inline-flex h-9 items-center gap-1.5 rounded-full bg-brand-600 px-3.5 text-sm font-bold text-[#140f08] transition-colors duration-150 hover:bg-brand-700"
+            className="inline-flex h-9 items-center gap-1.5 rounded-full bg-brand-600 px-3.5 text-sm font-bold text-white transition-colors duration-150 hover:bg-brand-700"
           >
             <PlusIcon className="h-4 w-4" strokeWidth={2.6} />
             <span className="hidden sm:inline">Post</span>
@@ -430,14 +430,14 @@ export function TopBar() {
             aria-label="Activity, 3 unread"
           >
             <BellIcon className="h-5 w-5" strokeWidth={2.2} />
-            <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-brand-500 ring-2 ring-[#080604]" />
+            <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-brand-600 ring-2 ring-white" />
           </Link>
 
           <TransitionLink href={profileHref} aria-label="Your profile" className="ml-0.5">
             {user ? (
               <Avatar src={me.avatar} alt={user.fullName} size={36} />
             ) : (
-              <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-line bg-[#15100a] text-brand-200 transition-colors duration-150 hover:bg-[#1c150d]">
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-line bg-slate-100 text-slate-500 transition-colors duration-150 hover:bg-slate-200">
                 <UserRoundIcon className="h-4.5 w-4.5" strokeWidth={2.2} aria-hidden="true" />
               </span>
             )}

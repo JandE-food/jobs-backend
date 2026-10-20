@@ -149,32 +149,32 @@ export function RecruiterPostComposerPage() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 py-5">
-      <section className="rounded-[2rem] border border-[#3a2c17]/90 bg-[#0f0b07]/95 p-6 shadow-[0_18px_45px_rgba(0,0,0,0.24)]">
+      <section className="rounded-[2rem] border border-slate-200/90 bg-white/95 p-6 shadow-[0_18px_45px_rgba(15,23,42,0.05)]">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
             <div className="flex items-center gap-2">
-              <VideoIcon className="h-5 w-5 text-brand-300" aria-hidden="true" />
-              <span className="text-xs font-bold uppercase tracking-[0.16em] text-brand-300">
+              <VideoIcon className="h-5 w-5 text-indigo-700" aria-hidden="true" />
+              <span className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-700">
                 Recruiter video post
               </span>
             </div>
-            <h1 className="mt-2 font-display text-4xl font-bold tracking-tight text-brand-50">
+            <h1 className="mt-2 font-display text-4xl font-bold tracking-tight text-slate-950">
               Record or upload a recruiter video update
             </h1>
-            <p className="mt-3 text-sm leading-7 text-brand-100/78">
+            <p className="mt-3 text-sm leading-7 text-slate-600">
               Publish a short recruiter-facing update for hiring campaigns, employer branding, or open-role visibility.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
             <Link
               href="/recruiter"
-              className="inline-flex min-h-11 items-center justify-center rounded-full border border-[#4d3a1d] bg-[#14100c] px-4 text-sm font-semibold text-brand-100 transition-colors hover:bg-[#18130d]"
+              className="inline-flex min-h-11 items-center justify-center rounded-full border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-50"
             >
               Back to feed
             </Link>
             <Link
               href="/companies#posting-queue"
-              className="inline-flex min-h-11 items-center justify-center rounded-full border border-[#4d3a1d] bg-[#16110b] px-4 text-sm font-semibold text-brand-100 transition-colors hover:bg-[#18130d]"
+              className="inline-flex min-h-11 items-center justify-center rounded-full border border-slate-300 bg-slate-50 px-4 text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-100"
             >
               Posting queue
             </Link>
@@ -187,34 +187,34 @@ export function RecruiterPostComposerPage() {
           <div className="flex items-center gap-3">
             <Avatar src={authorAvatar} alt={authorName} size={48} />
             <div>
-              <p className="font-bold text-brand-50">{authorName}</p>
-              <p className="text-sm text-brand-100/75">{authorTitle}</p>
+              <p className="font-bold text-slate-950">{authorName}</p>
+              <p className="text-sm text-slate-600">{authorTitle}</p>
             </div>
           </div>
 
-          <label className="mt-5 block text-sm font-semibold text-brand-100">
+          <label className="mt-5 block text-sm font-semibold text-slate-800">
             Caption
             <textarea
               value={caption}
               onChange={(event) => setCaption(event.target.value)}
               rows={5}
               placeholder="Share what you're hiring for, the type of talent you want to attract, or a quick employer-branding message."
-              className="mt-2 min-h-28 w-full rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 py-3 text-sm text-brand-50 outline-none"
+              className="mt-2 min-h-28 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm outline-none"
             />
           </label>
 
-          <label className="mt-4 block text-sm font-semibold text-brand-100">
+          <label className="mt-4 block text-sm font-semibold text-slate-800">
             Tags
             <input
               value={tagDraft}
               onChange={(event) => setTagDraft(event.target.value)}
-              className="mt-2 min-h-12 w-full rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 text-sm text-brand-50 outline-none"
+              className="mt-2 min-h-12 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 text-sm outline-none"
               placeholder="Hiring, Remote, Engineering"
             />
           </label>
 
           <div className="mt-5 flex flex-wrap gap-3">
-            <label className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-brand-500 px-5 py-3 text-sm font-semibold text-[#140f08] shadow-[0_14px_35px_rgba(196,150,28,0.26)]">
+            <label className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-indigo-700 px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_35px_rgba(79,70,229,0.28)]">
               <UploadCloudIcon className="h-4 w-4" aria-hidden="true" />
               Upload video
               <input type="file" accept="video/*" className="hidden" onChange={handleVideoPick} />
@@ -226,14 +226,14 @@ export function RecruiterPostComposerPage() {
           </div>
 
           {statusMessage ? (
-            <p className="mt-4 text-sm font-semibold text-brand-200">{statusMessage}</p>
+            <p className="mt-4 text-sm font-semibold text-indigo-800">{statusMessage}</p>
           ) : null}
         </Card>
 
         <Card className="p-6">
           <div className="flex items-center gap-2">
-            <VideoIcon className="h-5 w-5 text-brand-300" aria-hidden="true" />
-            <h2 className="font-display text-2xl font-bold tracking-tight text-brand-50">
+            <VideoIcon className="h-5 w-5 text-indigo-700" aria-hidden="true" />
+            <h2 className="font-display text-2xl font-bold tracking-tight text-slate-950">
               Preview
             </h2>
           </div>
@@ -246,7 +246,7 @@ export function RecruiterPostComposerPage() {
                 className="h-[34rem] w-full object-cover"
               />
             ) : (
-              <div className="grid h-[34rem] place-items-center text-center text-brand-100/80">
+              <div className="grid h-[34rem] place-items-center text-center text-white/80">
                 <div>
                   <VideoIcon className="mx-auto h-10 w-10" aria-hidden="true" />
                   <p className="mt-4 text-sm font-semibold">Upload a recruiter video to preview it here.</p>
@@ -265,12 +265,12 @@ export function RecruiterPostComposerPage() {
             ))}
           </div>
 
-          <p className="mt-4 text-sm leading-7 text-brand-100/78">
+          <p className="mt-4 text-sm leading-7 text-slate-600">
             Published recruiter videos use the shared feed post API, so they go through a real post-creation flow.
           </p>
           <Link
             href="/recruiter"
-            className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-sm font-semibold text-brand-100 transition-colors hover:bg-[#18130d]"
+            className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-sm font-semibold text-indigo-800 transition-colors hover:bg-indigo-50"
           >
             Return to recruiter feed <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
           </Link>

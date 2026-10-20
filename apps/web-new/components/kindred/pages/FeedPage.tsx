@@ -114,14 +114,14 @@ function ComposeCard({
   const captureVideoInputRef = useRef<HTMLInputElement | null>(null);
 
   return (
-    <Card className="overflow-hidden border-[#3a2c17]/90 bg-[#0f0b07]/95 p-5 shadow-[0_24px_60px_rgba(0,0,0,0.26)] sm:p-6">
+    <Card className="overflow-hidden border-slate-200/90 bg-white/95 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.06)] sm:p-6">
       <div className="flex items-start gap-3">
         <Avatar src={authorAvatar} alt={authorName} size={46} />
         <div className="min-w-0 flex-1">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="text-sm font-semibold text-brand-50">{authorName}</p>
-              <p className="text-xs font-medium uppercase tracking-[0.14em] text-brand-200/60">
+              <p className="text-sm font-semibold text-slate-900">{authorName}</p>
+              <p className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">
                 Post to your feed
               </p>
             </div>
@@ -132,14 +132,14 @@ function ComposeCard({
             onChange={(event) => onBodyChange(event.target.value)}
             rows={4}
             placeholder="Share an update, a role, or a win..."
-            className="mt-3 min-h-28 w-full resize-none rounded-[1.5rem] border border-[#4d3a1d] bg-[#14100c] px-4 py-3 text-sm leading-7 text-brand-100 outline-none transition-colors placeholder:text-brand-200/45 focus:border-brand-400 focus:bg-[#18130d] focus-visible:outline-none"
+            className="mt-3 min-h-28 w-full resize-none rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-7 text-slate-700 outline-none transition-colors placeholder:text-slate-500 focus:border-slate-300 focus:bg-white focus-visible:outline-none"
           />
           {media.length ? (
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               {media.map((item) => (
                 <div
                   key={item.id}
-                  className="overflow-hidden rounded-[1.4rem] border border-[#302312] bg-[#16110b]"
+                  className="overflow-hidden rounded-[1.4rem] border border-slate-200 bg-slate-50"
                 >
                   {item.type === "image" ? (
                     <div className="relative h-48 w-full">
@@ -156,13 +156,13 @@ function ComposeCard({
                     <video src={item.src} controls className="h-48 w-full object-cover" />
                   )}
                   <div className="flex items-center justify-between gap-3 px-4 py-3">
-                    <p className="min-w-0 truncate text-xs font-semibold uppercase tracking-[0.12em] text-brand-200/60">
+                    <p className="min-w-0 truncate text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
                       {item.type === "image" ? "Photo ready" : "Video ready"}
                     </p>
                     <button
                       type="button"
                       onClick={() => onRemoveMedia(item.id)}
-                      className="text-xs font-semibold text-rose-400 hover:text-rose-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400"
+                      className="text-xs font-semibold text-rose-700 hover:text-rose-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
                     >
                       Remove
                     </button>
@@ -199,17 +199,17 @@ function ComposeCard({
         onChange={onPickVideos}
       />
 
-      <div className="mt-4 flex flex-wrap gap-2 border-t border-[#241b10] pt-4">
+      <div className="mt-4 flex flex-wrap gap-2 border-t border-slate-100 pt-4">
         {(["Work", "Showcase", "Local"] as FeedMode[]).map((channel) => (
           <button
             key={channel}
             type="button"
             onClick={() => onSelectChannel(channel)}
             className={cn(
-              "inline-flex min-h-11 items-center justify-center rounded-xl border px-4 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400",
+              "inline-flex min-h-11 items-center justify-center rounded-xl border px-4 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600",
               selectedChannel === channel
-                ? "border-brand-500 bg-brand-50/12 text-brand-50"
-                : "border-[#3a2c17] text-brand-100 hover:bg-[#18130d]",
+                ? "border-indigo-200 bg-indigo-50 text-indigo-800"
+                : "border-slate-200 text-slate-700 hover:bg-slate-50",
             )}
           >
             {channel}
@@ -218,7 +218,7 @@ function ComposeCard({
         <button
           type="button"
           onClick={() => imageInputRef.current?.click()}
-          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#3a2c17] px-4 text-sm font-semibold text-brand-100 hover:bg-[#18130d] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
         >
           <ImageIcon className="h-4 w-4 text-emerald-700" aria-hidden="true" />
           Photos
@@ -226,15 +226,15 @@ function ComposeCard({
         <button
           type="button"
           onClick={() => videoInputRef.current?.click()}
-          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#3a2c17] px-4 text-sm font-semibold text-brand-100 hover:bg-[#18130d] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
         >
-          <VideoIcon className="h-4 w-4 text-brand-300" aria-hidden="true" />
+          <VideoIcon className="h-4 w-4 text-indigo-700" aria-hidden="true" />
           Videos
         </button>
         <button
           type="button"
           onClick={() => captureVideoInputRef.current?.click()}
-          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#3a2c17] px-4 text-sm font-semibold text-brand-100 hover:bg-[#18130d] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
         >
           <VideoIcon className="h-4 w-4 text-rose-700" aria-hidden="true" />
           Record intro
@@ -242,7 +242,7 @@ function ComposeCard({
         <button
           type="button"
           onClick={onCreateDraft}
-          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#3a2c17] px-4 text-sm font-semibold text-brand-100 hover:bg-[#18130d] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 text-sm font-semibold text-indigo-800 hover:bg-indigo-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
         >
           <SparklesIcon className="h-4 w-4" aria-hidden="true" />
           AI draft
@@ -402,20 +402,20 @@ function ProfileNudge({
   profileReadiness: number;
 }) {
   return (
-    <Card className="border-[#4a381b] bg-[linear-gradient(90deg,rgba(23,17,8,1),rgba(15,11,7,1),rgba(18,25,15,0.92))] p-5">
+    <Card className="border-indigo-200 bg-gradient-to-r from-indigo-50 via-white to-emerald-50 p-5">
       <div className="flex items-center gap-3">
         <Avatar src={avatarSrc} alt="" size={42} />
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-bold text-brand-50">
+          <p className="text-sm font-bold text-indigo-950">
             Your profile is {profileReadiness}% ready
           </p>
-          <p className="text-xs text-brand-100/75">
+          <p className="text-xs text-indigo-900">
             Add your CV to improve every match.
           </p>
         </div>
         <Link
           href="/resume"
-          className="inline-flex min-h-11 shrink-0 items-center gap-1 rounded-xl bg-brand-500 px-3 text-sm font-bold text-[#140f08] shadow-sm hover:bg-brand-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400"
+          className="inline-flex min-h-11 shrink-0 items-center gap-1 rounded-xl bg-white px-3 text-sm font-bold text-indigo-800 shadow-sm ring-1 ring-indigo-200 hover:bg-indigo-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
         >
           <FileTextIcon className="h-4 w-4" aria-hidden="true" />
           CV
@@ -468,23 +468,23 @@ function PostCard({
 
   return (
     <article>
-      <Card className="overflow-hidden border-[#3a2c17]/90 bg-[#0f0b07]/95 p-0 shadow-[0_22px_55px_rgba(0,0,0,0.24)]">
+      <Card className="overflow-hidden border-slate-200/90 bg-white/95 p-0 shadow-[0_22px_55px_rgba(15,23,42,0.06)]">
         <div className="p-5 sm:p-6">
           <div className="flex items-start gap-3">
             <Avatar src={item.author.avatar} alt={item.author.name} size={44} />
             <div className="min-w-0 flex-1">
               <div className="flex items-baseline gap-2">
-                <p className="truncate font-semibold text-brand-50">
+                <p className="truncate font-semibold text-slate-900">
                   {item.author.name}
                 </p>
-                <span className="text-xs text-brand-200/55">· {item.time}</span>
+                <span className="text-xs text-slate-500">· {item.time}</span>
               </div>
-              <p className="truncate text-sm text-brand-100/75">
+              <p className="truncate text-sm text-slate-600">
                 {item.author.title} at {item.author.company}
               </p>
             </div>
           </div>
-          <p className="mt-4 text-[15px] leading-relaxed text-brand-100/80">{item.body}</p>
+          <p className="mt-4 text-[15px] leading-relaxed text-slate-700">{item.body}</p>
           <div className="mt-4 flex flex-wrap gap-2">
             {item.tags.map((tag) => (
               <Badge key={tag} tone="indigo">
@@ -496,7 +496,7 @@ function PostCard({
         {item.media?.length ? (
           <div
             className={cn(
-              "grid gap-1.5 border-y border-[#241b10] bg-[#14100c] p-1.5",
+              "grid gap-1.5 border-y border-slate-100 bg-slate-100/70 p-1.5",
               item.media.length > 1 && "sm:grid-cols-2",
             )}
           >
@@ -504,7 +504,7 @@ function PostCard({
               media.type === "image" ? (
                 <div
                   key={media.src}
-                  className="relative h-[20rem] w-full overflow-hidden rounded-[1.5rem] bg-[#0a0806] sm:h-[32rem]"
+                  className="relative h-[20rem] w-full overflow-hidden rounded-[1.5rem] bg-slate-200 sm:h-[32rem]"
                 >
                   <Image
                     src={media.src}
@@ -535,7 +535,7 @@ function PostCard({
             aria-pressed={Boolean(item.liked)}
             aria-label={`${item.liked ? "Unlike" : "Like"} post, ${item.likes} likes`}
             className={cn(
-              "inline-flex min-h-11 items-center gap-2 rounded-2xl px-3.5 text-sm font-semibold hover:bg-[#18130d] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400",
+              "inline-flex min-h-11 items-center gap-2 rounded-2xl px-3.5 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600",
               item.liked && "text-rose-700",
             )}
           >
@@ -549,7 +549,7 @@ function PostCard({
             type="button"
             onClick={() => setCommentsOpen((current) => !current)}
             aria-label={`Open ${comments.length} comments`}
-            className="inline-flex min-h-11 items-center gap-2 rounded-2xl px-3.5 text-sm font-semibold text-brand-100 hover:bg-[#18130d] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400"
+            className="inline-flex min-h-11 items-center gap-2 rounded-2xl px-3.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
           >
             <MessageCircleIcon className="h-4 w-4" aria-hidden="true" />
             {comments.length}
@@ -558,13 +558,13 @@ function PostCard({
             type="button"
             aria-label="Share post"
             onClick={() => void handleShare()}
-            className="grid h-11 w-11 place-items-center rounded-2xl text-brand-100 hover:bg-[#18130d] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400"
+            className="grid h-11 w-11 place-items-center rounded-2xl text-slate-700 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
           >
             <Share2Icon className="h-4 w-4" aria-hidden="true" />
           </button>
         </div>
         {commentsOpen ? (
-          <div className="space-y-3 border-t border-[#241b10] px-4 py-4 sm:px-6">
+          <div className="space-y-3 border-t border-slate-100 px-4 py-4 sm:px-6">
             <div className="flex gap-3">
               <Avatar src={viewerAvatar} alt={viewerName} size={40} />
               <div className="flex-1">
@@ -573,10 +573,10 @@ function PostCard({
                   onChange={(event) => setCommentText(event.target.value)}
                   rows={3}
                   placeholder="Add a comment..."
-                  className="w-full rounded-2xl border border-[#3a2c17] bg-[#16110b] px-4 py-3 text-sm text-brand-100 outline-none focus:border-brand-500/60 focus:bg-[#1a140d] focus-visible:outline-none"
+                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none focus:border-slate-300 focus:bg-white focus-visible:outline-none"
                 />
                 <div className="mt-3 flex items-center justify-between gap-3">
-                  <span className="text-xs text-brand-200/55">Keep the conversation useful and specific.</span>
+                  <span className="text-xs text-slate-500">Keep the conversation useful and specific.</span>
                   <Button size="sm" onClick={handleAddComment}>
                     Comment
                   </Button>
@@ -585,12 +585,12 @@ function PostCard({
             </div>
             <div className="space-y-3">
               {comments.map((comment) => (
-                <div key={comment.id} className="rounded-2xl border border-[#302312] bg-[#16110b] p-4">
+                <div key={comment.id} className="rounded-2xl bg-slate-50 p-4">
                   <div className="flex items-center gap-2">
-                    <p className="text-sm font-semibold text-brand-50">{comment.author}</p>
-                    <span className="text-xs text-brand-200/55">{comment.time}</span>
+                    <p className="text-sm font-semibold text-slate-900">{comment.author}</p>
+                    <span className="text-xs text-slate-500">{comment.time}</span>
                   </div>
-                  <p className="mt-2 text-sm leading-7 text-brand-100/80">{comment.text}</p>
+                  <p className="mt-2 text-sm leading-7 text-slate-700">{comment.text}</p>
                 </div>
               ))}
             </div>
@@ -611,21 +611,21 @@ function MatchCard({
 }) {
   return (
     <article>
-      <Card className="overflow-hidden border-[#4a381b]">
-        <div className="flex items-center gap-2 border-b border-[#3a2c17] bg-[#171108] px-4 py-2.5">
-          <SparklesIcon className="h-4 w-4 text-brand-300" aria-hidden="true" />
-          <p className="text-xs font-bold uppercase tracking-wide text-brand-200">
+      <Card className="overflow-hidden border-indigo-200">
+        <div className="flex items-center gap-2 border-b border-indigo-100 bg-indigo-50 px-4 py-2.5">
+          <SparklesIcon className="h-4 w-4 text-indigo-700" aria-hidden="true" />
+          <p className="text-xs font-bold uppercase tracking-wide text-indigo-800">
             High-confidence match
           </p>
         </div>
         <div className="p-4 sm:p-5">
           <div className="flex items-start gap-3">
             <div className="min-w-0 flex-1">
-              <h2 className="font-display text-lg font-bold text-brand-50">
+              <h2 className="font-display text-lg font-bold text-slate-900">
                 {item.role}
               </h2>
-              <p className="text-sm text-brand-100/75">{item.company}</p>
-              <div className="mt-2 space-y-1 text-sm text-brand-100/75">
+              <p className="text-sm text-slate-600">{item.company}</p>
+              <div className="mt-2 space-y-1 text-sm text-slate-600">
                 <span className="flex items-center gap-1.5">
                   <MapPinIcon className="h-4 w-4" aria-hidden="true" />
                   {item.location}
@@ -640,7 +640,7 @@ function MatchCard({
           </div>
           <ul className="mt-4 space-y-2">
             {item.reasons.map((reason) => (
-              <li key={reason} className="flex items-start gap-2 text-sm text-brand-100/80">
+              <li key={reason} className="flex items-start gap-2 text-sm text-slate-700">
                 <CheckCircle2Icon
                   className="mt-0.5 h-4 w-4 shrink-0 text-emerald-700"
                   aria-hidden="true"
@@ -655,7 +655,7 @@ function MatchCard({
             </Button>
             <Link
               href="/jobs"
-              className="inline-flex min-h-11 items-center justify-center gap-1 rounded-xl border border-[#3a2c17] px-3 text-sm font-semibold text-brand-100 hover:bg-[#18130d] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400"
+              className="inline-flex min-h-11 items-center justify-center gap-1 rounded-xl border border-slate-300 px-3 text-sm font-semibold text-slate-800 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
             >
               All matches <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
             </Link>
@@ -677,16 +677,16 @@ function HiringCard({
         <div className="flex items-start gap-3">
           <Avatar src={item.author.avatar} alt={item.author.name} size={44} />
           <div className="min-w-0 flex-1">
-            <p className="text-sm text-brand-100/75">
-              <span className="font-semibold text-brand-50">{item.author.name}</span> is
+            <p className="text-sm text-slate-600">
+              <span className="font-semibold text-slate-900">{item.author.name}</span> is
               hiring · {item.time}
             </p>
-            <div className="mt-3 rounded-xl border border-[#302312] bg-[#16110b] p-4">
+            <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
               <div className="flex items-start justify-between gap-2">
-                <h2 className="font-semibold text-brand-50">{item.role}</h2>
+                <h2 className="font-semibold text-slate-900">{item.role}</h2>
                 <Badge tone="emerald">{item.seats} seats</Badge>
               </div>
-              <p className="mt-2 text-sm leading-relaxed text-brand-100/80">{item.note}</p>
+              <p className="mt-2 text-sm leading-relaxed text-slate-700">{item.note}</p>
               <div className="mt-3 grid grid-cols-2 gap-2">
                 <Button size="sm">Refer</Button>
                 <Button size="sm" variant="outline">
@@ -830,26 +830,26 @@ function FeedPromptModal({
         role="dialog"
         aria-modal="true"
         aria-label={prompt.title}
-        className="w-full max-w-sm rounded-[1.6rem] border border-[#4a381b] bg-[#0f0b07] p-5 shadow-[0_24px_60px_rgba(0,0,0,0.36)]"
+        className="w-full max-w-sm rounded-[1.6rem] bg-white p-5 shadow-[0_24px_60px_rgba(15,23,42,0.22)]"
         onClick={(event) => event.stopPropagation()}
       >
-        <p className="text-xs font-bold uppercase tracking-[0.16em] text-brand-300">
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-700">
           {prompt.badge}
         </p>
-        <h2 className="mt-2 text-xl font-bold text-brand-50">{prompt.title}</h2>
-        <p className="mt-3 text-sm leading-6 text-brand-100/80">{prompt.copy}</p>
+        <h2 className="mt-2 text-xl font-bold text-slate-950">{prompt.title}</h2>
+        <p className="mt-3 text-sm leading-6 text-slate-600">{prompt.copy}</p>
         <div className="mt-5 flex flex-wrap gap-3">
           <button
             type="button"
             onClick={onCta}
-            className="inline-flex min-h-11 items-center justify-center rounded-full bg-brand-500 px-5 text-sm font-bold text-[#140f08]"
+            className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-950 px-5 text-sm font-bold text-white"
           >
             {prompt.ctaLabel}
           </button>
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex min-h-11 items-center justify-center rounded-full border border-[#3a2c17] bg-[#16110b] px-5 text-sm font-bold text-brand-100"
+            className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-100 px-5 text-sm font-bold text-slate-700"
           >
             Maybe later
           </button>
@@ -1680,7 +1680,7 @@ export function FeedPage() {
     return (
       <div
         className={cn(
-          "grid h-full w-full place-items-center bg-slate-900 text-brand-100/70",
+          "grid h-full w-full place-items-center bg-slate-900 text-white/70",
           options?.className,
         )}
       >
@@ -1728,7 +1728,7 @@ export function FeedPage() {
         {activeShort ? (
           <article
             key={`${activeShort.id}-${lastMoveDirection}-mobile`}
-            className="relative h-[100svh] overflow-hidden bg-slate-950 text-brand-50"
+            className="relative h-[100svh] overflow-hidden bg-slate-950 text-white"
           >
             {mobilePreviewShort ? (
               <div
@@ -1782,10 +1782,15 @@ export function FeedPage() {
                 <TransitionLink
                   href={discoveryHref}
                   aria-label="Open discovery settings"
-                  className="grid h-11 w-11 place-items-center rounded-full border border-brand-50/15 bg-black/45 text-brand-50 shadow-[0_16px_36px_rgba(15,23,42,0.22)] backdrop-blur-md transition-transform duration-200 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-300/80"
+                  className="grid h-11 w-11 place-items-center rounded-full bg-black/45 text-white shadow-[0_16px_36px_rgba(15,23,42,0.22)] backdrop-blur-md transition-transform duration-200 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
                 >
                   <SlidersHorizontalIcon className="h-5 w-5" aria-hidden="true" />
                 </TransitionLink>
+              </div>
+              <div className="pointer-events-none absolute left-1/2 top-[calc(env(safe-area-inset-top)+0.95rem)] z-30 -translate-x-1/2">
+                <span className="font-['Palatino_Linotype','Book_Antiqua','URW_Palladio_L',serif] text-[1.55rem] italic font-semibold tracking-[0.12em] text-white drop-shadow-[0_10px_22px_rgba(15,23,42,0.42)]">
+                  BEJELI
+                </span>
               </div>
               <div
                 className="absolute right-4 top-[calc(env(safe-area-inset-top)+0.9rem)] z-30"
@@ -1795,18 +1800,18 @@ export function FeedPage() {
                 <TransitionLink
                   href={searchHref}
                   aria-label="Search jobs"
-                  className="grid h-11 w-11 place-items-center rounded-full border border-brand-50/15 bg-black/45 text-brand-50 shadow-[0_16px_36px_rgba(15,23,42,0.22)] backdrop-blur-md transition-transform duration-200 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-300/80"
+                  className="grid h-11 w-11 place-items-center rounded-full bg-black/45 text-white shadow-[0_16px_36px_rgba(15,23,42,0.22)] backdrop-blur-md transition-transform duration-200 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
                 >
                   <SearchIcon className="h-5 w-5" aria-hidden="true" />
                 </TransitionLink>
               </div>
               {activeShort.media?.type === "video" && playbackIndicator ? (
                 <div className="pointer-events-none absolute inset-0 z-20 grid place-items-center">
-                  <div className="flex min-w-[8.5rem] flex-col items-center gap-2 rounded-[1.75rem] border border-brand-50/15 bg-black/52 px-5 py-4 text-brand-50 shadow-[0_20px_45px_rgba(15,23,42,0.28)] backdrop-blur-md">
+                  <div className="flex min-w-[8.5rem] flex-col items-center gap-2 rounded-[1.75rem] bg-black/52 px-5 py-4 text-white shadow-[0_20px_45px_rgba(15,23,42,0.28)] backdrop-blur-md">
                     <span className="text-3xl font-bold leading-none">
                       {playbackIndicator === "pause" ? "❚❚" : "▶"}
                     </span>
-                    <span className="text-sm font-semibold tracking-[0.08em] text-brand-100/88">
+                    <span className="text-sm font-semibold tracking-[0.08em] text-white/90">
                       {playbackIndicator === "pause" ? "Paused" : "Playing"}
                     </span>
                   </div>
@@ -1827,36 +1832,36 @@ export function FeedPage() {
                   type="button"
                   onClick={handleTalentEndorseAttempt}
                   className={cn(
-                    "grid h-12 w-12 place-items-center rounded-full border border-brand-50/15 bg-black/45 text-brand-50 transition-transform duration-200 active:scale-95",
+                    "grid h-12 w-12 place-items-center rounded-full bg-black/45 text-white transition-transform duration-200 active:scale-95",
                     animatedAction === "endorse" && "reel-action-pop",
                   )}
                   aria-label="Endorse creator"
                 >
                   <ThumbsUpIcon className="h-5 w-5 -translate-y-px" aria-hidden="true" />
                 </button>
-                <span className="text-sm font-bold text-brand-50">{activeShort.endorsements ?? 0}</span>
+                <span className="text-sm font-bold text-white">{activeShort.endorsements ?? 0}</span>
                 <button
                   type="button"
                   onClick={() => setCommentsOpen((current) => !current)}
-                  className="grid h-12 w-12 place-items-center rounded-full border border-brand-50/15 bg-black/45 text-brand-50 transition-transform duration-200 active:scale-95"
+                  className="grid h-12 w-12 place-items-center rounded-full bg-black/45 text-white transition-transform duration-200 active:scale-95"
                   aria-label="Open comments"
                 >
                   <MessageCircleIcon className="h-5 w-5" aria-hidden="true" />
                 </button>
-                <span className="text-sm font-bold text-brand-50">{activeShort.comments}</span>
+                <span className="text-sm font-bold text-white">{activeShort.comments}</span>
                 <button
                   type="button"
                   onClick={() => void handleShareShort(activeShort.id)}
-                  className="grid h-12 w-12 place-items-center rounded-full border border-brand-50/15 bg-black/45 text-brand-50 transition-transform duration-200 active:scale-95"
+                  className="grid h-12 w-12 place-items-center rounded-full bg-black/45 text-white transition-transform duration-200 active:scale-95"
                   aria-label="Share post"
                 >
                   <Share2Icon className="h-5 w-5" aria-hidden="true" />
                 </button>
-                <span className="text-sm font-bold text-brand-50">{activeShort.shares ?? 0}</span>
+                <span className="text-sm font-bold text-white">{activeShort.shares ?? 0}</span>
                 <button
                   type="button"
                   onClick={() => setIsMuted((current) => !current)}
-                  className="grid h-12 w-12 place-items-center rounded-full border border-brand-50/15 bg-black/45 text-brand-50 transition-transform duration-200 active:scale-95"
+                  className="grid h-12 w-12 place-items-center rounded-full bg-black/45 text-white transition-transform duration-200 active:scale-95"
                   aria-label={isMuted ? "Unmute reel" : "Mute reel"}
                 >
                   {isMuted ? (
@@ -1875,7 +1880,7 @@ export function FeedPage() {
                 <div className="max-w-[12.75rem] space-y-2.5">
                   <TransitionLink
                     href={`/profile?creator=${activeShort.authorId}`}
-                    className="flex items-center gap-2.5 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-300/80"
+                    className="flex items-center gap-2.5 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
                     data-reel-interactive="true"
                   >
                     <span style={{ viewTransitionName: `creator-avatar-${activeShort.authorId}` }}>
@@ -1883,12 +1888,12 @@ export function FeedPage() {
                     </span>
                     <div className="min-w-0">
                       <p
-                        className="truncate text-[0.98rem] font-bold text-brand-50"
+                        className="truncate text-[0.98rem] font-bold text-white"
                         style={{ viewTransitionName: `creator-name-${activeShort.authorId}` }}
                       >
                         {activeShort.authorName}
                       </p>
-                      <p className="truncate text-[0.78rem] text-brand-100/72">
+                      <p className="truncate text-[0.78rem] text-white/72">
                         {activeShort.authorMeta}
                         {activeShort.locationLabel ? ` · ${activeShort.locationLabel}` : ""}
                       </p>
@@ -1899,31 +1904,31 @@ export function FeedPage() {
                     recommendationNote={activeShort.recommendationNote}
                     expanded={activeShortCaptionExpanded}
                     onToggle={() => toggleShortCaption(activeShort.id)}
-                    captionClassName="text-[0.84rem] font-semibold leading-[1.45rem] text-brand-50"
-                    noteClassName="text-[0.78rem] leading-5 text-brand-100/78"
-                    buttonClassName="text-left text-[0.78rem] font-bold text-brand-100 underline decoration-brand-400/45 underline-offset-2"
+                    captionClassName="text-[0.84rem] font-semibold leading-[1.45rem] text-white/96"
+                    noteClassName="text-[0.78rem] leading-5 text-white/78"
+                    buttonClassName="text-left text-[0.78rem] font-bold text-white/88 underline decoration-white/45 underline-offset-2"
                   />
                 </div>
               </div>
 
               {commentsOpen ? (
                 <div
-                  className="ui-fade-up absolute inset-x-4 bottom-4 z-40 rounded-[1.5rem] border border-[#4a381b] bg-[#0f0b07] p-4 shadow-[0_22px_55px_rgba(0,0,0,0.34)]"
+                  className="ui-fade-up absolute inset-x-4 bottom-4 z-40 rounded-[1.5rem] bg-white p-4 shadow-[0_22px_55px_rgba(15,23,42,0.2)]"
                   style={{ bottom: "calc(env(safe-area-inset-bottom) + 5rem)" }}
                   onClick={(event) => event.stopPropagation()}
                   data-reel-interactive="true"
                 >
                   <div className="flex items-center justify-between gap-3">
                     <div>
-                      <p className="text-sm font-bold text-brand-50">Comments</p>
-                      <p className="text-xs text-brand-200/60">
+                      <p className="text-sm font-bold text-slate-950">Comments</p>
+                      <p className="text-xs text-slate-500">
                         {(activeShort.commentItems ?? []).length} replies
                       </p>
                     </div>
                     <button
                       type="button"
                       onClick={() => setCommentsOpen(false)}
-                      className="text-xs font-bold text-brand-200/72"
+                      className="text-xs font-bold text-slate-500"
                     >
                       Close
                     </button>
@@ -1931,16 +1936,16 @@ export function FeedPage() {
                   <div className="mt-3 grid max-h-44 gap-2 overflow-y-auto">
                     {(activeShort.commentItems ?? []).length ? (
                       (activeShort.commentItems ?? []).map((comment) => (
-                        <div key={comment.id} className="rounded-2xl border border-[#302312] bg-[#16110b] p-3">
+                        <div key={comment.id} className="rounded-2xl bg-slate-50 p-3">
                           <div className="flex items-center gap-2">
-                            <p className="text-xs font-bold text-brand-50">{comment.author}</p>
-                            <span className="text-[11px] text-brand-200/55">{comment.time}</span>
+                            <p className="text-xs font-bold text-slate-900">{comment.author}</p>
+                            <span className="text-[11px] text-slate-500">{comment.time}</span>
                           </div>
-                          <p className="mt-2 text-sm leading-6 text-brand-100/80">{comment.text}</p>
+                          <p className="mt-2 text-sm leading-6 text-slate-700">{comment.text}</p>
                         </div>
                       ))
                     ) : (
-                      <p className="text-sm text-brand-200/70">
+                      <p className="text-sm text-slate-500">
                         Start the conversation on this short.
                       </p>
                     )}
@@ -1959,13 +1964,13 @@ export function FeedPage() {
                           }
                         }}
                         placeholder="Add a thoughtful reply..."
-                        className="w-full rounded-[1.25rem] border border-[#3a2c17] bg-[#16110b] px-4 py-3 text-sm text-brand-100 outline-none focus:border-brand-500/60 focus:bg-[#1a140d]"
+                        className="w-full rounded-[1.25rem] border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none focus:border-slate-300 focus:bg-white"
                       />
                       <div className="mt-3 flex justify-end">
                         <button
                           type="button"
                           onClick={submitShortComment}
-                          className="rounded-full bg-brand-500 px-4 py-2 text-sm font-bold text-[#140f08]"
+                          className="rounded-full bg-slate-950 px-4 py-2 text-sm font-bold text-white"
                         >
                           Send
                         </button>
@@ -1989,10 +1994,10 @@ export function FeedPage() {
             </div>
           </article>
         ) : (
-          <div className="grid h-[100svh] place-items-center bg-slate-950 px-6 text-center text-brand-50">
+          <div className="grid h-[100svh] place-items-center bg-slate-950 px-6 text-center text-white">
             <div>
               <h2 className="font-display text-2xl font-bold">No shorts yet</h2>
-              <p className="mt-3 text-sm leading-6 text-brand-100/75">
+              <p className="mt-3 text-sm leading-6 text-white/75">
                 Publish the first short to activate the immersive mobile feed.
               </p>
             </div>
@@ -2000,13 +2005,13 @@ export function FeedPage() {
         )}
       </section>
 
-      <section className="hidden rounded-[2rem] border border-[#3a2c17]/90 bg-[#0f0b07]/95 p-5 shadow-[0_24px_60px_rgba(0,0,0,0.26)] sm:block">
+      <section className="hidden rounded-[2rem] border border-slate-200/90 bg-white/95 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.06)] sm:block">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-300">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-indigo-700">
               FOR YOUR NEXT MOVE
             </p>
-            <h1 className="mt-2 font-display text-[2.35rem] font-bold tracking-tight text-brand-50">
+            <h1 className="mt-2 font-display text-[2.35rem] font-bold tracking-tight text-slate-950">
               Feed
             </h1>
           </div>
@@ -2028,7 +2033,7 @@ export function FeedPage() {
                 <button
                   type="button"
                   onClick={() => move(-1)}
-                  className="grid h-12 w-12 place-items-center rounded-full border border-[#3a2c17] bg-[#14100c] text-brand-100 shadow-sm"
+                  className="grid h-12 w-12 place-items-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm"
                   aria-label="Move up to previous short"
                   disabled={!immersiveShorts.length}
                 >
@@ -2073,11 +2078,11 @@ export function FeedPage() {
                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/15 via-black/10 to-black/75" />
                     {activeShort.media?.type === "video" && playbackIndicator ? (
                       <div className="pointer-events-none absolute inset-0 z-20 grid place-items-center">
-                        <div className="flex min-w-[8.5rem] flex-col items-center gap-2 rounded-[1.75rem] border border-brand-50/15 bg-black/52 px-5 py-4 text-brand-50 shadow-[0_20px_45px_rgba(15,23,42,0.28)] backdrop-blur-md">
+                        <div className="flex min-w-[8.5rem] flex-col items-center gap-2 rounded-[1.75rem] bg-black/52 px-5 py-4 text-white shadow-[0_20px_45px_rgba(15,23,42,0.28)] backdrop-blur-md">
                           <span className="text-3xl font-bold leading-none">
                             {playbackIndicator === "pause" ? "❚❚" : "▶"}
                           </span>
-                          <span className="text-sm font-semibold tracking-[0.08em] text-brand-100/88">
+                          <span className="text-sm font-semibold tracking-[0.08em] text-white/90">
                             {playbackIndicator === "pause" ? "Paused" : "Playing"}
                           </span>
                         </div>
@@ -2097,38 +2102,38 @@ export function FeedPage() {
                         type="button"
                         onClick={handleTalentEndorseAttempt}
                         className={cn(
-                          "grid h-12 w-12 place-items-center rounded-full border border-brand-50/15 bg-black/45 text-brand-50 transition-transform duration-200 hover:scale-105 active:scale-95",
+                          "grid h-12 w-12 place-items-center rounded-full bg-black/45 text-white transition-transform duration-200 hover:scale-105 active:scale-95",
                           animatedAction === "endorse" && "reel-action-pop",
                         )}
                         aria-label="Endorse creator"
                       >
                         <ThumbsUpIcon className="h-5 w-5 -translate-y-px" aria-hidden="true" />
                       </button>
-                      <span className="text-sm font-bold text-brand-50">
+                      <span className="text-sm font-bold text-white">
                         {activeShort.endorsements ?? 0}
                       </span>
                       <button
                         type="button"
                         onClick={() => setCommentsOpen((current) => !current)}
-                        className="grid h-12 w-12 place-items-center rounded-full border border-brand-50/15 bg-black/45 text-brand-50 transition-transform duration-200 hover:scale-105 active:scale-95"
+                        className="grid h-12 w-12 place-items-center rounded-full bg-black/45 text-white transition-transform duration-200 hover:scale-105 active:scale-95"
                         aria-label="Open comments"
                       >
                         <MessageCircleIcon className="h-5 w-5" aria-hidden="true" />
                       </button>
-                      <span className="text-sm font-bold text-brand-50">{activeShort.comments}</span>
+                      <span className="text-sm font-bold text-white">{activeShort.comments}</span>
                       <button
                         type="button"
                         onClick={() => void handleShareShort(activeShort.id)}
-                        className="grid h-12 w-12 place-items-center rounded-full border border-brand-50/15 bg-black/45 text-brand-50 transition-transform duration-200 hover:scale-105 active:scale-95"
+                        className="grid h-12 w-12 place-items-center rounded-full bg-black/45 text-white transition-transform duration-200 hover:scale-105 active:scale-95"
                         aria-label="Share post"
                       >
                         <Share2Icon className="h-5 w-5" aria-hidden="true" />
                       </button>
-                      <span className="text-sm font-bold text-brand-50">{activeShort.shares ?? 0}</span>
+                      <span className="text-sm font-bold text-white">{activeShort.shares ?? 0}</span>
                       <button
                         type="button"
                         onClick={() => setIsMuted((current) => !current)}
-                        className="grid h-12 w-12 place-items-center rounded-full border border-brand-50/15 bg-black/45 text-brand-50 transition-transform duration-200 hover:scale-105 active:scale-95"
+                        className="grid h-12 w-12 place-items-center rounded-full bg-black/45 text-white transition-transform duration-200 hover:scale-105 active:scale-95"
                         aria-label={isMuted ? "Unmute reel" : "Mute reel"}
                       >
                         {isMuted ? (
@@ -2145,7 +2150,7 @@ export function FeedPage() {
                     >
                       <TransitionLink
                         href={`/profile?creator=${activeShort.authorId}`}
-                        className="flex items-center gap-3 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-300/80"
+                        className="flex items-center gap-3 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
                         data-reel-interactive="true"
                       >
                         <span style={{ viewTransitionName: `creator-avatar-${activeShort.authorId}` }}>
@@ -2153,12 +2158,12 @@ export function FeedPage() {
                         </span>
                         <div className="min-w-0">
                           <p
-                            className="truncate text-[1.15rem] font-bold text-brand-50"
+                            className="truncate text-[1.15rem] font-bold text-white"
                             style={{ viewTransitionName: `creator-name-${activeShort.authorId}` }}
                           >
                             {activeShort.authorName}
                           </p>
-                          <p className="truncate text-sm text-brand-100/75">
+                          <p className="truncate text-sm text-white/75">
                             {activeShort.authorMeta}
                             {activeShort.locationLabel ? ` · ${activeShort.locationLabel}` : ""}
                           </p>
@@ -2170,19 +2175,19 @@ export function FeedPage() {
                           recommendationNote={activeShort.recommendationNote}
                           expanded={activeShortCaptionExpanded}
                           onToggle={() => toggleShortCaption(activeShort.id)}
-                          captionClassName="text-[0.95rem] font-semibold leading-7 text-brand-50"
-                          noteClassName="text-sm font-semibold text-brand-100/85"
-                          buttonClassName="text-left text-sm font-bold text-brand-100 underline decoration-brand-400/45 underline-offset-2"
+                          captionClassName="text-[0.95rem] font-semibold leading-7 text-white"
+                          noteClassName="text-sm font-semibold text-white/85"
+                          buttonClassName="text-left text-sm font-bold text-white/88 underline decoration-white/45 underline-offset-2"
                         />
                       </div>
                       <div className="mt-4 flex flex-wrap gap-2">
-                        <span className="rounded-full bg-brand-50 px-3 py-1 text-sm font-bold text-brand-700">
+                        <span className="rounded-full bg-white px-3 py-1 text-sm font-bold text-indigo-700">
                           {activeShort.recommendationLabel}
                         </span>
                         {activeShort.tags.slice(0, 2).map((tag) => (
                           <span
                             key={tag}
-                            className="rounded-full bg-brand-50/12 px-3 py-1 text-sm font-semibold text-brand-50"
+                            className="rounded-full bg-white/12 px-3 py-1 text-sm font-semibold text-white"
                           >
                             #{tag}
                           </span>
@@ -2192,20 +2197,20 @@ export function FeedPage() {
 
                     {commentsOpen ? (
                       <div
-                        className="ui-fade-up absolute inset-x-4 bottom-4 z-40 rounded-[1.5rem] border border-[#4a381b] bg-[#0f0b07] p-4 shadow-[0_22px_55px_rgba(0,0,0,0.34)]"
+                        className="ui-fade-up absolute inset-x-4 bottom-4 z-40 rounded-[1.5rem] bg-white p-4 shadow-[0_22px_55px_rgba(15,23,42,0.2)]"
                         onClick={(event) => event.stopPropagation()}
                       >
                         <div className="flex items-center justify-between gap-3">
                           <div>
-                            <p className="text-sm font-bold text-brand-50">Comments</p>
-                            <p className="text-xs text-brand-200/60">
+                            <p className="text-sm font-bold text-slate-950">Comments</p>
+                            <p className="text-xs text-slate-500">
                               {(activeShort.commentItems ?? []).length} replies
                             </p>
                           </div>
                           <button
                             type="button"
                             onClick={() => setCommentsOpen(false)}
-                            className="text-xs font-bold text-brand-200/72"
+                            className="text-xs font-bold text-slate-500"
                           >
                             Close
                           </button>
@@ -2213,16 +2218,16 @@ export function FeedPage() {
                         <div className="mt-3 grid max-h-44 gap-2 overflow-y-auto">
                           {(activeShort.commentItems ?? []).length ? (
                             (activeShort.commentItems ?? []).map((comment) => (
-                              <div key={comment.id} className="rounded-2xl border border-[#302312] bg-[#16110b] p-3">
+                              <div key={comment.id} className="rounded-2xl bg-slate-50 p-3">
                                 <div className="flex items-center gap-2">
-                                  <p className="text-xs font-bold text-brand-50">{comment.author}</p>
-                                  <span className="text-[11px] text-brand-200/55">{comment.time}</span>
+                                  <p className="text-xs font-bold text-slate-900">{comment.author}</p>
+                                  <span className="text-[11px] text-slate-500">{comment.time}</span>
                                 </div>
-                                <p className="mt-2 text-sm leading-6 text-brand-100/80">{comment.text}</p>
+                                <p className="mt-2 text-sm leading-6 text-slate-700">{comment.text}</p>
                               </div>
                             ))
                           ) : (
-                            <p className="text-sm text-brand-200/70">
+                            <p className="text-sm text-slate-500">
                               Start the conversation on this short.
                             </p>
                           )}
@@ -2241,13 +2246,13 @@ export function FeedPage() {
                                 }
                               }}
                               placeholder="Add a thoughtful reply..."
-                              className="w-full rounded-[1.25rem] border border-[#3a2c17] bg-[#16110b] px-4 py-3 text-sm text-brand-100 outline-none focus:border-brand-500/60 focus:bg-[#1a140d]"
+                              className="w-full rounded-[1.25rem] border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none focus:border-slate-300 focus:bg-white"
                             />
                             <div className="mt-3 flex justify-end">
                               <button
                                 type="button"
                                 onClick={submitShortComment}
-                                className="rounded-full bg-brand-500 px-4 py-2 text-sm font-bold text-[#140f08]"
+                                className="rounded-full bg-slate-950 px-4 py-2 text-sm font-bold text-white"
                               >
                                 Send
                               </button>
@@ -2270,11 +2275,11 @@ export function FeedPage() {
                   </div>
                 </article>
               ) : (
-                <Card className="mx-auto max-w-[calc(22rem+2cm)] border-[#3a2c17]/90 bg-[#0f0b07]/95 p-8 text-center">
-                  <h2 className="font-display text-xl font-bold text-brand-50">
+                <Card className="mx-auto max-w-[calc(22rem+2cm)] border-slate-200/90 bg-white/95 p-8 text-center">
+                  <h2 className="font-display text-xl font-bold text-slate-950">
                     No shorts yet
                   </h2>
-                  <p className="mt-2 text-sm leading-6 text-brand-100/75">
+                  <p className="mt-2 text-sm leading-6 text-slate-600">
                     Create the first short or switch modes once your synced feed loads.
                   </p>
                 </Card>
@@ -2283,24 +2288,24 @@ export function FeedPage() {
                 <button
                   type="button"
                   onClick={() => move(1)}
-                  className="grid h-12 w-12 place-items-center rounded-full border border-[#3a2c17] bg-[#14100c] text-brand-100 shadow-sm"
+                  className="grid h-12 w-12 place-items-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm"
                   aria-label="Move down to next short"
                   disabled={!immersiveShorts.length}
                 >
                   <ChevronDownIcon className="h-4 w-4" aria-hidden="true" />
                 </button>
-                <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-brand-200/55">
+                <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">
                   Down
                 </span>
               </div>
             </div>
 
             {immersiveShorts.length ? (
-              <div className="flex flex-col items-center justify-center gap-3 text-sm text-brand-200/60">
+              <div className="flex flex-col items-center justify-center gap-3 text-sm text-slate-500">
                 <button
                   type="button"
                   onClick={() => move(-1)}
-                  className="grid h-10 w-10 place-items-center rounded-full border border-[#3a2c17] bg-[#14100c] text-brand-100 md:hidden"
+                  className="grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-white md:hidden"
                   aria-label="Previous short above"
                 >
                   <ChevronDownIcon className="h-4 w-4 rotate-180" aria-hidden="true" />
@@ -2317,7 +2322,7 @@ export function FeedPage() {
                       }}
                       className={cn(
                         "h-2.5 rounded-full transition-all",
-                        index === safeActiveIndex ? "w-8 bg-brand-500" : "w-2.5 bg-[#5a4822]",
+                        index === safeActiveIndex ? "w-8 bg-indigo-600" : "w-2.5 bg-slate-300",
                       )}
                       aria-label={`Open short ${index + 1}`}
                     />
@@ -2329,7 +2334,7 @@ export function FeedPage() {
                 <button
                   type="button"
                   onClick={() => move(1)}
-                  className="grid h-10 w-10 place-items-center rounded-full border border-[#3a2c17] bg-[#14100c] text-brand-100 md:hidden"
+                  className="grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-white md:hidden"
                   aria-label="Next short below"
                 >
                   <ChevronDownIcon className="h-4 w-4" aria-hidden="true" />
@@ -2339,70 +2344,70 @@ export function FeedPage() {
           </div>
 
           <div className="space-y-4">
-            <Card className="border-[#3a2c17]/90 bg-[#0f0b07]/95 p-5 shadow-[0_14px_35px_rgba(0,0,0,0.22)]">
+            <Card className="border-slate-200/90 bg-white/95 p-5 shadow-[0_14px_35px_rgba(15,23,42,0.04)]">
               <div className="flex items-center justify-between gap-3">
-                <p className="text-xl font-bold text-brand-50">Profile readiness</p>
-                <span className="text-sm font-semibold text-brand-200/60">
+                <p className="text-xl font-bold text-slate-950">Profile readiness</p>
+                <span className="text-sm font-semibold text-slate-500">
                   {profileReadiness}% ready
                 </span>
               </div>
-              <div className="mt-4 flex items-center gap-3 rounded-2xl border border-[#302312] bg-[#16110b] p-3">
+              <div className="mt-4 flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-3">
                 <Avatar src={author.avatar} alt={author.name} size={42} />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-bold text-brand-50">{author.name}</p>
-                  <p className="truncate text-xs text-brand-100/75">{author.title}</p>
+                  <p className="truncate text-sm font-bold text-slate-950">{author.name}</p>
+                  <p className="truncate text-xs text-slate-600">{author.title}</p>
                 </div>
               </div>
               <div className="mt-4 grid grid-cols-2 gap-3 text-center">
                 <div>
-                  <p className="text-3xl font-display font-bold text-brand-50">
+                  <p className="text-3xl font-display font-bold text-slate-950">
                     {immersiveShorts.length}
                   </p>
-                  <p className="text-sm text-brand-200/60">Shorts live</p>
+                  <p className="text-sm text-slate-500">Shorts live</p>
                 </div>
                 <div>
-                  <p className="text-3xl font-display font-bold text-brand-50">
+                  <p className="text-3xl font-display font-bold text-slate-950">
                     {resume.skills.length}
                   </p>
-                  <p className="text-sm text-brand-200/60">Core skills</p>
+                  <p className="text-sm text-slate-500">Core skills</p>
                 </div>
               </div>
               <Link
                 href="/resume"
-                className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-brand-500 px-4 text-sm font-bold text-[#140f08] hover:bg-brand-400"
+                className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-indigo-600 px-4 text-sm font-bold text-white hover:bg-indigo-700"
               >
                 Open resume studio
               </Link>
             </Card>
 
-            <Card className="border-[#3a2c17]/90 bg-[#0f0b07]/95 p-5 shadow-[0_14px_35px_rgba(0,0,0,0.22)]">
+            <Card className="border-slate-200/90 bg-white/95 p-5 shadow-[0_14px_35px_rgba(15,23,42,0.04)]">
               <div className="flex items-center justify-between gap-3">
-                <p className="text-xl font-bold text-brand-50">Quick access</p>
-                <Link href="/jobs" className="text-sm font-bold text-brand-200">
+                <p className="text-xl font-bold text-slate-950">Quick access</p>
+                <Link href="/jobs" className="text-sm font-bold text-indigo-700">
                   Jobs
                 </Link>
               </div>
               <div className="mt-4 grid gap-3">
-                <Link href="/network" className="rounded-2xl border border-[#302312] bg-[#16110b] px-4 py-3 text-sm font-semibold text-brand-100">
+                <Link href="/network" className="rounded-2xl bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700">
                   Network
                 </Link>
-                <Link href="/notifications" className="rounded-2xl border border-[#302312] bg-[#16110b] px-4 py-3 text-sm font-semibold text-brand-100">
+                <Link href="/notifications" className="rounded-2xl bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700">
                   Activity
                 </Link>
-                <Link href="/jobs" className="rounded-2xl border border-[#302312] bg-[#16110b] px-4 py-3 text-sm font-semibold text-brand-100">
+                <Link href="/jobs" className="rounded-2xl bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700">
                   Matches
                 </Link>
               </div>
             </Card>
 
-            <Card className="border-[#3a2c17]/90 bg-[#0f0b07]/95 p-5 shadow-[0_14px_35px_rgba(0,0,0,0.22)]">
+            <Card className="border-slate-200/90 bg-white/95 p-5 shadow-[0_14px_35px_rgba(15,23,42,0.04)]">
               <div className="flex items-center justify-between gap-3">
-                <p className="text-xl font-bold text-brand-50">Recent momentum</p>
-                <span className="text-sm font-semibold text-brand-200/60">
+                <p className="text-xl font-bold text-slate-950">Recent momentum</p>
+                <span className="text-sm font-semibold text-slate-500">
                   {streamItems.length} updates
                 </span>
               </div>
-              <p className="mt-3 text-sm leading-6 text-brand-100/75">
+              <p className="mt-3 text-sm leading-6 text-slate-600">
                 Your feed now uses the same centered reel structure as the recruiter experience,
                 while keeping talent-specific actions and profile tools.
               </p>
@@ -2446,9 +2451,9 @@ export function FeedPage() {
             />
           ))
         ) : (
-          <Card className="border-[#3a2c17]/90 bg-[#0f0b07]/95 p-5">
-            <p className="text-sm font-semibold text-brand-50">No feed updates yet.</p>
-            <p className="mt-2 text-sm leading-7 text-brand-100/75">
+          <Card className="border-slate-200/90 bg-white/95 p-5">
+            <p className="text-sm font-semibold text-slate-900">No feed updates yet.</p>
+            <p className="mt-2 text-sm leading-7 text-slate-600">
               Publish the first update to activate the rest of your home stream.
             </p>
           </Card>

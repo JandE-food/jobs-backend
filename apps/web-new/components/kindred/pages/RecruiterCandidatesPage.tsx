@@ -281,16 +281,16 @@ export function RecruiterCandidatesPage() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 py-5">
-      <section className="rounded-[2rem] border border-[#3a2c17]/90 bg-[#0f0b07]/95 p-6 shadow-[0_18px_45px_rgba(0,0,0,0.24)]">
+      <section className="rounded-[2rem] border border-slate-200/90 bg-white/95 p-6 shadow-[0_18px_45px_rgba(15,23,42,0.05)]">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
-            <span className="text-xs font-bold uppercase tracking-[0.16em] text-brand-300">
+            <span className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-700">
               Algorithmic talent search
             </span>
-            <h1 className="mt-2 font-display text-4xl font-bold tracking-tight text-brand-50">
+            <h1 className="mt-2 font-display text-4xl font-bold tracking-tight text-slate-950">
               Find candidates without turning the network into spam
             </h1>
-            <p className="mt-3 text-sm leading-7 text-brand-100/78">
+            <p className="mt-3 text-sm leading-7 text-slate-600">
               Filter by query, skills, location, and certifications, then drop high-fit candidates into the right shortlist.
             </p>
           </div>
@@ -300,13 +300,13 @@ export function RecruiterCandidatesPage() {
         </div>
 
         <div className="mt-5 flex flex-wrap gap-2">
-          <span className="inline-flex min-h-11 items-center rounded-full bg-brand-500 px-4 text-sm font-semibold text-[#140f08]">
+          <span className="inline-flex min-h-11 items-center rounded-full bg-indigo-600 px-4 text-sm font-semibold text-white">
             Candidate search
           </span>
-          <span className="inline-flex min-h-11 items-center rounded-full border border-[#3a2c17] bg-[#16110b] px-4 text-sm font-semibold text-brand-100">
+          <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
             Shortlist actions
           </span>
-          <span className="inline-flex min-h-11 items-center rounded-full border border-[#3a2c17] bg-[#16110b] px-4 text-sm font-semibold text-brand-100">
+          <span className="inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700">
             Shared recruiter data
           </span>
         </div>
@@ -315,50 +315,50 @@ export function RecruiterCandidatesPage() {
           className="mt-5 grid gap-3 lg:grid-cols-2 2xl:grid-cols-[1.2fr,1fr,1fr,1fr,auto]"
           onSubmit={handleSearchSubmit}
         >
-          <label className="rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 py-3">
-            <span className="mb-1 block text-xs font-bold uppercase tracking-[0.14em] text-brand-200/60">
+          <label className="rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3">
+            <span className="mb-1 block text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
               Query
             </span>
             <div className="flex items-center gap-2">
-              <SearchIcon className="h-4 w-4 text-brand-200/55" aria-hidden="true" />
+              <SearchIcon className="h-4 w-4 text-slate-500" aria-hidden="true" />
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                className="w-full bg-transparent text-sm text-brand-50 outline-none placeholder:text-brand-200/45"
+                className="w-full bg-transparent text-sm text-slate-900 outline-none"
                 placeholder="Product designer, growth, frontend..."
               />
             </div>
           </label>
-          <label className="rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 py-3">
-            <span className="mb-1 block text-xs font-bold uppercase tracking-[0.14em] text-brand-200/60">
+          <label className="rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3">
+            <span className="mb-1 block text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
               Skills
             </span>
             <input
               value={skills}
               onChange={(event) => setSkills(event.target.value)}
-              className="w-full bg-transparent text-sm text-brand-50 outline-none placeholder:text-brand-200/45"
+              className="w-full bg-transparent text-sm text-slate-900 outline-none"
               placeholder="React, Growth, Figma"
             />
           </label>
-          <label className="rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 py-3">
-            <span className="mb-1 block text-xs font-bold uppercase tracking-[0.14em] text-brand-200/60">
+          <label className="rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3">
+            <span className="mb-1 block text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
               Location
             </span>
             <input
               value={location}
               onChange={(event) => setLocation(event.target.value)}
-              className="w-full bg-transparent text-sm text-brand-50 outline-none placeholder:text-brand-200/45"
+              className="w-full bg-transparent text-sm text-slate-900 outline-none"
               placeholder="London, Lagos, Remote"
             />
           </label>
-          <label className="rounded-2xl border border-[#4d3a1d] bg-[#14100c] px-4 py-3">
-            <span className="mb-1 block text-xs font-bold uppercase tracking-[0.14em] text-brand-200/60">
+          <label className="rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3">
+            <span className="mb-1 block text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
               Certification
             </span>
             <input
               value={certification}
               onChange={(event) => setCertification(event.target.value)}
-              className="w-full bg-transparent text-sm text-brand-50 outline-none placeholder:text-brand-200/45"
+              className="w-full bg-transparent text-sm text-slate-900 outline-none"
               placeholder="PhD, BSc, AWS, MSc"
             />
           </label>
@@ -378,7 +378,7 @@ export function RecruiterCandidatesPage() {
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h2 className="font-display text-2xl font-bold tracking-tight text-brand-50">
+                      <h2 className="font-display text-2xl font-bold tracking-tight text-slate-950">
                         {candidate.full_name}
                       </h2>
                       <Badge tone="indigo">
@@ -386,14 +386,14 @@ export function RecruiterCandidatesPage() {
                         {candidate.experience_years} years
                       </Badge>
                     </div>
-                    <p className="mt-1 text-sm font-semibold text-brand-100/82">
+                    <p className="mt-1 text-sm font-semibold text-slate-700">
                       {candidate.headline}
                     </p>
-                    <p className="mt-2 flex items-center gap-1.5 text-sm text-brand-100/75">
+                    <p className="mt-2 flex items-center gap-1.5 text-sm text-slate-600">
                       <MapPinIcon className="h-4 w-4" aria-hidden="true" />
                       {candidate.location}
                     </p>
-                    <p className="mt-3 text-sm leading-7 text-brand-100/75">
+                    <p className="mt-3 text-sm leading-7 text-slate-600">
                       {candidate.summary}
                     </p>
                     <div className="mt-4 flex flex-wrap gap-2">
@@ -403,7 +403,7 @@ export function RecruiterCandidatesPage() {
                     </div>
                     {candidate.education.length ? (
                       <div className="mt-4">
-                        <p className="text-xs font-bold uppercase tracking-[0.14em] text-brand-200/60">
+                        <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
                           Certifications
                         </p>
                         <div className="mt-2 flex flex-wrap gap-2">
@@ -416,8 +416,8 @@ export function RecruiterCandidatesPage() {
                       </div>
                     ) : null}
                   </div>
-                  <div className="w-full max-w-xs space-y-3 rounded-2xl border border-[#302312] bg-[#16110b] p-4">
-                    <p className="text-sm font-bold text-brand-50">
+                  <div className="w-full max-w-xs space-y-3 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                    <p className="text-sm font-bold text-slate-900">
                       Send to shortlist
                     </p>
                     <div className="grid gap-2">
@@ -436,7 +436,7 @@ export function RecruiterCandidatesPage() {
                     {shortlists.length ? (
                       <Link
                         href="/recruiter/shortlists"
-                        className="inline-flex min-h-11 items-center justify-center rounded-full px-4 text-sm font-semibold text-brand-100 transition-colors hover:bg-[#18130d]"
+                        className="inline-flex min-h-11 items-center justify-center rounded-full px-4 text-sm font-semibold text-indigo-800 transition-colors hover:bg-indigo-50"
                       >
                         View all shortlists
                       </Link>
@@ -447,32 +447,32 @@ export function RecruiterCandidatesPage() {
             ))
           ) : (
             <Card className="p-6">
-              <h2 className="font-display text-2xl font-bold tracking-tight text-brand-50">
+              <h2 className="font-display text-2xl font-bold tracking-tight text-slate-950">
                 No matching candidates
               </h2>
-              <p className="mt-2 text-sm leading-7 text-brand-100/75">
+              <p className="mt-2 text-sm leading-7 text-slate-600">
                 Try broadening the query or reducing the skill, location, or certification filters.
               </p>
             </Card>
           )}
         </div>
 
-        <Card className="h-fit border-[#3a2c17]/90 bg-[#0f0b07]/95 p-5 shadow-[0_18px_45px_rgba(0,0,0,0.24)]">
-          <h2 className="font-display text-xl font-bold text-brand-50">
+        <Card className="h-fit border-slate-200/90 bg-white/95 p-5 shadow-[0_18px_45px_rgba(15,23,42,0.05)]">
+          <h2 className="font-display text-xl font-bold text-slate-950">
             Shortlist workflow
           </h2>
-          <p className="mt-2 text-sm leading-7 text-brand-100/78">
+          <p className="mt-2 text-sm leading-7 text-slate-600">
             Create curated pipelines for UK product roles, Africa expansion, or any enterprise campaign.
           </p>
 
-          <div className="mt-4 rounded-2xl border border-[#302312] bg-[#16110b] p-4">
-            <label className="block text-xs font-bold uppercase tracking-[0.14em] text-brand-200/60">
+          <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <label className="block text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
               New shortlist
             </label>
             <input
               value={newShortlistName}
               onChange={(event) => setNewShortlistName(event.target.value)}
-              className="mt-2 min-h-12 w-full rounded-xl border border-[#4d3a1d] bg-[#14100c] px-4 text-sm text-brand-50 outline-none"
+              className="mt-2 min-h-12 w-full rounded-xl border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none"
               placeholder="EMEA growth pipeline"
             />
             <Button className="mt-3 w-full" onClick={() => void createShortlist()}>
@@ -485,10 +485,10 @@ export function RecruiterCandidatesPage() {
               <Link
                 key={shortlist.id}
                 href={`/recruiter/shortlists/${shortlist.id}`}
-                className="block rounded-2xl border border-[#302312] bg-[#16110b] p-4 transition-colors hover:bg-[#18130d]"
+                className="block rounded-2xl border border-slate-200 bg-white p-4 transition-colors hover:bg-slate-50"
               >
                 <div className="flex items-center justify-between gap-3">
-                  <p className="font-bold text-brand-50">{shortlist.name}</p>
+                  <p className="font-bold text-slate-950">{shortlist.name}</p>
                   <Badge tone="emerald">{shortlist.candidate_count} candidates</Badge>
                 </div>
               </Link>
