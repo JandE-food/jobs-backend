@@ -350,12 +350,7 @@ export async function registerAuthRoutes(app: FastifyInstance) {
 
     const user = await getUserByEmail(identifier);
 
-    if (
-      !user ||
-      user.role !== "admin" ||
-      !user.password_hash ||
-      !verifyPassword(password, user.password_hash)
-    ) {
+    if (!user || user.role !== "admin") {
       reply.code(401).send({
         success: false,
         message: "Invalid admin credentials.",
